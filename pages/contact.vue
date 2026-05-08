@@ -115,6 +115,7 @@
             <input type="email" placeholder="your@email.ca" required aria-label="Email address for newsletter" v-model="newsEmail" />
             <button type="submit">{{ newsSubscribed ? '✓ Subscribed' : 'Subscribe' }}</button>
           </form>
+          <p v-if="newsError" class="news-error">{{ newsError }}</p>
         </div>
       </div>
     </section>
@@ -162,9 +163,17 @@ const sending = ref(false)
 const sendError = ref('')
 const form = reactive({ firstName: '', lastName: '', email: '', role: '', topic: '', message: '' })
 
+function isValidEmail(email) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+}
+
 async function handleContact() {
-  sending.value = true
   sendError.value = ''
+  if (!isValidEmail(form.email)) {
+    sendError.value = 'Please enter a valid email address.'
+    return
+  }
+  sending.value = true
   try {
     const res = await $fetch('https://api.web3forms.com/submit', {
       method: 'POST',
@@ -192,7 +201,15 @@ async function handleContact() {
 
 const newsEmail = ref('')
 const newsSubscribed = ref(false)
-function handleNewsSubscribe() { newsSubscribed.value = true }
+const newsError = ref('')
+function handleNewsSubscribe() {
+  newsError.value = ''
+  if (!isValidEmail(newsEmail.value)) {
+    newsError.value = 'Please enter a valid email address.'
+    return
+  }
+  newsSubscribed.value = true
+}
 </script>
 
 <style scoped>
@@ -347,6 +364,7 @@ function handleNewsSubscribe() { newsSubscribed.value = true }
   transition: opacity .15s ease;
 }
 .news-form button:hover { opacity: 0.9; }
+.news-error { font-size: 13.5px; color: #ff8a8a; margin: 8px 0 0; }
 
 @media (max-width: 980px) {
   .contact-grid { grid-template-columns: 1fr; gap: 40px; }

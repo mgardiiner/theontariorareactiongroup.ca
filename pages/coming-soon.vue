@@ -40,6 +40,10 @@ const error = ref('')
 
 function handleSubmit() {
   error.value = ''
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value)) {
+    error.value = 'Please enter a valid email address.'
+    return
+  }
 
   const callbackName = 'mcCallback_' + Date.now()
   const url = `https://theontariorareactiongroup.us22.list-manage.com/subscribe/post-json?u=a5e592f36a13ce41b8da32d71&id=4ee9617924&EMAIL=${encodeURIComponent(email.value)}&c=${callbackName}`
