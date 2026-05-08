@@ -7,7 +7,8 @@
     "dev": "nuxt dev --no-fork",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare",
+    "sync-secrets": "gh secret set --env-file .env"
   },
   "dependencies": {
     "nodemailer": "^8.0.7",
