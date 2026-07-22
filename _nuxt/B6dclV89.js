@@ -1,1 +1,0 @@
-import{s as a,x as s,c as n,y as c,o as r}from"./DoPiPH4O.js";const u={__name:"logout",async setup(_){let e,o;const t=a("preview");return t.value=null,[e,o]=s(()=>c("/coming-soon")),await e,o(),(i,l)=>(r(),n("div"))}};export{u as default};
