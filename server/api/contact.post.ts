@@ -20,7 +20,7 @@ export default defineEventHandler(async (event) => {
 
   await transporter.sendMail({
     from: `"Ontario Rare Action Group" <${process.env.SMTP_USER}>`,
-    to: 'contact@theontariorareactiongroup.ca',
+    to: 'contact@ontariorare.ca',
     replyTo: email,
     subject: 'Website Contact Form Submission',
     text: [

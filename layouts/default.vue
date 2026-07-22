@@ -57,7 +57,7 @@ useHead({ bodyAttrs: { style: 'background:#FBF7EE;' } })
           <div class="foot-col">
             <h5>Contact</h5>
             <ul>
-              <li><a href="mailto:contact@ontariorare.ca">contact@theontariorareactiongroup.ca</a></li>
+              <li><a href="mailto:contact@ontariorare.ca">contact@ontariorare.ca</a></li>
               <li>Toronto, ON</li>
             </ul>
           </div>

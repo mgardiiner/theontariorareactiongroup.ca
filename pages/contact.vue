@@ -129,31 +129,31 @@ const channels = [
   {
     num: '01',
     label: 'General inquiries',
-    value: '<a href="mailto:contact@theontariorareactiongroup.ca?subject=General%20Inquiry%3A%20Website%20Submission">contact@theontariorareactiongroup.ca</a>',
+    value: '<a href="mailto:contact@ontariorare.ca?subject=General%20Inquiry%3A%20Website%20Submission">contact@ontariorare.ca</a>',
     note: 'We aim to reply within two business days.',
   },
   {
     num: '02',
     label: 'Patient support & story sharing',
-    value: '<a href="mailto:stories@theontariorareactiongroup.ca?subject=Story%20Submission%3A%20Website%20Submission">stories@theontariorareactiongroup.ca</a>',
+    value: '<a href="mailto:contact@ontariorare.ca?subject=Story%20Submission%3A%20Website%20Submission">contact@ontariorare.ca</a>',
     note: 'Confidential. We can interview you, transcribe your words, or publish a piece you\'ve written.',
   },
   {
     num: '03',
     label: 'Partnerships & affiliation',
-    value: '<a href="mailto:partners@theontariorareactiongroup.ca?subject=Partnership%20Inquiry%3A%20Website%20Submission">partners@theontariorareactiongroup.ca</a>',
+    value: '<a href="mailto:contact@ontariorare.ca?subject=Partnership%20Inquiry%3A%20Website%20Submission">contact@ontariorare.ca</a>',
     note: 'For other rare-disease organizations, clinics and researchers.',
   },
   {
     num: '04',
     label: 'Volunteering',
-    value: '<a href="mailto:volunteer@theontariorareactiongroup.ca?subject=Volunteering%3A%20Website%20Submission">volunteer@theontariorareactiongroup.ca</a>',
+    value: '<a href="mailto:contact@ontariorare.ca?subject=Volunteering%3A%20Website%20Submission">contact@ontariorare.ca</a>',
     note: 'Tell us a bit about yourself and how you\'d like to help.',
   },
   {
     num: '05',
     label: 'Donations & giving',
-    value: '<a href="mailto:donate@theontariorareactiongroup.ca?subject=Donations%20%26%20Giving%3A%20Website%20Submission">donate@theontariorareactiongroup.ca</a>',
+    value: '<a href="mailto:contact@ontariorare.ca?subject=Donations%20%26%20Giving%3A%20Website%20Submission">contact@ontariorare.ca</a>',
     note: 'Questions about giving, receipts, or how funds are used.',
   },
 ]

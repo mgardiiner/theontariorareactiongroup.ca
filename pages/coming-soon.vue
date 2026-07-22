@@ -23,8 +23,8 @@
         You're on the list. We'll be in touch.
       </div>
 
-      <a href="mailto:contact@theontariorareactiongroup.ca" class="contact-link">
-        contact@theontariorareactiongroup.ca
+      <a href="mailto:contact@ontariorare.ca" class="contact-link">
+        contact@ontariorare.ca
       </a>
     </main>
   </div>

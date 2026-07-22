@@ -221,7 +221,7 @@
           <div>
             <h2 class="contact-band-title">Have a question? A story? A <em>rare</em> idea?</h2>
             <p class="contact-band-lede">We read every message. Whether you're a patient, caregiver, clinician, policymaker — start a conversation.</p>
-            <a href="mailto:hello@ontariorare.ca" class="contact-band-email">hello@ontariorare.ca</a>
+            <a href="mailto:contact@ontariorare.ca" class="contact-band-email">contact@ontariorare.ca</a>
           </div>
           <div class="news-card">
             <h3>Stay in the loop</h3>
