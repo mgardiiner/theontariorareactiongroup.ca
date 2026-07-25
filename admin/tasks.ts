@@ -55,7 +55,7 @@ export interface TaskItem {
   //   event   -> { index }
   //   story   -> { index }
   //   partner -> { group, index }
-  //   video   -> { where: 'featured' } | { where: 'sideVideos', index } | { where: 'moreVideos', index }
+  //   video   -> { where: 'featured' } | { where: 'videos', index }
   ref: any
 }
 
@@ -447,11 +447,8 @@ export function readItems(task: TaskKey, content: any): TaskItem[] {
     if (content && content.featured && Object.keys(content.featured).length) {
       push(content.featured, { where: 'featured' })
     }
-    ;((content && content.sideVideos) || []).forEach((v: any, index: number) =>
-      push(v, { where: 'sideVideos', index })
-    )
-    ;((content && content.moreVideos) || []).forEach((v: any, index: number) =>
-      push(v, { where: 'moreVideos', index })
+    ;((content && content.videos) || []).forEach((v: any, index: number) =>
+      push(v, { where: 'videos', index })
     )
   }
 
@@ -576,8 +573,7 @@ function applyPartner(content: any, vals: Record<string, string>, ref: any): any
 
 function applyVideo(content: any, vals: Record<string, string>, ref: any): any {
   const c = clone(content) || {}
-  if (!Array.isArray(c.sideVideos)) c.sideVideos = []
-  if (!Array.isArray(c.moreVideos)) c.moreVideos = []
+  if (!Array.isArray(c.videos)) c.videos = []
   const featureYes = vals.feature === 'Yes'
 
   const buildInto = (target: any) => {
@@ -587,15 +583,14 @@ function applyVideo(content: any, vals: Record<string, string>, ref: any): any {
     target.cat = vals.format || ''
     return target
   }
-  const nextCls = () => 'v' + (((c.sideVideos.length + c.moreVideos.length + 1 - 1) % 8) + 1)
+  const nextCls = () => 'v' + ((c.videos.length % 8) + 1)
 
   if (ref && ref.where) {
     // EDIT in place at the item's current location. `feature` keeps the item
     // where it already lives (ref is authoritative); we never relocate on edit.
     let target: any
     if (ref.where === 'featured') target = c.featured = c.featured || {}
-    else if (ref.where === 'sideVideos') target = c.sideVideos[ref.index]
-    else target = c.moreVideos[ref.index]
+    else target = c.videos[ref.index]
     if (!target) return c
     buildInto(target)
     if (!target.cls) target.cls = nextCls() // featured keeps its own cls when editing
@@ -607,10 +602,10 @@ function applyVideo(content: any, vals: Record<string, string>, ref: any): any {
   target.cls = nextCls()
   if (featureYes) {
     // Single featured slot: move any current featured video into the grid so it isn't lost.
-    if (c.featured && Object.keys(c.featured).length) c.moreVideos.push(c.featured)
+    if (c.featured && Object.keys(c.featured).length) c.videos.push(c.featured)
     c.featured = target
   } else {
-    c.moreVideos.push(target)
+    c.videos.push(target)
   }
   return c
 }
@@ -642,8 +637,7 @@ export function removeItem(task: TaskKey, content: any, ref: any): any {
     if (grp && Array.isArray(grp.partners)) grp.partners.splice(ref.index, 1)
   } else if (task === 'video') {
     if (ref.where === 'featured') c.featured = {}
-    else if (ref.where === 'sideVideos' && Array.isArray(c.sideVideos)) c.sideVideos.splice(ref.index, 1)
-    else if (ref.where === 'moreVideos' && Array.isArray(c.moreVideos)) c.moreVideos.splice(ref.index, 1)
+    else if (Array.isArray(c.videos)) c.videos.splice(ref.index, 1)
   }
   return c
 }

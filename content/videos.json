@@ -8,7 +8,7 @@
     "title": "Watch, learn, <em>share.</em>",
     "lede": "Recorded panels, explainers and conversations with Ontario's rare-disease community. Free to watch — and free to share with your doctor, your family, or your MPP."
   },
-  "filters": ["All videos", "Featured", "Explainers", "Patient voices", "Briefings", "Workshops"],
+  "filters": ["All videos", "Explainers", "Patient voices", "Briefings", "Workshops"],
   "featured": {
     "cls": "v1",
     "cat": "Featured Panel",
@@ -16,13 +16,11 @@
     "dur": "42 min · Recorded Mar 2026",
     "url": ""
   },
-  "sideVideos": [
+  "videos": [
     { "cls": "v2", "cat": "Explainer", "title": "How drug access works in Ontario", "dur": "8 min", "url": "" },
     { "cls": "v3", "cat": "Patient Voice", "title": "Lila's story, in her own words", "dur": "12 min", "url": "" },
     { "cls": "v4", "cat": "Briefing", "title": "Newborn screening: what changes in 2026", "dur": "15 min", "url": "" },
-    { "cls": "v5", "cat": "Workshop", "title": "Self-advocacy 101 for caregivers", "dur": "28 min", "url": "" }
-  ],
-  "moreVideos": [
+    { "cls": "v5", "cat": "Workshop", "title": "Self-advocacy 101 for caregivers", "dur": "28 min", "url": "" },
     { "cls": "v6", "cat": "Briefing", "title": "Reading a Health Canada drug review", "dur": "19 min", "url": "" },
     { "cls": "v7", "cat": "Patient Voice", "title": "David on the wait for an approved therapy", "dur": "9 min", "url": "" },
     { "cls": "v8", "cat": "Explainer", "title": "What \"rare\" really means: 60-second primer", "dur": "1 min", "url": "" }

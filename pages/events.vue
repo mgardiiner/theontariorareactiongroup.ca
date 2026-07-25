@@ -33,7 +33,7 @@
                 class="event"
                 v-for="(event, i) in events"
                 :key="i"
-                :class="{ active: activeIdx === i }"
+                :class="{ active: activeIdx === i, 'has-img': event.image }"
                 @click="activeIdx = i; resetForm()"
                 :aria-pressed="activeIdx === i"
                 tabindex="0"
@@ -43,6 +43,9 @@
                 <div class="event-date" :aria-label="`${event.month} ${event.day}`">
                   <div class="event-month">{{ event.month }}</div>
                   <div class="event-day">{{ event.day }}</div>
+                </div>
+                <div class="event-thumb" v-if="event.image" aria-hidden="true">
+                  <img :src="event.image" alt="" />
                 </div>
                 <div>
                   <h3 class="event-title">{{ event.title }}</h3>
@@ -184,6 +187,20 @@ function handleRegister() {
   padding-left: 16px;
   padding-right: 16px;
   border-left: 2px solid var(--accent);
+}
+.event.has-img { grid-template-columns: 90px 108px 1fr auto; }
+.event-thumb {
+  width: 108px;
+  aspect-ratio: 4/3;
+  border-radius: 4px;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.14);
+}
+.event-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
 }
 .event-date {
   text-align: center;
@@ -386,5 +403,7 @@ function handleRegister() {
 @media (max-width: 600px) {
   .past-grid { grid-template-columns: 1fr; }
   .zoom-row { grid-template-columns: 1fr; }
+  .event.has-img { grid-template-columns: 90px 1fr auto; }
+  .event-thumb { display: none; }
 }
 </style>

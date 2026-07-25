@@ -68,6 +68,7 @@
             <div class="ov-idx" aria-hidden="true">{{ item.idx }}</div>
             <div class="ov-visual" aria-hidden="true">
               <div class="ov-img-placeholder" :class="item.imgClass"></div>
+              <img v-if="item.image" :src="item.image" alt="" class="ov-photo" />
               <span class="ov-visual-tag">{{ item.visualTag }}</span>
               <span class="ov-visual-arrow" aria-hidden="true">→</span>
             </div>
@@ -326,6 +327,14 @@ function handleNewsSubscribe() {
   position: absolute;
   inset: 0;
   background: linear-gradient(135deg, #2E1188, #5634C9);
+}
+.ov-photo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 2;
 }
 .ov-img-2 { background: linear-gradient(135deg, #1E0177, #4527A0); }
 .ov-img-3 { background: linear-gradient(135deg, #170269, #2E1188); }

@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="400" height="300" role="img" aria-label="">
+  <defs>
+    <pattern id="pdots" width="22" height="22" patternUnits="userSpaceOnUse">
+      <circle cx="2" cy="2" r="1" fill="#FFFFFF" opacity="0.05"/>
+    </pattern>
+  </defs>
+  <rect width="400" height="300" fill="url(#pdots)"/>
+  <g fill="#FFFFFF" opacity="0.16" transform="translate(-6 -12) scale(1.15) rotate(0)">
+    <path d="M150 176 C150 146 168 122 198 116 L198 132 C182 138 172 150 172 164 L190 164 C196 164 200 168 200 174 L200 194 C200 200 196 204 190 204 L160 204 C154 204 150 200 150 194 Z"/>
+    <path d="M212 176 C212 146 230 122 260 116 L260 132 C244 138 234 150 234 164 L252 164 C258 164 262 168 262 174 L262 194 C262 200 258 204 252 204 L222 204 C216 204 212 200 212 194 Z"/>
+  </g>
+</svg>

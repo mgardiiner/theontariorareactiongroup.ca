@@ -38,7 +38,7 @@
             :to="`/stories/${story.slug}`"
           >
             <div class="story-img" :class="story.imgClass" aria-hidden="true">
-              <img v-if="story.image" :src="story.image" alt="" class="story-photo" />
+              <img :src="story.image || '/uploads/placeholder-story.svg'" alt="" class="story-photo" />
               <span class="story-img-label">{{ story.imgLabel }}</span>
             </div>
             <div class="story-body">

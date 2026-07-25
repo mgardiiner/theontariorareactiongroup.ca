@@ -5,8 +5,8 @@
 //   brand/home button) can drive the page's flow even from other admin routes.
 // - `toast` + `showToast` are the global toast region hosted in layouts/admin.vue.
 //   `undoKey` (when present) is a useDrafts() pending key the toast's Undo reverts.
-// - `editorName` / `editorInitials` — there is no user profile, so a friendly
-//   default is used for the avatar and greeting (matches the design's "Margaret").
+// - `editorName` / `editorInitials` — there is no user profile, so a neutral
+//   default is used for the avatar and greeting.
 
 export type AdminScreen = 'home' | 'pick' | 'wizard' | 'done' | 'search'
 
@@ -19,7 +19,7 @@ export interface AdminToast {
 // calls showToast().
 let toastTimer: ReturnType<typeof setTimeout> | null = null
 
-export const EDITOR_NAME = 'Margaret'
+export const EDITOR_NAME = 'Admin'
 
 export function useAdminUi() {
   const screen = useState<AdminScreen>('admin_screen', () => 'home')
