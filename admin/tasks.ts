@@ -15,7 +15,7 @@ export type TaskKey = 'event' | 'story' | 'partner' | 'video'
 export interface TaskField {
   key: string
   label: string
-  kind: 'text' | 'area' | 'rich' | 'choice'
+  kind: 'text' | 'area' | 'rich' | 'choice' | 'image'
   required?: boolean
   placeholder?: string
   help?: string
@@ -166,6 +166,7 @@ export const tasks: Record<TaskKey, TaskConfig> = {
             placeholder: 'Five years and eleven specialists before a diagnosis',
           },
           { key: 'body', label: 'The story', kind: 'rich' },
+          { key: 'photo', label: 'A photo (optional)', kind: 'image' },
         ],
       },
       { q: 'Here it is — does this look right?', review: true, fields: [] },
@@ -401,6 +402,7 @@ export function readItems(task: TaskKey, content: any): TaskItem[] {
           format: s.category || '',
           blurb: s.title || '',
           body: s.body || '',
+          photo: s.image || '',
         },
         ref: { index },
       })
@@ -505,6 +507,7 @@ function applyStory(content: any, vals: Record<string, string>, ref: any): any {
   target.filterKey = filterMap[vals.format] || vals.format || ''
   target.title = vals.blurb || '' // the story headline
   target.body = vals.body || ''
+  target.image = vals.photo || '' // story photo; blank = colour fallback
   // Derived-from-content fields (safe to recompute on edit too)
   target.initials = initialsOf(target.authorName)
   target.imgLabel = 'Photo · ' + target.authorName

@@ -23,6 +23,27 @@
         <button type="button" class="escape-link" @click="goSearch">Search the whole site →</button>
       </div>
 
+      <div class="direct-block">
+        <div class="direct-head">
+          <p class="eyebrow">Edit a page directly</p>
+          <span class="direct-note">Change any wording, add or remove items, on any page.</span>
+        </div>
+        <div class="direct-grid">
+          <NuxtLink
+            v-for="s in sections"
+            :key="s.key"
+            :to="`/admin/${s.key}`"
+            class="direct-row"
+          >
+            <span class="direct-row-body">
+              <span class="direct-row-title">{{ s.label }}</span>
+              <span v-if="s.description" class="direct-row-desc">{{ s.description }}</span>
+            </span>
+            <span class="direct-row-arrow" aria-hidden="true">→</span>
+          </NuxtLink>
+        </div>
+      </div>
+
       <div class="pending-block">
         <div class="pending-head">
           <p class="eyebrow">Waiting to be published</p>
@@ -131,6 +152,8 @@
             ></textarea>
 
             <RichText v-else-if="f.kind === 'rich'" v-model="vals[f.key]" />
+
+            <ImageUpload v-else-if="f.kind === 'image'" v-model="vals[f.key]" />
 
             <div v-else-if="f.kind === 'choice'" class="wiz-choices">
               <button
@@ -809,6 +832,40 @@ onMounted(() => {
 }
 .escape-link:hover { text-decoration: underline; }
 
+/* ---- Edit a page directly ---- */
+.direct-block { display: flex; flex-direction: column; gap: 14px; }
+.direct-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.direct-note { font-size: 13.5px; color: var(--muted); }
+.direct-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.direct-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 16px 18px;
+  text-decoration: none;
+  color: inherit;
+  transition: border-color 0.15s ease, transform 0.15s ease;
+}
+.direct-row:hover { border-color: var(--primary); transform: translateY(-2px); }
+.direct-row-body { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.direct-row-title { font-size: 16px; font-weight: 600; color: var(--ink); }
+.direct-row-desc { font-size: 13px; line-height: 1.45; color: var(--muted); }
+.direct-row-arrow { color: var(--primary); font-size: 16px; flex-shrink: 0; }
+
 .pending-block { display: flex; flex-direction: column; gap: 12px; }
 .pending-head {
   display: flex;
@@ -1291,6 +1348,7 @@ onMounted(() => {
 /* ---- Responsive ---- */
 @media (max-width: 900px) {
   .tiles { grid-template-columns: 1fr; }
+  .direct-grid { grid-template-columns: 1fr; }
   .screen-title { font-size: 32px; }
   .section-title { font-size: 27px; }
   .wiz-card { padding: 24px 20px; }

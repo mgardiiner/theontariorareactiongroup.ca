@@ -16,16 +16,14 @@
         </div>
         <div class="ed-actions">
           <span v-if="dirty" class="dirty-dot" title="Unsaved changes">● unsaved</span>
-          <button type="button" class="save" :disabled="!canSave" @click="save">
-            {{ saving ? 'Saving…' : 'Save & publish' }}
-          </button>
+          <button type="button" class="save" :disabled="!canSave" @click="save">Save</button>
         </div>
       </div>
 
       <p v-if="loadError" class="banner err">{{ loadError }}</p>
       <p v-if="saveError" class="banner err">{{ saveError }}</p>
       <p v-if="saveOk" class="banner ok">
-        Saved. Your change is publishing now — it should be live in a couple of minutes.
+        Saved. Press <strong>Review &amp; publish</strong> at the bottom when you're ready to put it live.
       </p>
 
       <div v-if="loading" class="loading">Loading current content from GitHub…</div>
@@ -34,9 +32,7 @@
         <AdminField v-for="f in section.fields" :key="f.key" :field="f" :obj="data" />
 
         <div class="ed-foot">
-          <button type="submit" class="save" :disabled="!canSave">
-            {{ saving ? 'Saving…' : 'Save & publish' }}
-          </button>
+          <button type="submit" class="save" :disabled="!canSave">Save</button>
         </div>
       </form>
     </template>
@@ -45,40 +41,42 @@
 
 <script setup>
 import { getSection, normalize } from '~/admin/schema'
-import { loadJsonFile, saveJsonFile } from '~/utils/adminGithub'
 
 definePageMeta({ layout: 'admin', middleware: 'admin-auth' })
 
 const route = useRoute()
-const { token, canWrite } = useAdminAuth()
+const { getData, stageChange } = useDrafts()
+const { showToast } = useAdminUi()
 
 const section = computed(() => getSection(route.params.section))
+
+// Deep clone so our edits never mutate the draft store's cached object (which
+// stageChange snapshots for Undo). getData returns the local draft if the file
+// already has unsaved edits, otherwise a fresh load from GitHub.
+const clone = (v) => (v == null ? v : JSON.parse(JSON.stringify(v)))
 
 const data = ref(null)
 // Expose the section's data so nested dropdowns can source choices from sibling
 // fields (e.g. a story's filterKey from the filters list).
 provide('adminRoot', data)
-const sha = ref('')
 const savedSnapshot = ref('')
 const loading = ref(true)
 const loadError = ref('')
-const saving = ref(false)
 const saveOk = ref(false)
 const saveError = ref('')
 
 const dirty = computed(
   () => data.value && JSON.stringify(data.value) !== savedSnapshot.value,
 )
-const canSave = computed(() => canWrite.value && dirty.value && !saving.value)
+const canSave = computed(() => dirty.value)
 
 async function load() {
-  if (!section.value || !token.value) return
+  if (!section.value) return
   loading.value = true
   loadError.value = ''
   try {
-    const { data: json, sha: fileSha } = await loadJsonFile(token.value, section.value.file)
-    data.value = normalize(json, section.value.fields)
-    sha.value = fileSha
+    const json = await getData(section.value.file)
+    data.value = normalize(clone(json), section.value.fields)
     savedSnapshot.value = JSON.stringify(data.value)
   } catch (e) {
     loadError.value = e?.message || 'Could not load this section from GitHub.'
@@ -87,31 +85,19 @@ async function load() {
   }
 }
 
-async function save() {
-  if (!canSave.value || !section.value || !token.value) return
-  saving.value = true
+function save() {
+  if (!canSave.value || !section.value) return
   saveOk.value = false
   saveError.value = ''
   try {
-    const newSha = await saveJsonFile(
-      token.value,
-      section.value.file,
-      data.value,
-      sha.value,
-      `Update ${section.value.label} via admin`,
-    )
-    sha.value = newSha
+    // Stage the change locally — publishing is the separate global step
+    // (the "Review & publish" bar at the bottom of the screen).
+    stageChange(section.value.file, clone(data.value), `Edited the ${section.value.label} page`)
     savedSnapshot.value = JSON.stringify(data.value)
     saveOk.value = true
+    showToast("Saved — press Review & publish when you're ready.")
   } catch (e) {
-    if (e?.status === 409) {
-      saveError.value =
-        'Someone else changed this section since you opened it. Reload the page to get the latest version (your unsaved edits will be lost).'
-    } else {
-      saveError.value = e?.message || 'Could not save. Please try again.'
-    }
-  } finally {
-    saving.value = false
+    saveError.value = e?.message || 'Could not save. Please try again.'
   }
 }
 

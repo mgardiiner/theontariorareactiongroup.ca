@@ -135,8 +135,10 @@ import content from '~/content/events.json'
 
 definePageMeta({ layout: 'default' })
 
-const events = content.upcoming
-const pastEvents = content.past
+// Newest to oldest, so the order holds no matter what order events get added in
+const byDateDesc = (a, b) => new Date(b.date) - new Date(a.date)
+const events = [...content.upcoming].sort(byDateDesc)
+const pastEvents = [...content.past].sort(byDateDesc)
 
 const activeIdx = ref(0)
 const registered = ref(false)

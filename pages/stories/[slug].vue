@@ -7,6 +7,7 @@
 
     <!-- HERO -->
     <div class="story-hero" :style="{ background: story.imgGradient }">
+      <img v-if="story.image" :src="story.image" alt="" class="hero-photo" />
       <div class="hero-overlay" />
       <div class="wrap hero-inner">
         <div class="crumb">
@@ -101,6 +102,13 @@ const paragraphs = computed(() =>
   display: flex;
   align-items: flex-end;
   padding-bottom: 64px;
+}
+.hero-photo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 .hero-overlay {
   position: absolute;

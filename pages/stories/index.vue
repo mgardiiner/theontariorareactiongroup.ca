@@ -38,6 +38,7 @@
             :to="`/stories/${story.slug}`"
           >
             <div class="story-img" :class="story.imgClass" aria-hidden="true">
+              <img v-if="story.image" :src="story.image" alt="" class="story-photo" />
               <span class="story-img-label">{{ story.imgLabel }}</span>
             </div>
             <div class="story-body">
@@ -121,6 +122,13 @@ const filteredStories = computed(() => {
   position: relative;
   display: flex;
   align-items: flex-end;
+}
+.story-photo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 .story-img.s1 { background: linear-gradient(135deg, #2E1188, #5634C9); }
 .story-img.s2 { background: linear-gradient(135deg, #170269, #1E0177); }

@@ -421,6 +421,12 @@ export const sections: Section[] = [
             type: 'textarea',
             help: 'Separate paragraphs with a blank line.',
           },
+          {
+            key: 'image',
+            label: 'Photo',
+            type: 'image',
+            help: 'Upload a photo, or leave blank to use a colour.',
+          },
           { key: '_settings', label: 'Settings', type: 'heading' },
           {
             key: 'slug',

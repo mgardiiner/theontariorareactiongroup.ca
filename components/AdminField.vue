@@ -54,12 +54,12 @@
     <span v-if="field.help" class="afld-help">{{ field.help }}</span>
   </label>
 
-  <!-- image (URL for now; media picker added later) -->
-  <label v-else-if="field.type === 'image'" class="afld">
+  <!-- image (upload or paste a URL) -->
+  <div v-else-if="field.type === 'image'" class="afld">
     <span class="afld-label">{{ field.label }}</span>
-    <input type="text" v-model="obj[field.key]" placeholder="/uploads/example.jpg" />
-    <img v-if="obj[field.key]" :src="obj[field.key]" alt="" class="afld-preview" />
-  </label>
+    <ImageUpload v-model="obj[field.key]" />
+    <span v-if="field.help" class="afld-help">{{ field.help }}</span>
+  </div>
 
   <!-- object -->
   <fieldset v-else-if="field.type === 'object'" class="afld-object">
