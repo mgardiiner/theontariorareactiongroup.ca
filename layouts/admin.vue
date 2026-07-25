@@ -13,6 +13,7 @@
           <span class="ed-avatar">{{ editorInitials }}</span>
           <span class="ed-username">{{ editorName }}</span>
         </span>
+        <button type="button" class="ed-signout" @click="handleSignOut">Sign out</button>
       </div>
     </header>
 
@@ -82,6 +83,7 @@
 const router = useRouter()
 const { pending, pendingCount, publishAll, undo } = useDrafts()
 const { screen, toast, showToast, hideToast, editorName, editorInitials } = useAdminUi()
+const { logout } = useAdminAuth()
 
 const publishOpen = ref(false)
 const publishing = ref(false)
@@ -134,6 +136,10 @@ function goHomeNav() {
 function goSearchNav() {
   screen.value = 'search'
   router.push('/admin')
+}
+function handleSignOut() {
+  logout()
+  router.push('/admin/login')
 }
 function previewSite() {
   showToast('Opening a private preview of the site with your changes.')
@@ -252,6 +258,18 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKey))
 }
 .ed-findwords:hover {
   background: rgba(255, 255, 255, 0.12);
+}
+.ed-signout {
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.82);
+  cursor: pointer;
+}
+.ed-signout:hover {
+  color: #fff;
+  text-decoration: underline;
 }
 .ed-user {
   display: flex;
