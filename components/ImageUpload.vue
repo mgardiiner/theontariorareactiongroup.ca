@@ -85,7 +85,7 @@ function onImgError() {
   error.value = "That image didn't load. If you just uploaded it, give it a moment; otherwise check the link."
 }
 
-/** Read a File as a base64 string (without the data:...;base64, prefix). */
+/** Read a Blob/File as a base64 string (without the data:...;base64, prefix). */
 function readBase64(file) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader()
@@ -97,6 +97,49 @@ function readBase64(file) {
     reader.onerror = () => reject(new Error('Could not read that file.'))
     reader.readAsDataURL(file)
   })
+}
+
+// Photos are downscaled + re-encoded as JPEG before upload, so commits stay small
+// and pages load fast (a phone photo can be 5–10 MB otherwise). Vector/animated
+// formats are passed through untouched.
+const MAX_UPLOAD_DIM = 1600
+const JPEG_QUALITY = 0.82
+
+async function processImage(file) {
+  const type = (file.type || '').toLowerCase()
+  const dot = file.name.lastIndexOf('.')
+
+  // SVG (vector) and GIF (animation) would be ruined by a canvas re-encode.
+  if (type === 'image/svg+xml' || type === 'image/gif' || !type.startsWith('image/')) {
+    const ext = (kebab(dot >= 0 ? file.name.slice(dot + 1) : '') || 'img').slice(0, 5)
+    return { base64: await readBase64(file), ext }
+  }
+
+  const url = URL.createObjectURL(file)
+  try {
+    const img = await new Promise((resolve, reject) => {
+      const im = new Image()
+      im.onload = () => resolve(im)
+      im.onerror = () => reject(new Error('Could not read that image.'))
+      im.src = url
+    })
+    const scale = Math.min(1, MAX_UPLOAD_DIM / Math.max(img.naturalWidth, img.naturalHeight))
+    const w = Math.max(1, Math.round(img.naturalWidth * scale))
+    const h = Math.max(1, Math.round(img.naturalHeight * scale))
+    const canvas = document.createElement('canvas')
+    canvas.width = w
+    canvas.height = h
+    const ctx = canvas.getContext('2d')
+    // Flatten onto white so transparent PNGs don't turn black when saved as JPEG.
+    ctx.fillStyle = '#ffffff'
+    ctx.fillRect(0, 0, w, h)
+    ctx.drawImage(img, 0, 0, w, h)
+    const blob = await new Promise((resolve) => canvas.toBlob(resolve, 'image/jpeg', JPEG_QUALITY))
+    if (!blob) return { base64: await readBase64(file), ext: 'jpg' } // toBlob unsupported → original
+    return { base64: await readBase64(blob), ext: 'jpg' }
+  } finally {
+    URL.revokeObjectURL(url)
+  }
 }
 
 async function onFile(e) {
@@ -113,12 +156,10 @@ async function onFile(e) {
 
   uploading.value = true
   try {
-    const base64 = await readBase64(file)
+    const { base64, ext } = await processImage(file)
 
     // Build a safe, collision-resistant path: uploads/<kebab-name>-<shorttime>.<ext>
     const dot = file.name.lastIndexOf('.')
-    const rawExt = dot >= 0 ? file.name.slice(dot + 1) : ''
-    const ext = (kebab(rawExt) || 'jpg').slice(0, 5)
     const base = kebab(dot >= 0 ? file.name.slice(0, dot) : file.name) || 'image'
     const suffix = Date.now().toString(36).slice(-5)
     const path = `uploads/${base}-${suffix}.${ext}`
