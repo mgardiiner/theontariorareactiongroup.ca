@@ -1,3 +1,8 @@
 {
-  "configured": false
+  "configured": true,
+  "v": 1,
+  "iter": 310000,
+  "salt": "racY4YaEo5flYk9BB0XtOg==",
+  "iv": "rhAI6eV4OKi4vYEk",
+  "ct": "dWhcofQvSeVPlSH02sHKON37/9v07fkO5E8/lDSHbyc9Ax0IXlwSJEh6TA/iETyLMKLrtv3BJg7ZDGHNaRv1ceBE3kLvTDdeA7Lgf4IY0oJowpZYF7dYsMdorW8/2vWy0QtH4Ph0relY8EvSQA=="
 }
