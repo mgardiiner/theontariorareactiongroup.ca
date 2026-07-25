@@ -1,12 +1,12 @@
 {
   "nav": [
-    { "label": "Advocacy", "href": "/advocacy", "order": 1 },
-    { "label": "Challenges", "href": "/challenges", "order": 2 },
-    { "label": "Stories", "href": "/stories", "order": 3 },
-    { "label": "Events", "href": "/events", "order": 4 },
-    { "label": "Videos", "href": "/videos", "order": 5 },
-    { "label": "Partners", "href": "/partners", "order": 6 },
-    { "label": "Contact", "href": "/contact", "order": 7 }
+    { "label": "Advocacy", "href": "/advocacy" },
+    { "label": "Challenges", "href": "/challenges" },
+    { "label": "Stories", "href": "/stories" },
+    { "label": "Events", "href": "/events" },
+    { "label": "Videos", "href": "/videos" },
+    { "label": "Partners", "href": "/partners" },
+    { "label": "Contact", "href": "/contact" }
   ],
   "cta": { "label": "Join the movement", "href": "/contact" },
   "footer": {

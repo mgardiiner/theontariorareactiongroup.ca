@@ -1,73 +1,66 @@
 <template>
-  <div class="login-wrap">
-    <div class="login-card">
-      <h1>Site admin</h1>
-      <p class="sub">Paste your GitHub key to sign in and edit the site.</p>
+  <div class="signin">
+    <div class="signin-card">
+      <div class="signin-brand">
+        <img src="/logo.png" width="34" height="34" alt="" />
+        <span class="signin-org">Ontario Rare Action Group</span>
+      </div>
 
-      <form @submit.prevent="submit">
-        <label class="field">
-          <span>GitHub key</span>
+      <div class="signin-heading">
+        <h2>Sign in to edit the website</h2>
+        <p>
+          Use the password the group shared with you. If you don't have it, email
+          <a href="mailto:hello@theontariorareactiongroup.ca">hello@theontariorareactiongroup.ca</a>
+          and someone will send it over.
+        </p>
+      </div>
+
+      <form class="signin-form" @submit.prevent="submit">
+        <label class="signin-field">
+          <span class="signin-label">Password</span>
           <input
-            v-model="key"
+            v-model="password"
             type="password"
             autocomplete="current-password"
-            placeholder="github_pat_…"
+            placeholder="Type or paste it here"
             :disabled="busy"
           />
         </label>
 
-        <p v-if="error" class="error">{{ error }}</p>
-        <p v-if="warn" class="warn">{{ warn }}</p>
+        <p v-if="error" class="signin-error">{{ error }}</p>
 
-        <button type="submit" :disabled="busy || !key.trim()">
+        <button type="submit" class="signin-btn" :disabled="busy">
           {{ busy ? 'Checking…' : 'Sign in' }}
         </button>
       </form>
 
-      <details class="help">
-        <summary>How do I get a key?</summary>
-        <ol>
-          <li>Go to GitHub → <strong>Settings → Developer settings → Personal access tokens → Fine-grained tokens</strong>.</li>
-          <li>Click <strong>Generate new token</strong>. Give it a name and an expiry.</li>
-          <li>Under <strong>Repository access</strong>, choose <em>Only select repositories</em> → <strong>theontariorareactiongroup.ca</strong>.</li>
-          <li>Under <strong>Permissions → Repository permissions</strong>, set <strong>Contents</strong> to <strong>Read and write</strong>.</li>
-          <li>Generate it, copy the <code>github_pat_…</code> value, and paste it above.</li>
-        </ol>
-        <p class="help-note">Your key stays in this browser only — it's never sent anywhere except GitHub.</p>
-      </details>
+      <p class="signin-foot">
+        Nothing you do here is public until you press Publish. You can't break the
+        website from this screen.
+      </p>
     </div>
   </div>
 </template>
 
 <script setup>
-definePageMeta({ layout: 'admin' })
+definePageMeta({ layout: false })
 
 const { login } = useAdminAuth()
 const router = useRouter()
 
-const key = ref('')
+const password = ref('')
 const busy = ref(false)
 const error = ref('')
-const warn = ref('')
 
 async function submit() {
   error.value = ''
-  warn.value = ''
   busy.value = true
   try {
-    const { push } = await login(key.value)
-    if (!push) {
-      warn.value =
-        'This key can read the site but not save changes (needs Contents: Read and write). You can look around, but saving will fail.'
-    }
+    await login(password.value)
     router.push('/admin')
-  } catch (e) {
-    const status = e?.status
-    if (status === 401) error.value = 'That key was rejected by GitHub. Check you copied it correctly.'
-    else if (status === 404)
-      error.value =
-        "Key accepted, but it can't see this repository. Make sure it's scoped to theontariorareactiongroup.ca."
-    else error.value = e?.message || 'Could not sign in. Please try again.'
+  } catch (_) {
+    error.value =
+      "That password didn't work. Check for extra spaces, or email hello@… for a new one."
   } finally {
     busy.value = false
   }
@@ -75,60 +68,132 @@ async function submit() {
 </script>
 
 <style scoped>
-.login-wrap {
+.signin {
+  min-height: 100vh;
   display: flex;
+  align-items: center;
   justify-content: center;
-  padding-top: 40px;
+  background: var(--primary);
+  padding: 40px;
+  font-family: var(--sans);
 }
-.login-card {
+.signin-card {
   width: 100%;
-  max-width: 440px;
-  background: #fff;
-  border: 1px solid #e3ddd0;
-  border-radius: 10px;
-  padding: 32px 30px;
+  max-width: 520px;
+  background: var(--bg);
+  border-radius: 18px;
+  padding: 44px 46px;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.3);
 }
-h1 {
-  font-family: var(--serif, Georgia, serif);
-  font-size: 28px;
-  margin: 0 0 6px;
-  color: var(--primary-deep, #1c0f52);
+.signin-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
-.sub { margin: 0 0 22px; color: #6a6a6a; font-size: 15px; }
-.field span {
+.signin-brand img {
+  border-radius: 8px;
   display: block;
+}
+.signin-org {
+  font-family: var(--mono);
   font-size: 13px;
-  font-weight: 600;
-  margin-bottom: 6px;
+  color: var(--muted);
 }
-.field input {
+.signin-heading {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.signin-heading h2 {
+  margin: 0;
+  font-family: var(--serif);
+  font-size: 34px;
+  font-weight: 500;
+  color: var(--primary-deep);
+  line-height: 1.1;
+}
+.signin-heading p {
+  margin: 0;
+  font-size: 15.5px;
+  line-height: 1.6;
+  color: var(--muted);
+}
+.signin-heading a {
+  color: var(--primary);
+  text-decoration: underline;
+}
+.signin-form {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+.signin-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.signin-label {
+  font-size: 14.5px;
+  font-weight: 600;
+  color: var(--ink);
+}
+.signin-field input {
   width: 100%;
-  padding: 11px 13px;
-  border: 1px solid #cfc8ba;
-  border-radius: 6px;
-  font: inherit;
+  padding: 15px 17px;
+  border: 1px solid #d8cfbb;
+  border-radius: 10px;
+  background: #fff;
+  font-size: 17px;
+  color: var(--ink);
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.signin-field input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(30, 1, 119, 0.12);
+}
+.signin-error {
+  margin: -8px 0 0;
   font-size: 14px;
+  color: #a6203a;
+  line-height: 1.5;
 }
-.field input:focus { outline: 2px solid var(--primary, #5634c9); border-color: transparent; }
-button[type='submit'] {
-  margin-top: 18px;
-  width: 100%;
-  padding: 12px;
-  background: var(--primary, #5634c9);
-  color: #fff;
+.signin-btn {
+  background: var(--accent);
   border: none;
-  border-radius: 6px;
-  font: inherit;
-  font-size: 15px;
-  font-weight: 600;
+  border-radius: 999px;
+  padding: 16px 30px;
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--primary-deep);
   cursor: pointer;
+  transition: transform 0.15s ease;
 }
-button[type='submit']:disabled { opacity: 0.5; cursor: not-allowed; }
-.error { color: #b23; font-size: 13.5px; margin: 14px 0 0; }
-.warn { color: #9a6a00; font-size: 13.5px; margin: 14px 0 0; }
-.help { margin-top: 24px; font-size: 13.5px; }
-.help summary { cursor: pointer; font-weight: 600; color: var(--primary, #5634c9); }
-.help ol { margin: 12px 0; padding-left: 20px; line-height: 1.7; color: #444; }
-.help code { background: #f0ece2; padding: 1px 5px; border-radius: 3px; font-size: 12px; }
-.help-note { color: #6a6a6a; font-style: italic; }
+.signin-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+}
+.signin-btn:disabled {
+  opacity: 0.7;
+  cursor: default;
+}
+.signin-foot {
+  margin: 0;
+  font-size: 13.5px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .signin-btn:hover:not(:disabled) {
+    transform: none;
+  }
+}
+@media (max-width: 560px) {
+  .signin-card {
+    padding: 32px 24px;
+  }
+}
 </style>

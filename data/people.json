@@ -1,0 +1,167 @@
+{
+  "_meta": {
+    "scrapedOn": "2026-07-24",
+    "note": "Real named people. `verbatim` quotes are the person's own words as published. Check consent before publishing anything here beyond what is already public on the org's own channels."
+  },
+  "founders": [
+    {
+      "name": "Beth Vanstone",
+      "role": "Co-founder",
+      "source": "https://www.instagram.com/p/DYS9SdnyUTM",
+      "note": "Named as co-founder in the Queen's Park breakfast recap."
+    },
+    {
+      "name": "Alice Williams",
+      "role": "Co-founder",
+      "source": "https://www.instagram.com/p/DYS9SdnyUTM",
+      "linkedin": "https://www.linkedin.com/in/alice-williams/"
+    }
+  ],
+  "contributors": [
+    {
+      "name": "Madi Vanstone",
+      "instagram": "@madssharley",
+      "contribution": "Created the presentation shown at the Queen's Park breakfast on the diversity of Ontarians affected by rare disease.",
+      "source": "https://www.instagram.com/p/DYS9SdnyUTM"
+    }
+  ],
+  "mppSpeakers": [
+    {
+      "name": "Brian Saunderson",
+      "riding": "Simcoe–Grey",
+      "instagram": "@briansaundersonpc",
+      "event": "Voices for Rare Advocacy Breakfast 2026",
+      "source": "https://www.instagram.com/p/DYS9SdnyUTM"
+    },
+    {
+      "name": "France Gélinas",
+      "riding": "Nickel Belt",
+      "instagram": "@francempp",
+      "event": "Voices for Rare Advocacy Breakfast 2026",
+      "source": "https://www.instagram.com/p/DYS9SdnyUTM",
+      "note": "Also a co-sponsor of Bill 129, Rare Disease Strategy Act, 2023 — see policy-references.json. Strongest existing legislative ally."
+    },
+    {
+      "name": "Dr. Adil Shamji",
+      "riding": "Don Valley East",
+      "event": "Voices for Rare Advocacy Breakfast 2026",
+      "source": "https://www.instagram.com/p/DYS9SdnyUTM"
+    },
+    {
+      "name": "Mike Schreiner",
+      "riding": "Guelph",
+      "event": "Voices for Rare Advocacy Breakfast 2026",
+      "source": "https://www.instagram.com/p/DYS9SdnyUTM"
+    }
+  ],
+  "honouredGuests": [
+    {
+      "name": "Durhane Wong-Rieger",
+      "affiliation": "Canadian Organization for Rare Disorders (CORD)",
+      "instagram": "@raredisorders_cord",
+      "description": "Long-standing champion whose leadership has moved rare disease policy forward in Ontario and across Canada.",
+      "source": "https://www.instagram.com/p/DYS9SdnyUTM"
+    },
+    {
+      "name": "Christine Elliott",
+      "affiliation": "Former Ontario Minister of Health",
+      "source": "https://www.instagram.com/p/DYS9SdnyUTM"
+    }
+  ],
+  "storytellers": [
+    {
+      "name": "Pearl Cooley",
+      "location": "Guelph, Ontario",
+      "condition": "Cystic fibrosis",
+      "category": "Patient",
+      "source": "https://www.instagram.com/p/DalYHQeRngk",
+      "postDate": "2026-07-09",
+      "facts": [
+        "Diagnosed with cystic fibrosis at two months old",
+        "Early challenges with growth, digestion and severe lung disease",
+        "Required daily treatments, medications and chest physiotherapy",
+        "First double lung transplant at age 18",
+        "Second double lung transplant two years later",
+        "Lung function has since declined despite years of stability",
+        "Campaigning for Trikafta access, which remains out of reach for some transplant recipients",
+        "Works as an athletic trainer for hockey teams across the GTA",
+        "Also works as a part-time medical assistant"
+      ],
+      "quotes": [
+        {
+          "text": "We cannot forget the people who are living with CF today. We need to support current patients, improve access to life-changing medications, and ensure earlier diagnosis.",
+          "verbatim": true
+        },
+        {
+          "text": "A lung transplant is not a cure. It is a life-saving treatment.",
+          "verbatim": false,
+          "note": "Paraphrased by the org as 'as Pearl reminds us...' — confirm exact wording with her."
+        }
+      ],
+      "usedOnSite": "content/stories.json → pearl-cooley",
+      "image": "/images/instagram/2026-07-09-story-pearl-cooley.jpg"
+    },
+    {
+      "name": "Sandra Markus",
+      "category": "Caregiver",
+      "relation": "Mother of Zach",
+      "condition": "CHD2-related disorder",
+      "source": "https://www.instagram.com/p/DZpyt5oxE57",
+      "postDate": "2026-06-16",
+      "facts": [
+        "Son Zach born with developmental differences 25 years ago",
+        "Took 18 years to receive a diagnosis",
+        "Diagnosed with a CHD2-related disorder at age 18",
+        "Condition can include epilepsy, autism, intellectual disability and developmental delays",
+        "Support system disappeared on transition to adult care",
+        "A dermatological treatment triggered a severe, persisting psychiatric reaction",
+        "Now experiences memory loss and cognitive decline resembling dementia"
+      ],
+      "quotes": [
+        {
+          "text": "In Ontario, that meant no diagnosis, no meaningful support.",
+          "verbatim": true
+        },
+        {
+          "text": "We finally had answers. But the diagnosis didn't unlock care.",
+          "verbatim": true
+        },
+        {
+          "text": "No coordinated team. No roadmap. No one accountable.",
+          "verbatim": true
+        },
+        {
+          "text": "No specialist pathway. No integrated care. No guidance. Just silence.",
+          "verbatim": true
+        },
+        {
+          "text": "Because rare does not mean invisible. Ontario can do better. And for families like ours, it must.",
+          "verbatim": true
+        }
+      ],
+      "note": "Her entire caption is first-person — the richest single source on the account.",
+      "usedOnSite": "content/stories.json → sandra-markus",
+      "image": "/images/instagram/2026-06-16-story-sandra-markus.jpg"
+    },
+    {
+      "name": "Kristen Hummel",
+      "category": "Patient · Advocate",
+      "condition": "Myeloproliferative neoplasm (MPN) → myelofibrosis (MF)",
+      "instagram": "@gritandmarrow",
+      "affiliation": "Canadian MPN Network volunteer",
+      "source": "https://www.instagram.com/p/DbCE66tR5Jp",
+      "postDate": "2026-07-20",
+      "facts": [
+        "In her early 40s attributed constantly feeling hot to perimenopause",
+        "Bloodwork instead revealed a myeloproliferative neoplasm (MPN)",
+        "Condition later progressed to myelofibrosis, which scars the bone marrow",
+        "There is no cure",
+        "Volunteers with the Canadian MPN Network on awareness and access to care"
+      ],
+      "quotes": [],
+      "warning": "No direct quote from Kristen exists in the caption. The site currently uses the org's line 'Rare disease journeys are often lifelong, but no one should have to navigate them alone' as her pull-quote — those are NOT her words. Replace with a real quote.",
+      "usedOnSite": "content/stories.json → kristen-hummel",
+      "image": "/images/instagram/2026-07-20-story-kristen-hummel.jpg"
+    }
+  ]
+}

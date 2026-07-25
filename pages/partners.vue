@@ -29,7 +29,13 @@
               </div>
               <h4 class="partner-name">{{ p.name }}</h4>
               <p class="partner-focus">{{ p.focus }}</p>
-              <span class="partner-link">Visit ↗</span>
+              <component
+                :is="p.url ? 'a' : 'span'"
+                class="partner-link"
+                :href="p.url || undefined"
+                :target="p.url ? '_blank' : undefined"
+                :rel="p.url ? 'noopener' : undefined"
+              >Visit ↗</component>
             </article>
           </div>
         </div>

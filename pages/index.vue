@@ -76,7 +76,7 @@
               <h3 class="ov-title">{{ item.title }}</h3>
               <p class="ov-desc">{{ item.desc }}</p>
             </div>
-            <div class="ov-meta" :aria-label="item.metaAriaLabel">
+            <div class="ov-meta" :aria-label="`${item.count} ${item.countLabel}`">
               <div class="ov-meta-num">{{ item.count }}</div>
               <div class="ov-meta-label">{{ item.countLabel }}</div>
             </div>
@@ -86,7 +86,7 @@
     </section>
 
     <!-- FEATURED EVENT -->
-    <section class="feat-bg">
+    <section class="feat-bg" v-if="featured">
       <div class="wrap">
         <div class="feat-grid">
           <div>
@@ -101,7 +101,7 @@
               <NuxtLink :to="content.featuredEvent.secondaryCta.href" class="btn btn-ghost">{{ content.featuredEvent.secondaryCta.label }}</NuxtLink>
             </div>
           </div>
-          <div class="feat-card" :aria-label="content.featuredEvent.cardAriaLabel">
+          <div class="feat-card" :aria-label="`${content.featuredEvent.savedateLabel} ${featured.day} ${content.featuredEvent.monthLabel}, ${featured.time}, ${content.featuredEvent.locationLabel}`">
             <div class="feat-card-date">{{ content.featuredEvent.savedateLabel }}</div>
             <div class="feat-day">{{ featured.day }}</div>
             <div class="feat-month">{{ content.featuredEvent.monthLabel }}</div>

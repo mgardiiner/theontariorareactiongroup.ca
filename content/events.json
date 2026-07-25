@@ -10,12 +10,12 @@
   },
   "upcomingLabel": "Upcoming events",
   "upcoming": [
-    { "day": "21", "month": "May", "title": "Town Hall: Ontario's Rare Disease Strategy — what's next?", "time": "7:00–8:30 PM ET", "tag": "ZOOM", "date": "May 21, 2026", "featured": true },
-    { "day": "04", "month": "Jun", "title": "Caregiver Roundtable: navigating ODSP and respite", "time": "12:00–1:00 PM ET", "tag": "ZOOM", "date": "Jun 4, 2026" },
-    { "day": "12", "month": "Jun", "title": "Family Meetup: Toronto picnic in High Park", "time": "11:00 AM–3:00 PM ET", "tag": "IRL", "date": "Jun 12, 2026" },
-    { "day": "26", "month": "Jun", "title": "Policy Briefing: drug-access reform in Ontario", "time": "1:00–2:00 PM ET", "tag": "ZOOM", "date": "Jun 26, 2026" },
-    { "day": "10", "month": "Jul", "title": "Self-advocacy 101 for newly diagnosed adults", "time": "6:30–8:00 PM ET", "tag": "ZOOM", "date": "Jul 10, 2026" },
-    { "day": "24", "month": "Jul", "title": "Researcher Q&A: rare-disease registries in Canada", "time": "12:00–1:00 PM ET", "tag": "ZOOM", "date": "Jul 24, 2026" }
+    { "day": "21", "month": "May", "title": "Town Hall: Ontario's Rare Disease Strategy — what's next?", "time": "7:00–8:30 PM ET", "tag": "ZOOM", "date": "May 21, 2026", "featured": true, "desc": "" },
+    { "day": "04", "month": "Jun", "title": "Caregiver Roundtable: navigating ODSP and respite", "time": "12:00–1:00 PM ET", "tag": "ZOOM", "date": "Jun 4, 2026", "desc": "" },
+    { "day": "12", "month": "Jun", "title": "Family Meetup: Toronto picnic in High Park", "time": "11:00 AM–3:00 PM ET", "tag": "IRL", "date": "Jun 12, 2026", "desc": "" },
+    { "day": "26", "month": "Jun", "title": "Policy Briefing: drug-access reform in Ontario", "time": "1:00–2:00 PM ET", "tag": "ZOOM", "date": "Jun 26, 2026", "desc": "" },
+    { "day": "10", "month": "Jul", "title": "Self-advocacy 101 for newly diagnosed adults", "time": "6:30–8:00 PM ET", "tag": "ZOOM", "date": "Jul 10, 2026", "desc": "" },
+    { "day": "24", "month": "Jul", "title": "Researcher Q&A: rare-disease registries in Canada", "time": "12:00–1:00 PM ET", "tag": "ZOOM", "date": "Jul 24, 2026", "desc": "" }
   ],
   "pastHead": {
     "eyebrow": "Past events",

@@ -1,0 +1,28 @@
+{
+  "_meta": {
+    "scrapedOn": "2026-07-24",
+    "note": "content/videos.json lists 8 invented videos with 8 empty url fields, and the home page advertises '38 Videos'. These are the only two videos that exist on the account — both short-form, not the panels/explainers the page describes. Consider cutting the page or making it an Instagram embed."
+  },
+  "videos": [
+    {
+      "title": "Ontario, we can do better than this. We have to.",
+      "date": "2026-05-05",
+      "permalink": "https://www.instagram.com/p/DX945eax5zU",
+      "likes": 18,
+      "pinned": true,
+      "hashtags": [
+        "ontariorare",
+        "raredisease",
+        "advocacy",
+        "ontario",
+        "policychange"
+      ]
+    },
+    {
+      "title": "When you put us all together, we aren't that rare! There is strength in numbers",
+      "date": "2026-05-08",
+      "permalink": "https://www.instagram.com/p/DYFMWaQxEmr",
+      "likes": 33
+    }
+  ]
+}

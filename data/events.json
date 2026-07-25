@@ -1,0 +1,116 @@
+{
+  "_meta": {
+    "scrapedOn": "2026-07-24",
+    "note": "content/events.json currently contains six invented 'upcoming' events and six invented 'past' events. None appear anywhere on the account. Note the org breaks for summer and reconvenes in September, so the window those fake events occupy is one the org has said it is dark for."
+  },
+  "past": [
+    {
+      "name": "Voices for Rare Advocacy Breakfast",
+      "date": "2026-05-13",
+      "dateConfidence": "approximate — post date; caption says 'this morning'",
+      "location": "Queen's Park, Toronto",
+      "attendance": "more than 80 patients, caregivers and supporters",
+      "description": "The organization's first advocacy breakfast. Patients, caregivers and supporters from across Ontario shared stories and a unified message: Ontario's 1.3 million rare disease patients deserve a provincial strategy that meets their needs.",
+      "mppSpeakers": [
+        "Brian Saunderson (Simcoe–Grey)",
+        "France Gélinas (Nickel Belt)",
+        "Dr. Adil Shamji (Don Valley East)",
+        "Mike Schreiner (Guelph)"
+      ],
+      "guests": [
+        "Durhane Wong-Rieger (CORD)",
+        "Christine Elliott (former Minister of Health)"
+      ],
+      "sponsors": [
+        "Alexion",
+        "Novartis Canada"
+      ],
+      "support": [
+        "3Sixty Public Affairs",
+        "Global Public Affairs"
+      ],
+      "closingLine": "Next year, we may need a bigger room.",
+      "source": "https://www.instagram.com/p/DYS9SdnyUTM"
+    },
+    {
+      "name": "OntarioRare community meeting",
+      "date": "2026-06-16",
+      "time": "7:00 PM ET",
+      "description": "Final meeting before the summer break.",
+      "agenda": [
+        "Updates on recent advocacy efforts and growing momentum across Ontario",
+        "Ideas for connecting with your local MPP during the summer months",
+        "An invitation to share your rare disease story for features on the upcoming website and social channels",
+        "Feedback on future advocacy priorities and initiatives"
+      ],
+      "source": "https://www.instagram.com/p/DZKvr6RxfRl",
+      "format": "Zoom",
+      "formatSource": "The announcement graphic states 'Via Zoom' — the caption does not mention the format."
+    }
+  ],
+  "announced": [
+    {
+      "name": "Virtual town hall",
+      "when": "October 2026",
+      "description": "With patients, caregivers, industry, policy and political representatives.",
+      "status": "announced as under consideration",
+      "source": "https://www.instagram.com/p/DZKvr6RxfRl"
+    },
+    {
+      "name": "Provincial patient advocacy conference",
+      "when": "Spring 2027",
+      "status": "announced as under consideration",
+      "source": "https://www.instagram.com/p/DZKvr6RxfRl"
+    },
+    {
+      "name": "Voices for Rare Advocacy Breakfast (second annual)",
+      "when": "May 2027",
+      "location": "Queen's Park, Toronto",
+      "status": "announced as under consideration",
+      "source": "https://www.instagram.com/p/DZKvr6RxfRl"
+    }
+  ],
+  "cadence": {
+    "note": "Meetings pause over the summer and reconvene in September. The June 16 meeting was explicitly 'our final meeting before we break for the summer and reconvene in September.'",
+    "source": "https://www.instagram.com/p/DZKvr6RxfRl"
+  },
+  "campaigns": [
+    {
+      "name": "Summer MPP outreach",
+      "period": "Summer 2026",
+      "description": "Encourages supporters to visit their MPP's constituency office or meet them at community events to share their story.",
+      "copy": "Summer is a GREAT time to connect with your local MPP! Whether you stop by their constituency office or meet them at a community event, taking the time to share your story can help build meaningful relationships and increase understanding of the challenges faced by the rare disease community. Every conversation matters.",
+      "verbatim": true,
+      "source": "https://www.instagram.com/p/Dagm4IVkUTj"
+    }
+  ],
+  "advocacyFramework": {
+    "name": "Connecting Patients to Care",
+    "tagline": "Every rare disease journey deserves timely diagnosis, treatment access, research, and support.",
+    "verbatim": true,
+    "source": "https://www.instagram.com/p/DZnHmXnR3BX/",
+    "note": "Taken from the organization's own infographic. A real five-stage framework that could replace the six invented advocacy commitments on the site.",
+    "stages": [
+      {
+        "stage": "Family",
+        "description": "Support and caregivers"
+      },
+      {
+        "stage": "Diagnosis",
+        "description": "Accurate diagnosis for a faster path forward"
+      },
+      {
+        "stage": "Research",
+        "description": "Advancing science and innovation for rare solutions"
+      },
+      {
+        "stage": "Treatment",
+        "description": "Access to therapies and expert care when it matters"
+      },
+      {
+        "stage": "Hope & Community",
+        "description": "Better quality of life through connection, inclusion, and hope"
+      }
+    ]
+  }
+}

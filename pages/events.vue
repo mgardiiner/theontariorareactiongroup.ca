@@ -50,6 +50,7 @@
                     <span class="event-tag">{{ event.tag }}</span>
                     <span>{{ event.time }}</span>
                   </div>
+                  <p class="event-desc" v-if="event.desc">{{ event.desc }}</p>
                 </div>
                 <div class="event-arrow" aria-hidden="true">→</div>
               </div>
@@ -232,6 +233,13 @@ function handleRegister() {
   padding: 3px 8px;
   border-radius: 3px;
   letter-spacing: 0.1em;
+}
+.event-desc {
+  font-size: 14.5px;
+  line-height: 1.5;
+  color: rgba(255,255,255,0.72);
+  margin: 10px 0 0;
+  max-width: 52ch;
 }
 .event-arrow {
   align-self: center;

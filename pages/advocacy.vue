@@ -26,7 +26,13 @@
             <div>
               <h3 class="goal-title">{{ goal.title }}</h3>
               <p class="goal-desc">{{ goal.desc }}</p>
-              <a class="goal-link" href="#" @click.prevent>Read the brief</a>
+              <a
+                class="goal-link"
+                :href="goal.briefUrl || '#'"
+                :target="goal.briefUrl ? '_blank' : undefined"
+                :rel="goal.briefUrl ? 'noopener' : undefined"
+                @click="!goal.briefUrl && $event.preventDefault()"
+              >Read the brief</a>
             </div>
             <div class="goal-side">
               <span class="pill" :class="goal.statusClass">{{ goal.status }}</span>

@@ -1,0 +1,125 @@
+{
+  "_meta": {
+    "scrapedOn": "2026-07-24",
+    "warning": "content/advocacy.json → progress[] currently asserts 'Bill 142', 'Bill 87', a 'Win — Mar 2025' (patient seat on the EAP committee) and a 'Win — Nov 2025' (Northern Centre of Expertise pilot). None of these are corroborated by the account or by any source found. Claimed legislative wins with dates should not ship unverified. The real, citable items are below."
+  },
+  "statistics": [
+    {
+      "stat": "1.3 million",
+      "claim": "Ontarians living with a rare disease",
+      "usedBy": "the organization, in at least three separate posts",
+      "sources": [
+        "https://www.instagram.com/p/DYS9SdnyUTM",
+        "https://www.instagram.com/p/DZKvr6RxfRl"
+      ],
+      "note": "Their headline number. Already in the site footer; should be the hero stat."
+    },
+    {
+      "stat": "1 in 12",
+      "claim": "Canadians living with a rare disease",
+      "sources": [
+        "https://www.instagram.com/p/DaQJSIZxRt4"
+      ],
+      "note": "Conflicts with the site's current hero stat of '2.8M Canadians'. 1 in 12 is roughly 3.2M."
+    },
+    {
+      "stat": "more than 80",
+      "claim": "attendees at the first Voices for Rare Advocacy Breakfast",
+      "sources": [
+        "https://www.instagram.com/p/DYS9SdnyUTM"
+      ]
+    },
+    {
+      "stat": "18 years",
+      "claim": "time to diagnosis in the Markus family's case",
+      "sources": [
+        "https://www.instagram.com/p/DZpyt5oxE57"
+      ],
+      "note": "A real, attributable figure. The site's unsourced '5+ years' average is not."
+    }
+  ],
+  "legislation": [
+    {
+      "bill": "Bill 129",
+      "title": "Rare Disease Strategy Act, 2023",
+      "longTitle": "An Act to amend the Health Protection and Promotion Act to implement the recommendations of the Rare Diseases Working Group Report",
+      "parliament": "43rd Parliament, 1st Session",
+      "sponsors": [
+        "Bhutila Karpoche",
+        "France Gélinas",
+        "Jill Andrew"
+      ],
+      "status": "First Reading carried, June 7 2023 — no subsequent readings",
+      "proposes": "Requires Ontario to implement the recommendations of the Rare Diseases Working Group Report (March 10, 2017) as soon as is practicable, and to publish progress updates every six months.",
+      "url": "https://www.ola.org/en/legislative-business/bills/parliament-43/session-1/bill-129",
+      "relevance": "Directly on point for the 'Provincial Rare Disease Strategy' goal, and co-sponsor France Gélinas spoke at the org's own breakfast. This is a real bill the progress tracker could cite instead of the invented 'Bill 142'."
+    }
+  ],
+  "governmentSources": [
+    {
+      "title": "Ontario Launches Working Group to Benefit People Living with Rare Diseases",
+      "date": "2016-09-02",
+      "url": "http://health.gov.on.ca/en/news/bulletin/2016/hb_20160902.aspx"
+    },
+    {
+      "title": "Ontario Supporting People Living with Rare Diseases",
+      "date": "2017-12-08",
+      "url": "https://www.health.gov.on.ca/en/news/bulletin/2017/hb_20171208.aspx"
+    },
+    {
+      "title": "Rare Diseases Working Group Report",
+      "date": "2017-03-10",
+      "note": "Referenced by Bill 129 as the report whose recommendations remain unimplemented."
+    }
+  ],
+  "advocacyPriorities": {
+    "note": "Priorities the organization itself has stated, as opposed to the site's invented six.",
+    "items": [
+      {
+        "priority": "Coordinated care across the lifespan",
+        "source": "https://www.instagram.com/p/DZpyt5oxE57"
+      },
+      {
+        "priority": "Integration of genomic diagnosis into care pathways",
+        "source": "https://www.instagram.com/p/DZpyt5oxE57"
+      },
+      {
+        "priority": "Faster access to treatments",
+        "source": "https://www.instagram.com/p/DZpyt5oxE57"
+      },
+      {
+        "priority": "Support that doesn't disappear at age 18",
+        "source": "https://www.instagram.com/p/DZpyt5oxE57",
+        "note": "Distinctive to them and absent from the current site."
+      },
+      {
+        "priority": "A provincial rare disease strategy for Ontario's 1.3 million patients",
+        "source": "https://www.instagram.com/p/DYS9SdnyUTM"
+      },
+      {
+        "priority": "Earlier diagnosis",
+        "source": "https://www.instagram.com/p/DalYHQeRngk"
+      },
+      {
+        "priority": "Access to existing medications such as Trikafta",
+        "source": "https://www.instagram.com/p/DalYHQeRngk"
+      },
+      {
+        "priority": "Equitable access regardless of where you live",
+        "source": "https://www.instagram.com/p/DaQJSIZxRt4"
+      }
+    ]
+  },
+  "newsCoverage": [
+    {
+      "title": "New group launches to advocate for rare disease patients in Ontario",
+      "outlet": "Village Media (BarrieToday / BradfordToday)",
+      "urls": [
+        "https://www.barrietoday.com/local-news/new-group-launches-to-advocate-for-rare-disease-patients-in-ontario-11804751",
+        "https://www.bradfordtoday.ca/local-news/new-group-launches-to-advocate-for-rare-disease-patients-in-ontario-11796390"
+      ],
+      "note": "Confirms the ORAG acronym and the mission framing. Full text is behind a Cloudflare challenge — open it in a browser to pull the direct quotes and the contact email it lists.",
+      "status": "not retrieved — Cloudflare blocked"
+    }
+  ]
+}

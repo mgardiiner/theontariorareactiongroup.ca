@@ -12,6 +12,7 @@
         <div>
           <h1>{{ section.label }}</h1>
           <p v-if="section.description" class="sub">{{ section.description }}</p>
+          <a v-if="section.path" :href="section.path" target="_blank" rel="noopener" class="view-page">View this page ↗</a>
         </div>
         <div class="ed-actions">
           <span v-if="dirty" class="dirty-dot" title="Unsaved changes">● unsaved</span>
@@ -54,6 +55,9 @@ const { token, canWrite } = useAdminAuth()
 const section = computed(() => getSection(route.params.section))
 
 const data = ref(null)
+// Expose the section's data so nested dropdowns can source choices from sibling
+// fields (e.g. a story's filterKey from the filters list).
+provide('adminRoot', data)
 const sha = ref('')
 const savedSnapshot = ref('')
 const loading = ref(true)
@@ -146,6 +150,14 @@ h1 {
   color: var(--primary-deep, #1c0f52);
 }
 .sub { margin: 0; color: #6a6a6a; font-size: 14.5px; max-width: 60ch; }
+.view-page {
+  display: inline-block;
+  margin-top: 8px;
+  font-size: 13px;
+  color: var(--primary, #5634c9);
+  text-decoration: none;
+}
+.view-page:hover { text-decoration: underline; }
 .ed-actions { display: flex; align-items: center; gap: 14px; flex-shrink: 0; }
 .dirty-dot { color: #b26a00; font-size: 13px; font-weight: 600; }
 .save {

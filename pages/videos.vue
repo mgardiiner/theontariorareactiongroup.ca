@@ -31,7 +31,17 @@
         </div>
 
         <div class="videos-grid">
-          <article class="video feature v1" tabindex="0" role="button" :aria-label="content.featured.ariaLabel">
+          <component
+            :is="content.featured.url ? 'a' : 'article'"
+            class="video feature"
+            :class="content.featured.cls"
+            :href="content.featured.url || undefined"
+            :target="content.featured.url ? '_blank' : undefined"
+            :rel="content.featured.url ? 'noopener' : undefined"
+            :tabindex="content.featured.url ? undefined : '0'"
+            :role="content.featured.url ? undefined : 'button'"
+            :aria-label="`${content.featured.cat}: ${content.featured.title}, ${content.featured.dur}`"
+          >
             <div class="video-thumb"></div>
             <div class="video-play" aria-hidden="true">
               <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
@@ -41,9 +51,21 @@
               <h4 class="video-title">{{ content.featured.title }}</h4>
               <div class="video-dur">{{ content.featured.dur }}</div>
             </div>
-          </article>
+          </component>
 
-          <article class="video v2" v-for="v in content.sideVideos" :key="v.title" tabindex="0" role="button" :aria-label="`${v.cat}: ${v.title}, ${v.dur}`">
+          <component
+            :is="v.url ? 'a' : 'article'"
+            class="video"
+            :class="v.cls"
+            v-for="v in filteredSide"
+            :key="v.title"
+            :href="v.url || undefined"
+            :target="v.url ? '_blank' : undefined"
+            :rel="v.url ? 'noopener' : undefined"
+            :tabindex="v.url ? undefined : '0'"
+            :role="v.url ? undefined : 'button'"
+            :aria-label="`${v.cat}: ${v.title}, ${v.dur}`"
+          >
             <div class="video-thumb"></div>
             <div class="video-play" aria-hidden="true">
               <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
@@ -53,11 +75,23 @@
               <h4 class="video-title">{{ v.title }}</h4>
               <div class="video-dur">{{ v.dur }}</div>
             </div>
-          </article>
+          </component>
         </div>
 
         <div class="more-grid">
-          <article class="video" :class="v.cls" v-for="v in content.moreVideos" :key="v.title" tabindex="0" role="button" :aria-label="`${v.cat}: ${v.title}, ${v.dur}`">
+          <component
+            :is="v.url ? 'a' : 'article'"
+            class="video"
+            :class="v.cls"
+            v-for="v in filteredMore"
+            :key="v.title"
+            :href="v.url || undefined"
+            :target="v.url ? '_blank' : undefined"
+            :rel="v.url ? 'noopener' : undefined"
+            :tabindex="v.url ? undefined : '0'"
+            :role="v.url ? undefined : 'button'"
+            :aria-label="`${v.cat}: ${v.title}, ${v.dur}`"
+          >
             <div class="video-thumb"></div>
             <div class="video-play" aria-hidden="true">
               <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
@@ -67,7 +101,7 @@
               <h4 class="video-title">{{ v.title }}</h4>
               <div class="video-dur">{{ v.dur }}</div>
             </div>
-          </article>
+          </component>
         </div>
       </div>
     </section>
@@ -80,6 +114,17 @@ import content from '~/content/videos.json'
 definePageMeta({ layout: 'default' })
 
 const activeFilter = ref('All videos')
+
+// An "All …" filter shows everything. Otherwise match each video's category to
+// the active filter. Behaviour-safe: if no category matches (e.g. the filter
+// labels and cat values don't line up), fall back to showing every video rather
+// than an empty grid.
+const showAll = computed(() => activeFilter.value.toLowerCase().startsWith('all'))
+const sideMatches = computed(() => content.sideVideos.filter(v => v.cat === activeFilter.value))
+const moreMatches = computed(() => content.moreVideos.filter(v => v.cat === activeFilter.value))
+const noMatches = computed(() => sideMatches.value.length === 0 && moreMatches.value.length === 0)
+const filteredSide = computed(() => (showAll.value || noMatches.value) ? content.sideVideos : sideMatches.value)
+const filteredMore = computed(() => (showAll.value || noMatches.value) ? content.moreVideos : moreMatches.value)
 </script>
 
 <style scoped>

@@ -15,6 +15,7 @@
       "desc": "Implementation of Canada's National Strategy at the Ontario level — with funding, accountability and patient governance built in from the start.",
       "status": "Tabled",
       "statusClass": "",
+      "briefUrl": "",
       "points": ["Standing patient council with binding input", "Five-year funding tied to outcomes", "Annual public reporting on equity"]
     },
     {
@@ -23,6 +24,7 @@
       "desc": "Universal newborn screening expansion and reimbursed genetic testing, so families don't wait years for answers.",
       "status": "Drafting",
       "statusClass": "pill-draft",
+      "briefUrl": "",
       "points": ["Newborn panel aligned with U.S. RUSP", "OHIP exome and genome sequencing", "Adult diagnostic-odyssey program"]
     },
     {
@@ -31,6 +33,7 @@
       "desc": "A transparent, patient-informed reimbursement pathway for rare-disease therapies — including pediatric and ultra-rare medications.",
       "status": "In review",
       "statusClass": "pill-draft",
+      "briefUrl": "",
       "points": ["Defined post-approval timelines", "A managed-access fund", "Patient seats on EAP review"]
     },
     {
@@ -39,6 +42,7 @@
       "desc": "Recognition of unpaid caregivers in provincial labour and benefit policy, including respite and mental-health funding.",
       "status": "Active",
       "statusClass": "",
+      "briefUrl": "",
       "points": ["Paid caregiver leave protections", "Direct respite-care subsidies", "Mental-health coverage for caregivers"]
     },
     {
@@ -47,6 +51,7 @@
       "desc": "Designated Centres of Expertise across Ontario so rural and northern patients receive the same standard of care as those in the GTA.",
       "status": "Piloting",
       "statusClass": "pill-draft",
+      "briefUrl": "",
       "points": ["Centre of Expertise per Health Region", "Permanent telehealth funding", "Travel & accommodation grants"]
     },
     {
@@ -55,6 +60,7 @@
       "desc": "Dedicated provincial funding for rare-disease research, registries and patient-reported outcome programs.",
       "status": "Open",
       "statusClass": "pill-open",
+      "briefUrl": "",
       "points": ["Provincial fund matched to federal", "Connected patient registry network", "Mandatory patient partners"]
     }
   ],

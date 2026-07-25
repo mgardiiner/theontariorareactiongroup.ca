@@ -6,19 +6,25 @@ export type FieldType =
   | 'text'
   | 'textarea'
   | 'html' // prose that may contain inline markup (<em>, <strong>, <a>); rendered with v-html on the site
+  | 'url' // a link; renders like text with link-friendly hints
   | 'number'
   | 'boolean'
   | 'select'
   | 'image'
   | 'object'
   | 'list'
+  | 'heading' // not a data field — renders a divider/subheading in the form
+
+/** A dropdown choice: either a plain string (label = value) or a friendly label mapped to a stored value. */
+export type SelectOption = string | { label: string; value: string }
 
 export interface Field {
   key: string
   label: string
   type: FieldType
   help?: string
-  options?: string[] // for 'select'
+  options?: SelectOption[] // for 'select' (static choices)
+  optionsFrom?: string // for 'select': key of a sibling/root string-list whose values become the choices (e.g. 'filters')
   fields?: Field[] // for 'object' and 'list' (the per-item fields, when items are objects)
   itemType?: 'text' | 'textarea' // for 'list' of plain strings (no per-item fields)
   itemLabelKey?: string // for 'list' of objects: which sub-field to show as each row's title
@@ -30,10 +36,15 @@ export interface Section {
   label: string
   file: string // path in the repo, e.g. content/challenges.json
   description?: string
+  path?: string // the live page this section renders (for a "View this page" link), e.g. '/stories'
   fields: Field[]
 }
 
 // ---- defaults / normalization so the editor can assume the full shape exists ----
+function optionValue(o: SelectOption): string {
+  return typeof o === 'string' ? o : o.value
+}
+
 function defaultFor(f: Field): unknown {
   switch (f.type) {
     case 'boolean':
@@ -41,7 +52,7 @@ function defaultFor(f: Field): unknown {
     case 'number':
       return 0
     case 'select':
-      return f.options?.[0] ?? ''
+      return f.options?.length ? optionValue(f.options[0]) : ''
     case 'object':
       return blankFromFields(f.fields || [])
     case 'list':
@@ -53,7 +64,10 @@ function defaultFor(f: Field): unknown {
 
 export function blankFromFields(fields: Field[]): Record<string, unknown> {
   const o: Record<string, unknown> = {}
-  for (const f of fields) o[f.key] = defaultFor(f)
+  for (const f of fields) {
+    if (f.type === 'heading') continue // display-only, no data
+    o[f.key] = defaultFor(f)
+  }
   return o
 }
 
@@ -62,6 +76,7 @@ export function normalize(data: unknown, fields: Field[]): Record<string, any> {
   const out: Record<string, any> =
     data && typeof data === 'object' ? (data as Record<string, any>) : {}
   for (const f of fields) {
+    if (f.type === 'heading') continue // display-only, no data
     if (f.type === 'object') {
       out[f.key] = normalize(out[f.key], f.fields || [])
     } else if (f.type === 'list') {
@@ -100,12 +115,25 @@ function ctaField(key: string, label: string): Field {
   }
 }
 
+// Friendly names for the video thumbnail gradients (v1..v8, defined in pages/videos.vue).
+const videoThumbOptions: SelectOption[] = [
+  { label: 'Dark blue', value: 'v1' },
+  { label: 'Blue indigo', value: 'v2' },
+  { label: 'Gold', value: 'v3' },
+  { label: 'Indigo', value: 'v4' },
+  { label: 'Amber', value: 'v5' },
+  { label: 'Deep blue', value: 'v6' },
+  { label: 'Violet', value: 'v7' },
+  { label: 'Yellow-gold', value: 'v8' },
+]
+
 export const sections: Section[] = [
   {
     key: 'site',
     label: 'Site-wide (nav & footer)',
     file: 'content/site.json',
     description: 'The top navigation, the header button, and everything in the footer — shown on every page.',
+    path: '/',
     fields: [
       {
         key: 'nav',
@@ -116,7 +144,6 @@ export const sections: Section[] = [
         fields: [
           { key: 'label', label: 'Link text', type: 'text' },
           { key: 'href', label: 'Link (a /path or full URL)', type: 'text' },
-          { key: 'order', label: 'Sort order', type: 'number' },
         ],
       },
       ctaField('cta', 'Header button'),
@@ -187,6 +214,7 @@ export const sections: Section[] = [
     file: 'content/home.json',
     description:
       'The landing page: hero, stats, marquee, mission, the section overview, the featured event, and the contact + newsletter bands.',
+    path: '/',
     fields: [
       seoField,
       {
@@ -261,21 +289,29 @@ export const sections: Section[] = [
         itemLabelKey: 'tag',
         addLabel: 'Add a card',
         fields: [
-          { key: 'href', label: 'Link (a /path or full URL)', type: 'text' },
-          { key: 'idx', label: 'Index number (e.g. 01)', type: 'text' },
-          {
-            key: 'imgClass',
-            label: 'Image CSS class',
-            type: 'text',
-            help: 'Controls the placeholder gradient (e.g. ov-img-2). Leave blank for the default.',
-          },
-          { key: 'visualTag', label: 'Image tag label', type: 'text' },
           { key: 'tag', label: 'Category tag', type: 'text' },
           { key: 'title', label: 'Title', type: 'text' },
           { key: 'desc', label: 'Description', type: 'textarea' },
           { key: 'count', label: 'Count number (e.g. 6)', type: 'text' },
           { key: 'countLabel', label: 'Count label', type: 'text' },
-          { key: 'metaAriaLabel', label: 'Accessibility label for the count', type: 'text' },
+          { key: 'href', label: 'Link (a /path or full URL)', type: 'text' },
+          { key: '_settings', label: 'Settings', type: 'heading' },
+          { key: 'visualTag', label: 'Image tag label', type: 'text' },
+          { key: 'idx', label: 'Index number (e.g. 01)', type: 'text' },
+          {
+            key: 'imgClass',
+            label: 'Card image colour',
+            type: 'select',
+            help: 'The gradient shown on the card image.',
+            options: [
+              { label: 'Default (indigo)', value: '' },
+              { label: 'Deep blue', value: 'ov-img-2' },
+              { label: 'Dark indigo', value: 'ov-img-3' },
+              { label: 'Violet', value: 'ov-img-4' },
+              { label: 'Gold', value: 'ov-img-5' },
+              { label: 'Yellow-gold', value: 'ov-img-6' },
+            ],
+          },
         ],
       },
       {
@@ -287,7 +323,6 @@ export const sections: Section[] = [
           { key: 'meta', label: 'Description', type: 'textarea' },
           ctaField('primaryCta', 'Primary button'),
           ctaField('secondaryCta', 'Secondary button'),
-          { key: 'cardAriaLabel', label: 'Accessibility label for the date card', type: 'text' },
           { key: 'savedateLabel', label: '"Save the date" label', type: 'text' },
           { key: 'monthLabel', label: 'Month label', type: 'text' },
           { key: 'locationLabel', label: 'Location label', type: 'text' },
@@ -327,6 +362,7 @@ export const sections: Section[] = [
     file: 'content/stories.json',
     description:
       'The stories listing page, the individual story articles, and the "share your story" call-to-action.',
+    path: '/stories',
     fields: [
       seoField,
       {
@@ -373,35 +409,61 @@ export const sections: Section[] = [
         itemLabelKey: 'authorName',
         addLabel: 'Add a story',
         fields: [
-          { key: 'id', label: 'ID (unique number)', type: 'number' },
-          {
-            key: 'slug',
-            label: 'URL slug',
-            type: 'text',
-            help: 'Used in the page address, e.g. maya-nakamura.',
-          },
-          { key: 'category', label: 'Category', type: 'text' },
-          {
-            key: 'filterKey',
-            label: 'Filter category',
-            type: 'text',
-            help: 'Must match one of the filter buttons above (e.g. Caregivers) for filtering to work.',
-          },
-          { key: 'readTime', label: 'Read time (e.g. 9 min read)', type: 'text' },
-          { key: 'imgClass', label: 'Image CSS class', type: 'text' },
-          { key: 'imgLabel', label: 'Image caption', type: 'text' },
-          { key: 'imgGradient', label: 'Image gradient (CSS)', type: 'text' },
           { key: 'title', label: 'Headline', type: 'textarea' },
           { key: 'quote', label: 'Pull quote', type: 'textarea' },
           { key: 'initials', label: 'Author initials', type: 'text' },
           { key: 'authorName', label: 'Author name', type: 'text' },
           { key: 'authorRole', label: 'Author role', type: 'text' },
+          { key: 'readTime', label: 'Read time (e.g. 9 min read)', type: 'text' },
           {
             key: 'body',
             label: 'Story body',
             type: 'textarea',
             help: 'Separate paragraphs with a blank line.',
           },
+          { key: '_settings', label: 'Settings', type: 'heading' },
+          {
+            key: 'slug',
+            label: 'URL slug',
+            type: 'text',
+            help: 'Used in the page address, e.g. pearl-cooley.',
+          },
+          {
+            key: 'category',
+            label: 'Category',
+            type: 'text',
+            help: 'The label shown on the story card (e.g. Caregiver).',
+          },
+          {
+            key: 'filterKey',
+            label: 'Filter category',
+            type: 'select',
+            optionsFrom: 'filters',
+            help: 'Controls which filter tab this story appears under.',
+          },
+          {
+            key: 'imgClass',
+            label: 'Card image colour',
+            type: 'select',
+            help: 'The gradient shown on the story card image.',
+            options: [
+              { label: 'Indigo', value: 's1' },
+              { label: 'Dark blue', value: 's2' },
+              { label: 'Amber', value: 's3' },
+              { label: 'Blue-violet', value: 's4' },
+              { label: 'Gold', value: 's5' },
+              { label: 'Dark indigo', value: 's6' },
+            ],
+          },
+          { key: 'imgLabel', label: 'Image caption', type: 'text' },
+          { key: '_advanced', label: 'Advanced', type: 'heading' },
+          {
+            key: 'imgGradient',
+            label: 'Image gradient (CSS)',
+            type: 'text',
+            help: '(optional) overrides the article-header colour — leave as-is if unsure.',
+          },
+          { key: 'id', label: 'ID (unique number)', type: 'number' },
         ],
       },
     ],
@@ -411,6 +473,7 @@ export const sections: Section[] = [
     label: 'Events',
     file: 'content/events.json',
     description: 'Upcoming and past events, plus the registration form labels and options.',
+    path: '/events',
     fields: [
       seoField,
       {
@@ -439,6 +502,7 @@ export const sections: Section[] = [
           { key: 'day', label: 'Day (e.g. 21)', type: 'text' },
           { key: 'month', label: 'Month (e.g. May)', type: 'text' },
           { key: 'title', label: 'Title', type: 'text' },
+          { key: 'desc', label: 'Short description', type: 'textarea' },
           { key: 'time', label: 'Time (e.g. 7:00–8:30 PM ET)', type: 'text' },
           { key: 'tag', label: 'Format', type: 'select', options: ['ZOOM', 'IRL'] },
           { key: 'date', label: 'Full date (e.g. May 21, 2026)', type: 'text' },
@@ -508,6 +572,7 @@ export const sections: Section[] = [
     label: 'Challenges',
     file: 'content/challenges.json',
     description: 'The numbered challenges list, the pull quote, and the call-to-action band.',
+    path: '/challenges',
     fields: [
       seoField,
       {
@@ -582,6 +647,7 @@ export const sections: Section[] = [
     label: 'Advocacy',
     file: 'content/advocacy.json',
     description: 'The advocacy goals, the progress tracker, and the closing call-to-action band.',
+    path: '/advocacy',
     fields: [
       seoField,
       {
@@ -609,12 +675,17 @@ export const sections: Section[] = [
           { key: 'num', label: 'Number (e.g. 01)', type: 'text' },
           { key: 'title', label: 'Title', type: 'text' },
           { key: 'desc', label: 'Description', type: 'textarea' },
+          { key: 'briefUrl', label: "'Read the brief' link", type: 'url' },
           { key: 'status', label: 'Status label', type: 'text' },
           {
             key: 'statusClass',
-            label: 'Status style (CSS class)',
-            type: 'text',
-            help: 'Leave blank, or use pill-draft / pill-open to change the badge colour.',
+            label: 'Status badge colour',
+            type: 'select',
+            options: [
+              { label: 'Neutral', value: '' },
+              { label: 'Draft', value: 'pill-draft' },
+              { label: 'Open', value: 'pill-open' },
+            ],
           },
           {
             key: 'points',
@@ -652,9 +723,13 @@ export const sections: Section[] = [
           { key: 'status', label: 'Status label', type: 'text' },
           {
             key: 'statusClass',
-            label: 'Status style (CSS class)',
-            type: 'text',
-            help: 'pr-progress, pr-open, or pr-win change the badge colour.',
+            label: 'Status badge colour',
+            type: 'select',
+            options: [
+              { label: 'In progress', value: 'pr-progress' },
+              { label: 'Open', value: 'pr-open' },
+              { label: 'Won', value: 'pr-win' },
+            ],
           },
         ],
       },
@@ -681,6 +756,7 @@ export const sections: Section[] = [
     label: 'Videos',
     file: 'content/videos.json',
     description: 'The video library: filters, the featured video, and the two grids of additional videos.',
+    path: '/videos',
     fields: [
       seoField,
       {
@@ -713,7 +789,8 @@ export const sections: Section[] = [
           { key: 'cat', label: 'Category', type: 'text' },
           { key: 'title', label: 'Title', type: 'text' },
           { key: 'dur', label: 'Duration / meta (e.g. 42 min · Recorded Mar 2026)', type: 'text' },
-          { key: 'ariaLabel', label: 'Accessibility label', type: 'text' },
+          { key: 'url', label: 'Video link', type: 'url' },
+          { key: 'cls', label: 'Thumbnail colour', type: 'select', options: videoThumbOptions },
         ],
       },
       {
@@ -723,10 +800,11 @@ export const sections: Section[] = [
         itemLabelKey: 'title',
         addLabel: 'Add a video',
         fields: [
-          { key: 'cls', label: 'Thumbnail CSS class', type: 'text' },
           { key: 'cat', label: 'Category', type: 'text' },
           { key: 'title', label: 'Title', type: 'text' },
           { key: 'dur', label: 'Duration (e.g. 8 min)', type: 'text' },
+          { key: 'url', label: 'Video link', type: 'url' },
+          { key: 'cls', label: 'Thumbnail colour', type: 'select', options: videoThumbOptions },
         ],
       },
       {
@@ -736,10 +814,11 @@ export const sections: Section[] = [
         itemLabelKey: 'title',
         addLabel: 'Add a video',
         fields: [
-          { key: 'cls', label: 'Thumbnail CSS class', type: 'text' },
           { key: 'cat', label: 'Category', type: 'text' },
           { key: 'title', label: 'Title', type: 'text' },
           { key: 'dur', label: 'Duration (e.g. 19 min)', type: 'text' },
+          { key: 'url', label: 'Video link', type: 'url' },
+          { key: 'cls', label: 'Thumbnail colour', type: 'select', options: videoThumbOptions },
         ],
       },
     ],
@@ -749,6 +828,7 @@ export const sections: Section[] = [
     label: 'Partners',
     file: 'content/partners.json',
     description: 'The affiliated-organization groups and their partners, plus the "become a partner" band.',
+    path: '/partners',
     fields: [
       seoField,
       {
@@ -785,6 +865,7 @@ export const sections: Section[] = [
               { key: 'region', label: 'Region', type: 'text' },
               { key: 'name', label: 'Organization name', type: 'text' },
               { key: 'focus', label: 'Focus / description', type: 'textarea' },
+              { key: 'url', label: 'Website link', type: 'url' },
             ],
           },
         ],
@@ -812,6 +893,7 @@ export const sections: Section[] = [
     file: 'content/contact.json',
     description:
       'The contact form (labels, dropdown options, success message), the newsletter band, and the form-service key.',
+    path: '/contact',
     fields: [
       seoField,
       {
@@ -885,6 +967,12 @@ export const sections: Section[] = [
         ],
       },
       {
+        key: '_advanced',
+        label: "Advanced — don't change unless you know what you're doing",
+        type: 'heading',
+        help: 'This connects the contact form to the service that delivers messages. Editing it wrong will stop submissions from arriving.',
+      },
+      {
         key: 'web3formsKey',
         label: 'Web3Forms access key',
         type: 'text',
@@ -897,6 +985,7 @@ export const sections: Section[] = [
     label: 'Coming-soon page',
     file: 'content/coming-soon.json',
     description: 'The standalone launch page: headline, signup form, and the Mailchimp connection.',
+    path: '/coming-soon',
     fields: [
       seoField,
       { key: 'orgName', label: 'Organization name', type: 'text' },
@@ -911,6 +1000,12 @@ export const sections: Section[] = [
       { key: 'submitLabel', label: 'Signup button label', type: 'text' },
       { key: 'successText', label: 'Success message', type: 'text' },
       { key: 'contactEmail', label: 'Contact email', type: 'text' },
+      {
+        key: '_advanced',
+        label: "Advanced — don't change unless you know what you're doing",
+        type: 'heading',
+        help: 'This connects the signup form to Mailchimp. Editing these wrong will stop signups from being recorded.',
+      },
       {
         key: 'mailchimp',
         label: 'Mailchimp connection',

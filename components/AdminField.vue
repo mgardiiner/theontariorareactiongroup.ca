@@ -13,6 +13,19 @@
     <span v-if="field.help" class="afld-help">{{ field.help }}</span>
   </label>
 
+  <!-- url / link -->
+  <label v-else-if="field.type === 'url'" class="afld">
+    <span class="afld-label">{{ field.label }}</span>
+    <input type="text" inputmode="url" v-model="obj[field.key]" placeholder="https://…  or  /a-page" />
+    <span class="afld-help">{{ field.help || 'A full web address (https://…) or an internal page like /stories. Leave blank for no link.' }}</span>
+  </label>
+
+  <!-- heading / divider (display only) -->
+  <p v-else-if="field.type === 'heading'" class="afld-heading">
+    {{ field.label }}
+    <span v-if="field.help" class="afld-heading-help">{{ field.help }}</span>
+  </p>
+
   <!-- html / rich prose -->
   <label v-else-if="field.type === 'html'" class="afld">
     <span class="afld-label">{{ field.label }} <em class="afld-tag">formatting allowed</em></span>
@@ -36,8 +49,9 @@
   <label v-else-if="field.type === 'select'" class="afld">
     <span class="afld-label">{{ field.label }}</span>
     <select v-model="obj[field.key]">
-      <option v-for="o in field.options" :key="o" :value="o">{{ o }}</option>
+      <option v-for="o in resolvedOptions" :key="o.value" :value="o.value">{{ o.label }}</option>
     </select>
+    <span v-if="field.help" class="afld-help">{{ field.help }}</span>
   </label>
 
   <!-- image (URL for now; media picker added later) -->
@@ -94,12 +108,34 @@ import { type Field, blankFromFields } from '~/admin/schema'
 
 const props = defineProps<{ field: Field; obj: Record<string, any> }>()
 
+// The whole section's data (provided by the editor page) so a dropdown can source
+// its choices from another field, e.g. a story's filterKey from the filters list.
+const root = inject<any>('adminRoot', null)
+
 const child = computed<Record<string, any>>(() => props.obj[props.field.key] ?? {})
 const list = computed<any[]>(() => {
   const v = props.obj[props.field.key]
   return Array.isArray(v) ? v : []
 })
 const isPrimitiveList = computed(() => !(props.field.fields && props.field.fields.length))
+
+function getByPath(obj: any, path: string): any {
+  return path.split('.').reduce((o, k) => (o == null ? o : o[k]), obj)
+}
+
+const resolvedOptions = computed<{ label: string; value: string }[]>(() => {
+  if (props.field.optionsFrom && root && (root as any).value) {
+    const src = getByPath((root as any).value, props.field.optionsFrom)
+    if (Array.isArray(src)) {
+      return src
+        .filter((v) => typeof v === 'string')
+        .map((v) => ({ label: v as string, value: v as string }))
+    }
+  }
+  return (props.field.options || []).map((o) =>
+    typeof o === 'string' ? { label: o, value: o } : o,
+  )
+})
 
 function stripTags(s: unknown): string {
   return typeof s === 'string' ? s.replace(/<[^>]+>/g, '').trim() : ''
@@ -194,6 +230,28 @@ function move(i: number, dir: number) {
   margin-top: 8px;
   border-radius: 4px;
   border: 1px solid #cfc8ba;
+}
+
+.afld-heading {
+  font-family: var(--mono, monospace);
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: #8a7fb8;
+  margin: 26px 0 12px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid #e3ddd0;
+}
+.afld-heading-help {
+  display: block;
+  font-family: var(--sans, sans-serif);
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: 0;
+  font-size: 12px;
+  color: #9a7a3a;
+  margin-top: 4px;
 }
 
 .afld-object,

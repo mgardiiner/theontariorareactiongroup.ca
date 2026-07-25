@@ -1,0 +1,37 @@
+{
+  "_meta": {
+    "source": "https://www.instagram.com/ontariorare/",
+    "method": "Instagram public web_profile_info API (unauthenticated)",
+    "scrapedOn": "2026-07-24",
+    "note": "All values verbatim from the account. No inference."
+  },
+  "handle": "ontariorare",
+  "url": "https://www.instagram.com/ontariorare/",
+  "displayName": "Ontario Rare Action Group",
+  "alsoStyledAs": "OntarioRare",
+  "acronym": "ORAG",
+  "acronymSource": "https://www.barrietoday.com/local-news/new-group-launches-to-advocate-for-rare-disease-patients-in-ontario-11804751",
+  "instagramCategory": "Nonprofit organization",
+  "biography": "Registered not-for-profit organization advocating for those with rare diseases. \nSee resources below ⬇️",
+  "externalUrl": "https://linktr.ee/OntarioRare",
+  "followers": 231,
+  "following": 167,
+  "postCount": 67,
+  "highlightCount": 7,
+  "isVerified": false,
+  "isProfessionalAccount": true,
+  "businessEmail": null,
+  "businessPhone": null,
+  "businessAddress": null,
+  "linktree": {
+    "url": "https://linktr.ee/OntarioRare",
+    "headline": "Find resources below:",
+    "realLinks": [
+      {
+        "title": "Canadian Organization for Rare Disorders",
+        "url": "https://www.raredisorders.ca"
+      }
+    ],
+    "warning": "Every other link on the Linktree is Linktree's own injected affiliate advertising (Hulu, HelloFresh, Ritual, Acorns...), not content the organization added. Worth cleaning up — it currently sits behind the only link in the IG bio."
+  }
+}

@@ -1,0 +1,215 @@
+{
+  "_meta": {
+    "source": "https://www.instagram.com/ontariorare/",
+    "method": "Instagram public web_profile_info API (unauthenticated)",
+    "scrapedOn": "2026-07-24",
+    "returned": 12,
+    "accountTotal": 67,
+    "coverageGap": "Only the 12 most recent posts are reachable without a logged-in session. The other 55 posts (everything before 2026-05-05) require an authenticated browser. GraphQL pagination via query_hash and doc_id both return 'Incorrect Query' / a login wall when unauthenticated.",
+    "note": "Captions are verbatim. imageUrl values are CDN links that expire."
+  },
+  "posts": [
+    {
+      "shortcode": "DX945eax5zU",
+      "permalink": "https://www.instagram.com/p/DX945eax5zU/",
+      "date": "2026-05-05",
+      "type": "video",
+      "likes": 18,
+      "comments": 0,
+      "pinned": true,
+      "caption": "Ontario, we can do better than this.\nWe have to.\n\n#ontariorare #raredisease #advocacy #ontario #policychange",
+      "hashtags": [
+        "advocacy",
+        "ontario",
+        "ontariorare",
+        "policychange",
+        "raredisease"
+      ],
+      "mentions": [],
+      "imageUrl": "https://scontent-yyz1-1.cdninstagram.com/v/t51.71878-15/684697459_1692378255514379_2941815371483334818_n.jpg?stp=dst-jpg_e15_tt6&_nc_ht=scontent-yyz1-1.cdninstagram.com&_nc_cat=111&_nc_oc=Q6cZ2gGCxtJwMTZCOAL8pNHEbUgSkLOw_0306YjNPZQz3hEvLthdBLfwiAUpLfda_tiOtcs&_nc_ohc=6vENz9NKsK8Q7kNvwGSEtqw&_nc_gid=5KUy-aBw9M0_h6rVAnbdfg&edm=AOQ1c0wBAAAA&ccb=7-5&oh=00_AQBS3WTki3fsbwtgNx0rBEmWxsDSd3vNoX9OX3F_qYb_pQ&oe=6A69EB62&_nc_sid=8b3546"
+    },
+    {
+      "shortcode": "DYFPzo1EVvT",
+      "permalink": "https://www.instagram.com/p/DYFPzo1EVvT/",
+      "date": "2026-05-08",
+      "type": "carousel",
+      "likes": 41,
+      "comments": 4,
+      "pinned": false,
+      "caption": "Hallelujah.",
+      "hashtags": [],
+      "mentions": [],
+      "imageUrl": "https://scontent-yyz1-1.cdninstagram.com/v/t51.82787-15/687738025_17867171922676802_919500137046276285_n.jpg?stp=dst-jpg_e35_p1080x1080_sh2.08_tt6&_nc_ht=scontent-yyz1-1.cdninstagram.com&_nc_cat=102&_nc_oc=Q6cZ2gGCxtJwMTZCOAL8pNHEbUgSkLOw_0306YjNPZQz3hEvLthdBLfwiAUpLfda_tiOtcs&_nc_ohc=qcd8pf2Pz8YQ7kNvwFoKi18&_nc_gid=5KUy-aBw9M0_h6rVAnbdfg&edm=AOQ1c0wBAAAA&ccb=7-5&oh=00_AQA_gW_I6ZiopDSdn6cX3ec94TGcKmZVY_Mg3WXI1FIgHw&oe=6A6A0A10&_nc_sid=8b3546"
+    },
+    {
+      "shortcode": "DYFMWaQxEmr",
+      "permalink": "https://www.instagram.com/p/DYFMWaQxEmr/",
+      "date": "2026-05-08",
+      "type": "video",
+      "likes": 33,
+      "comments": 2,
+      "pinned": false,
+      "caption": "When you put us all together, we aren’t that rare! There is strength in numbers 💪🏻",
+      "hashtags": [],
+      "mentions": [],
+      "imageUrl": "https://scontent-yyz1-1.cdninstagram.com/v/t51.71878-15/685757841_1607516580328970_4299601021592763332_n.jpg?stp=dst-jpg_e15_tt6&_nc_ht=scontent-yyz1-1.cdninstagram.com&_nc_cat=102&_nc_oc=Q6cZ2gGCxtJwMTZCOAL8pNHEbUgSkLOw_0306YjNPZQz3hEvLthdBLfwiAUpLfda_tiOtcs&_nc_ohc=EyhfFy0liWcQ7kNvwHjSpdX&_nc_gid=5KUy-aBw9M0_h6rVAnbdfg&edm=AOQ1c0wBAAAA&ccb=7-5&oh=00_AQCPtrWYWbU_Im4qkfv6qRYmAxMJgC-beAWDlymeU4xKCg&oe=6A69E57E&_nc_sid=8b3546"
+    },
+    {
+      "shortcode": "DYS9SdnyUTM",
+      "permalink": "https://www.instagram.com/p/DYS9SdnyUTM/",
+      "date": "2026-05-13",
+      "type": "image",
+      "likes": 52,
+      "comments": 7,
+      "pinned": false,
+      "caption": "The Ontario Rare Action Group’s first Voices for Rare Advocacy Breakfast at Queen’s Park brought together more than 80 patients, caregivers and supporters from across Ontario who shared powerful stories and a unified message: Ontario’s 1.3 million rare disease patients deserve a provincial strategy that meets their needs.\n\nWe were honoured to have so many MPPs join us, including four incredible speakers representing each political party: @briansaundersonpc (Simcoe–Grey), @francempp (Nickel Belt), Dr. Adil Shamji (Don Valley East) and Mike Schreiner (Guelph). Their willingness to listen and engage gives our community real hope.\n\nA heartfelt thank‑you to OntarioRare Action Group’s co‑founders Beth Vanstone and Alice Williams, and to everyone who filled the room this morning. Your presence made this day unforgettable.\n \nThanks to Madi Vanstone (@madssharley) for sharing her creative skills. Madi created a powerful presentation showing the diversity of people across Ontario impacted by a rare disease. \nDeep gratitude to Alexion and Novartis Canada for sponsoring today’s event, and to 3Sixty Public Affairs and Global Public Affairs for their tremendous support in helping us bring this event to life.\n\nA very special acknowledgment to two special guests - Durhane Wong‑Rieger from Canadian Organization for Rare Disorders (@raredisorders_cord) and Christine Elliott (former Minister of Health) — two long‑standing champions whose leadership has moved rare disease policy forward in Ontario and across Canada.\n\nAnd our deepest thanks to the many patients, caregivers, and supporters who came to Queen’s Park today. Thank you for sharing your stories. Your voices are powerful.\n\nTogether, we are stronger. And together, we can drive the change that is so urgently needed. This is what drives the creation of the newly formed Ontario Rare Action Group – to unite and amplify rare disease voices across Ontario.\n\nThis is just the beginning. We will continue building this movement of 1.3 million Ontarians.\n\nNext year, we may need a bigger room.",
+      "hashtags": [],
+      "mentions": [
+        "briansaundersonpc",
+        "francempp",
+        "madssharley",
+        "raredisorders_cord"
+      ],
+      "imageUrl": "https://scontent-yyz1-1.cdninstagram.com/v/t51.82787-15/696325460_17868138489676802_2967716131329406726_n.jpg?stp=dst-jpg_e35_s1080x1080_sh2.08_tt6&_nc_ht=scontent-yyz1-1.cdninstagram.com&_nc_cat=102&_nc_oc=Q6cZ2gGCxtJwMTZCOAL8pNHEbUgSkLOw_0306YjNPZQz3hEvLthdBLfwiAUpLfda_tiOtcs&_nc_ohc=5mwVTD7jBWsQ7kNvwHgIYVK&_nc_gid=5KUy-aBw9M0_h6rVAnbdfg&edm=AOQ1c0wBAAAA&ccb=7-5&oh=00_AQB45irC_zpudMOs7wPnbMnAaN3OG6FywSnT7mfaS_sl4g&oe=6A69FF0A&_nc_sid=8b3546"
+    },
+    {
+      "shortcode": "DZKvr6RxfRl",
+      "permalink": "https://www.instagram.com/p/DZKvr6RxfRl/",
+      "date": "2026-06-04",
+      "type": "image",
+      "likes": 7,
+      "comments": 0,
+      "pinned": true,
+      "caption": "Register at link in bio! 📢🔗\n\nWe hope you can join us for our next OntarioRare meeting on June 16th at 7 pm ET. This will be our final meeting before we break for the summer and reconvene in September.\n\nDuring the meeting, we will:\n\n• Share updates on our recent advocacy efforts and growing momentum across Ontario\n• Discuss ideas for connecting with your local MPP during the summer months\n• Invite you to share your story — either your own rare disease journey or that of a loved one — for future features on our upcoming website and social media channels\n• Ask for your feedback on future advocacy priorities and initiatives\n\nWe also want to hear your thoughts on potential future events, including:\n\n• A virtual town hall (with patients, caregivers, industry, policy and political representatives) in October 2026\n• A provincial patient advocacy conference in Spring 2027\n• Another Voices for Rare Advocacy Breakfast at Queen’s Park in May 2027\n\nYour voices, ideas, and experiences continue to shape this growing movement for the 1.3 million Ontarians living with a rare disease. \n\nWe look forward to connecting before the summer break and continuing to build momentum together.",
+      "hashtags": [],
+      "mentions": [],
+      "imageUrl": "https://scontent-yyz1-1.cdninstagram.com/v/t51.82787-15/717582466_17872159332676802_727214055033470237_n.jpg?stp=dst-jpg_e35_p1080x1080_sh2.08_tt6&_nc_ht=scontent-yyz1-1.cdninstagram.com&_nc_cat=102&_nc_oc=Q6cZ2gGCxtJwMTZCOAL8pNHEbUgSkLOw_0306YjNPZQz3hEvLthdBLfwiAUpLfda_tiOtcs&_nc_ohc=iHrvJgZ-XqcQ7kNvwGuGm9b&_nc_gid=5KUy-aBw9M0_h6rVAnbdfg&edm=AOQ1c0wBAAAA&ccb=7-5&oh=00_AQCFBTs79ISj4V7rzjnTWy2dX1rbHOR6JAUjOZrvxoOC1w&oe=6A69E379&_nc_sid=8b3546"
+    },
+    {
+      "shortcode": "DZnHmXnR3BX",
+      "permalink": "https://www.instagram.com/p/DZnHmXnR3BX/",
+      "date": "2026-06-15",
+      "type": "image",
+      "likes": 19,
+      "comments": 0,
+      "pinned": false,
+      "caption": "Every rare disease journey is unique, but no one should have to navigate it alone.\n\nFrom diagnosis and research to treatment access, caregiver support, and community connection, every step matters. Together, we can help ensure that people living with rare diseases are seen, heard, and supported.\n\nRare doesn’t mean invisible.",
+      "hashtags": [],
+      "mentions": [],
+      "imageUrl": "https://scontent-yyz1-1.cdninstagram.com/v/t51.82787-15/723853143_17874053694676802_4888468167776505770_n.jpg?stp=dst-jpg_e35_p1080x1080_sh2.08_tt6&_nc_ht=scontent-yyz1-1.cdninstagram.com&_nc_cat=102&_nc_oc=Q6cZ2gGCxtJwMTZCOAL8pNHEbUgSkLOw_0306YjNPZQz3hEvLthdBLfwiAUpLfda_tiOtcs&_nc_ohc=L-Sihg3E5cwQ7kNvwH4pTrP&_nc_gid=5KUy-aBw9M0_h6rVAnbdfg&edm=AOQ1c0wBAAAA&ccb=7-5&oh=00_AQBesD3_mWctHjmgrSVjmFHnt_fIGlYyX1c-YtHATF6oAA&oe=6A69F345&_nc_sid=8b3546"
+    },
+    {
+      "shortcode": "DZpyt5oxE57",
+      "permalink": "https://www.instagram.com/p/DZpyt5oxE57/",
+      "date": "2026-06-16",
+      "type": "image",
+      "likes": 9,
+      "comments": 1,
+      "pinned": false,
+      "caption": "“Our oldest son was born with developmental differences 25 years ago. We knew early that something wasn’t typical, but it took 18 years to receive a diagnosis.\n\nIn Ontario, that meant no diagnosis, no meaningful support.\n\nWhen Zach was finally diagnosed with a CHD2-related disorder at age 18, we felt relief. We finally had answers. But the diagnosis didn’t unlock care.\n\nCHD2-related syndrome is a complex, lifelong condition that can include epilepsy, autism, intellectual disability, and developmental delays. Yet when Zach transitioned to adult care, the support system disappeared.\n\nNo coordinated team.\nNo roadmap.\nNo one accountable.\n\nThen came a crisis. A dermatological treatment triggered a severe psychiatric reaction that persists today. Memory loss. Cognitive decline. Symptoms now resemble dementia more than autism.\n\nAnd there is nowhere to turn.\n\nNo specialist pathway.\nNo integrated care.\nNo guidance.\n\nJust silence.\n\nFamilies living with rare diseases are too often left navigating trial-and-error treatment, managing symptoms, and making impossible decisions without support.\n\nMeanwhile, research is advancing. New discoveries and targeted therapies are on the horizon.\n\nBut innovation means little if patients cannot access it.\n\nWe need coordinated care across the lifespan, integration of genomic diagnosis into care pathways, faster access to treatments, and support that doesn’t disappear at age 18.\n\nBecause rare does not mean invisible.\n\nOntario can do better. And for families like ours, it must.” \n\n- Sandra Markus \n\n#ontariorare #advocacy #ontario #policy",
+      "hashtags": [
+        "advocacy",
+        "ontario",
+        "ontariorare",
+        "policy"
+      ],
+      "mentions": [],
+      "imageUrl": "https://scontent-yyz1-1.cdninstagram.com/v/t51.82787-15/724239487_17874232392676802_6045848395329481659_n.jpg?stp=dst-jpg_e35_p1080x1080_sh2.08_tt6&_nc_ht=scontent-yyz1-1.cdninstagram.com&_nc_cat=102&_nc_oc=Q6cZ2gGCxtJwMTZCOAL8pNHEbUgSkLOw_0306YjNPZQz3hEvLthdBLfwiAUpLfda_tiOtcs&_nc_ohc=PQOLYjuLri8Q7kNvwF7pnGQ&_nc_gid=5KUy-aBw9M0_h6rVAnbdfg&edm=AOQ1c0wBAAAA&ccb=7-5&oh=00_AQDhB_bo-6kE1N-2yiro_MA2KZ26oluABx_zUa0R8yrN2g&oe=6A6A1183&_nc_sid=8b3546"
+    },
+    {
+      "shortcode": "DaMNO2ixthi",
+      "permalink": "https://www.instagram.com/p/DaMNO2ixthi/",
+      "date": "2026-06-30",
+      "type": "image",
+      "likes": 16,
+      "comments": 2,
+      "pinned": false,
+      "caption": "Rare disease organizations — join us. We’re stronger together.\n\nBeing rare isn’t easy. When numbers are small, it can be difficult to ensure our communities are seen, heard, and prioritized.\n\nThat’s why OntarioRare is bringing rare disease organizations together to amplify our collective voice and strengthen advocacy across the province.\n\nWe’re inviting rare disease foundations and organizations to endorse our work and help demonstrate the broad support behind our shared priorities. By adding your organization’s voice, you’re helping build a stronger, more unified movement for everyone affected by rare diseases in Ontario.\n\nInterested in learning more or adding your endorsement? We’d love to connect. Reach out to us to learn more about our work and how your organization can be part of this growing coalition.\n\nTogether, we’re stronger. Together, we can create meaningful change.\n\n#ontariorare #advocacy #empowering #collaboration #policychange",
+      "hashtags": [
+        "advocacy",
+        "collaboration",
+        "empowering",
+        "ontariorare",
+        "policychange"
+      ],
+      "mentions": [],
+      "imageUrl": "https://scontent-yyz1-1.cdninstagram.com/v/t51.82787-15/730182786_17876861385676802_5680130981486577354_n.jpg?stp=dst-jpg_e35_p1080x1080_sh2.08_tt6&_nc_ht=scontent-yyz1-1.cdninstagram.com&_nc_cat=102&_nc_oc=Q6cZ2gGCxtJwMTZCOAL8pNHEbUgSkLOw_0306YjNPZQz3hEvLthdBLfwiAUpLfda_tiOtcs&_nc_ohc=jlwDuurwCY4Q7kNvwEvTmbc&_nc_gid=5KUy-aBw9M0_h6rVAnbdfg&edm=AOQ1c0wBAAAA&ccb=7-5&oh=00_AQDZOSksRjWBwCBr8pGNbn7K49JMZg4mvqpoTGf17zszRw&oe=6A69F6BA&_nc_sid=8b3546"
+    },
+    {
+      "shortcode": "DaQJSIZxRt4",
+      "permalink": "https://www.instagram.com/p/DaQJSIZxRt4/",
+      "date": "2026-07-01",
+      "type": "image",
+      "likes": 9,
+      "comments": 0,
+      "pinned": false,
+      "caption": "🇨🇦 Happy Canada Day.\n\nToday, we celebrate everything that makes Canada special - our diversity, compassion, and commitment to caring for one another.\n\nBut for the 1 in 12 Canadians living with a rare disease, there is still work to do.\n\nToo many families face long diagnostic journeys, unequal access to treatments, fragmented care, and barriers that depend on where they live. No Canadian should have to fight harder for healthcare simply because their condition is rare.\n\nCanada can do better.\n\nThis Canada Day, let’s celebrate how far we’ve come while recommitting ourselves to building a country where every person living with a rare disease has equitable access to the care, support, and treatment they deserve.\n\nTogether, we can make rare impossible to ignore.\n\n#canadaday #ontariorare #raredisease #healthequity #rarediseasestrategy",
+      "hashtags": [
+        "canadaday",
+        "healthequity",
+        "ontariorare",
+        "raredisease",
+        "rarediseasestrategy"
+      ],
+      "mentions": [],
+      "imageUrl": "https://scontent-yyz1-1.cdninstagram.com/v/t51.82787-15/731345424_17877191931676802_3812254329638413309_n.jpg?stp=dst-jpg_e35_p1080x1080_sh2.08_tt6&_nc_ht=scontent-yyz1-1.cdninstagram.com&_nc_cat=102&_nc_oc=Q6cZ2gGCxtJwMTZCOAL8pNHEbUgSkLOw_0306YjNPZQz3hEvLthdBLfwiAUpLfda_tiOtcs&_nc_ohc=dAvdCBKMzOAQ7kNvwHgk6F2&_nc_gid=5KUy-aBw9M0_h6rVAnbdfg&edm=AOQ1c0wBAAAA&ccb=7-5&oh=00_AQCcYHhb8ySmjx2MVJ8qZ_LAqP7HREUzoXeakP5KQX9Tsg&oe=6A69EA81&_nc_sid=8b3546"
+    },
+    {
+      "shortcode": "Dagm4IVkUTj",
+      "permalink": "https://www.instagram.com/p/Dagm4IVkUTj/",
+      "date": "2026-07-07",
+      "type": "carousel",
+      "likes": 17,
+      "comments": 0,
+      "pinned": false,
+      "caption": "Summer is a GREAT time to connect with your local MPP! ☀️\n\nWhether you stop by their constituency office or meet them at a community event, taking the time to share your story can help build meaningful relationships and increase understanding of the challenges faced by the rare disease community.\n\nEvery conversation matters, and your voice has the power to inspire awareness, compassion, and change. \n\n#ontario #ontariorare #advocacy #summer",
+      "hashtags": [
+        "advocacy",
+        "ontario",
+        "ontariorare",
+        "summer"
+      ],
+      "mentions": [],
+      "imageUrl": "https://scontent-yyz1-1.cdninstagram.com/v/t51.82787-15/741455613_17878430364676802_3972192871119415259_n.jpg?stp=dst-jpg_e35_p1080x1080_sh2.08_tt6&_nc_ht=scontent-yyz1-1.cdninstagram.com&_nc_cat=102&_nc_oc=Q6cZ2gGCxtJwMTZCOAL8pNHEbUgSkLOw_0306YjNPZQz3hEvLthdBLfwiAUpLfda_tiOtcs&_nc_ohc=7hxH8Dx2kxkQ7kNvwFo2YvL&_nc_gid=5KUy-aBw9M0_h6rVAnbdfg&edm=AOQ1c0wBAAAA&ccb=7-5&oh=00_AQCxrmVgXAxZCEIfxjpVESlgWDMSm8PkjTI7_p8paCrqpQ&oe=6A69E4AA&_nc_sid=8b3546"
+    },
+    {
+      "shortcode": "DalYHQeRngk",
+      "permalink": "https://www.instagram.com/p/DalYHQeRngk/",
+      "date": "2026-07-09",
+      "type": "image",
+      "likes": 43,
+      "comments": 4,
+      "pinned": false,
+      "caption": "Meet Pearl Cooley from Guelph, Ontario — a young woman living with cystic fibrosis (CF).\n\nPearl was diagnosed with CF at just two months old. From the very beginning, she faced challenges with growth, digestion, and severe lung disease that required daily treatments, medications, and chest physiotherapy.\n\nAs her disease progressed, breathing became increasingly difficult. By just 18 years old, Pearl received her first double lung transplant. Two years later, she underwent a second double lung transplant.\n\nBut as Pearl reminds us, a lung transplant is not a cure. It is a life-saving treatment.\n\nToday, she continues to live with CF. While she has been grateful for years of stability, her lung function has declined, and she continues to fight for access to medications like Trikafta—a treatment that has transformed the lives of many people with CF but remains out of reach for some transplant recipients.\n\nDespite everything she has faced, Pearl has built a career helping others. She works as an athletic trainer supporting hockey teams across the GTA and as a part-time medical assistant, all while advocating for the CF community.\n\n“We cannot forget the people who are living with CF today. We need to support current patients, improve access to life-changing medications, and ensure earlier diagnosis.“\n\nPearl’s journey is a powerful reminder that behind every diagnosis is a person with dreams, resilience, and a determination to make a difference 🧬💜 \n\n#ontariorare #cysticfibrosis #ontario #advocacy #inspire",
+      "hashtags": [
+        "advocacy",
+        "cysticfibrosis",
+        "inspire",
+        "ontario",
+        "ontariorare"
+      ],
+      "mentions": [],
+      "imageUrl": "https://scontent-yyz1-1.cdninstagram.com/v/t51.82787-15/731422523_17878773018676802_364282279205302795_n.jpg?stp=dst-jpg_e35_p1080x1080_sh2.08_tt6&_nc_ht=scontent-yyz1-1.cdninstagram.com&_nc_cat=102&_nc_oc=Q6cZ2gGCxtJwMTZCOAL8pNHEbUgSkLOw_0306YjNPZQz3hEvLthdBLfwiAUpLfda_tiOtcs&_nc_ohc=6huBIkVX3_oQ7kNvwGIng68&_nc_gid=5KUy-aBw9M0_h6rVAnbdfg&edm=AOQ1c0wBAAAA&ccb=7-5&oh=00_AQC0tQ8ikEmeYupj7obF5t4xpSNy7RJFf1qq0XKT-qY7Gg&oe=6A69E946&_nc_sid=8b3546"
+    },
+    {
+      "shortcode": "DbCE66tR5Jp",
+      "permalink": "https://www.instagram.com/p/DbCE66tR5Jp/",
+      "date": "2026-07-20",
+      "type": "image",
+      "likes": 24,
+      "comments": 1,
+      "pinned": false,
+      "caption": "When Kristen Hummel was in her early 40s, she thought constantly feeling hot was simply a sign of perimenopause. Instead, bloodwork led to a life-changing diagnosis of a rare blood cancer called a myeloproliferative neoplasm (MPN).\n\nYears later, her condition progressed to myelofibrosis (MF), a rare chronic blood cancer that causes scarring of the bone marrow. While there is no cure, Kristen has met her diagnosis with resilience, staying active, informed, and committed to advocating for others living with rare blood cancers.\n\nToday, Kristen volunteers with the Canadian MPN Network, helping improve awareness, access to care, and support for the rare disease community.\n\n💙 Rare disease journeys are often lifelong, but no one should have to navigate them alone.\n\nThank you, Kristen, for sharing your story and for being such a powerful advocate for others.\n\nLearn more about the Canadian MPN Network at canadianmpnnetwork.ca.\n\n@gritandmarrow \n\n#ontario #policy #myelofibrosis #advocacy",
+      "hashtags": [
+        "advocacy",
+        "myelofibrosis",
+        "ontario",
+        "policy"
+      ],
+      "mentions": [
+        "gritandmarrow"
+      ],
+      "imageUrl": "https://scontent-yyz1-1.cdninstagram.com/v/t51.82787-15/753125288_17881030500676802_4908829578338280088_n.jpg?stp=dst-jpg_e35_p1080x1080_sh2.08_tt6&_nc_ht=scontent-yyz1-1.cdninstagram.com&_nc_cat=102&_nc_oc=Q6cZ2gGCxtJwMTZCOAL8pNHEbUgSkLOw_0306YjNPZQz3hEvLthdBLfwiAUpLfda_tiOtcs&_nc_ohc=LQAKTUlEX38Q7kNvwFzWFZl&_nc_gid=5KUy-aBw9M0_h6rVAnbdfg&edm=AOQ1c0wBAAAA&ccb=7-5&oh=00_AQDYuB8tU73LsaoOMSri_PjC8KvgSANtx0IcT5DhkwfnhA&oe=6A69E31F&_nc_sid=8b3546"
+    }
+  ]
+}

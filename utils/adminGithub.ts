@@ -137,6 +137,73 @@ export async function saveBinaryFile(
   return json.content?.sha as string
 }
 
+/** Current blob sha of a file (null if it doesn't exist). Used for pre-publish conflict detection. */
+export async function getFileSha(
+  token: string,
+  path: string,
+  branch: string = GH_REPO.branch,
+): Promise<string | null> {
+  try {
+    const res = await ghFetch(
+      token,
+      `/repos/${GH_REPO.owner}/${GH_REPO.repo}/contents/${path}?ref=${branch}`,
+    )
+    return (await res.json()).sha as string
+  } catch (e) {
+    if ((e as GhError).status === 404) return null
+    throw e
+  }
+}
+
+/**
+ * Commit several files in ONE commit via the Git Data API (blobs -> tree -> commit -> move ref),
+ * so the site rebuilds once no matter how many files changed. Returns the new commit sha.
+ */
+export async function commitFiles(
+  token: string,
+  files: { path: string; content: string }[],
+  message: string,
+  branch: string = GH_REPO.branch,
+): Promise<string> {
+  const git = `/repos/${GH_REPO.owner}/${GH_REPO.repo}/git`
+
+  const refJson = await (await ghFetch(token, `${git}/ref/heads/${branch}`)).json()
+  const latestCommitSha = refJson.object.sha
+  const baseCommit = await (await ghFetch(token, `${git}/commits/${latestCommitSha}`)).json()
+  const baseTreeSha = baseCommit.tree.sha
+
+  const tree: { path: string; mode: '100644'; type: 'blob'; sha: string }[] = []
+  for (const f of files) {
+    const blob = await (
+      await ghFetch(token, `${git}/blobs`, {
+        method: 'POST',
+        body: JSON.stringify({ content: stringToBase64(f.content), encoding: 'base64' }),
+      })
+    ).json()
+    tree.push({ path: f.path, mode: '100644', type: 'blob', sha: blob.sha })
+  }
+
+  const newTree = await (
+    await ghFetch(token, `${git}/trees`, {
+      method: 'POST',
+      body: JSON.stringify({ base_tree: baseTreeSha, tree }),
+    })
+  ).json()
+
+  const newCommit = await (
+    await ghFetch(token, `${git}/commits`, {
+      method: 'POST',
+      body: JSON.stringify({ message, tree: newTree.sha, parents: [latestCommitSha] }),
+    })
+  ).json()
+
+  await ghFetch(token, `${git}/refs/heads/${branch}`, {
+    method: 'PATCH',
+    body: JSON.stringify({ sha: newCommit.sha }),
+  })
+  return newCommit.sha as string
+}
+
 /** Most recent commit on the branch — used to show "last published" in the dashboard. */
 export async function latestCommit(
   token: string,

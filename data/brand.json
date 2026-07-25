@@ -1,0 +1,97 @@
+{
+  "_meta": {
+    "scrapedOn": "2026-07-24",
+    "note": "Derived by sampling the account's own graphics. Hex values are measured from JPEG pixels, so treat them as close approximations rather than the official brand values — ask the founders for the real spec."
+  },
+  "logo": {
+    "wordmark": "OntarioRare",
+    "lockup": "OntarioRare / ACTION GROUP",
+    "monogram": "OR",
+    "styling": "'Ontario' in regular weight, 'Rare' in bold — set as one word.",
+    "filesInRepo": [
+      "public/OntarioRare_Logo.png",
+      "public/logo.png"
+    ]
+  },
+  "palette": {
+    "deepPurple": {
+      "hex": "#300048",
+      "usage": "Logo background gradient, darkest brand tone"
+    },
+    "purple": {
+      "hex": "#502080",
+      "usage": "Headings, calendar card type"
+    },
+    "midPurple": {
+      "hex": "#8850B8",
+      "usage": "Infographic secondary headings"
+    },
+    "lavender": {
+      "hex": "#C0B4D8",
+      "usage": "Spotlight Story background, calendar cells"
+    },
+    "paleLavender": {
+      "hex": "#F0F0FC",
+      "usage": "Card backgrounds"
+    },
+    "cream": {
+      "hex": "#F0F0D8",
+      "usage": "Background of the 'Meet X' and Summer Outreach cards"
+    },
+    "orange": {
+      "hex": "#F88000",
+      "usage": "Sun doodle, solid accent type"
+    },
+    "amber": {
+      "hex": "#F8C060",
+      "usage": "Outlined display type, illustration fills"
+    },
+    "teal": {
+      "hex": "#308878",
+      "usage": "Illustration accent, swipe button"
+    },
+    "blue": {
+      "hex": "#088898",
+      "usage": "Illustration outlines"
+    }
+  },
+  "motifs": [
+    "Hand-drawn crayon-textured sun (orange) — appears on the cream card template",
+    "DNA double helix watermark — on the lavender card template",
+    "Heartbeat/ECG line linking icons — 'Connecting Patients to Care' infographic",
+    "Large translucent 'OR' monogram — video title frames and the avatar",
+    "Layered crescent shapes with a circular photo crop — lavender template"
+  ],
+  "cardTemplates": [
+    {
+      "name": "Meet X",
+      "background": "cream",
+      "use": "Patient story features",
+      "structure": "'Meet {FirstName}' in outlined amber + cut-out portrait + '{Name} lives with {Condition}' in italic purple"
+    },
+    {
+      "name": "Spotlight Story",
+      "background": "lavender",
+      "use": "Caregiver / family features",
+      "structure": "'SPOTLIGHT STORY' in white caps top + names bottom-right"
+    },
+    {
+      "name": "Lavender info card",
+      "background": "paleLavender",
+      "use": "Announcements, recruitment, seasonal"
+    }
+  ],
+  "siteMismatch": {
+    "note": "The website currently uses a different, more saturated palette than the Instagram graphics — gradients built from #2E1188, #5634C9, #170269, #1E0177, #FED700, #F5A623, #B89500. The account's real look is softer: cream and pale lavender grounds with amber/orange and mid-purple accents. Worth reconciling so the site and socials read as one brand.",
+    "siteColoursFound": [
+      "#2E1188",
+      "#5634C9",
+      "#170269",
+      "#1E0177",
+      "#4527A0",
+      "#FED700",
+      "#F5A623",
+      "#B89500"
+    ]
+  }
+}

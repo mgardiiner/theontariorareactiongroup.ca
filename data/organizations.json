@@ -1,0 +1,68 @@
+{
+  "_meta": {
+    "scrapedOn": "2026-07-24",
+    "note": "Only organizations with evidence on the org's own channels. content/partners.json currently claims 28 affiliated organizations with 15 invented names and no URLs — nothing supports that number. Their own Jun 30 2026 post is a recruitment call, i.e. the coalition is only now being built."
+  },
+  "affiliated": [
+    {
+      "name": "Canadian Organization for Rare Disorders",
+      "abbr": "CORD",
+      "url": "https://www.raredisorders.ca",
+      "region": "National",
+      "focus": "National advocacy network and umbrella body for Canada's rare-disease patient groups.",
+      "evidence": "The only real link on the org's Linktree; CORD president Durhane Wong-Rieger attended the Queen's Park breakfast.",
+      "source": "https://linktr.ee/OntarioRare"
+    },
+    {
+      "name": "Canadian MPN Network",
+      "url": "https://canadianmpnnetwork.ca",
+      "region": "National",
+      "focus": "Awareness, access to care and support for the rare blood cancer community.",
+      "evidence": "Named in Kristen Hummel's story; she volunteers with them.",
+      "source": "https://www.instagram.com/p/DbCE66tR5Jp"
+    },
+    {
+      "name": "Coalition to Cure CHD2",
+      "abbr": "CCC",
+      "focus": "Research and family support for CHD2-related disorders.",
+      "evidence": "Zach Markus wears a 'CCC — Coalition to Cure CHD2' beanie in the Spotlight Story card published 2026-06-16.",
+      "source": "https://www.instagram.com/p/DZpyt5oxE57/",
+      "confidence": "inferred from imagery — confirm the relationship before listing as a partner",
+      "url": null
+    }
+  ],
+  "sponsors": [
+    {
+      "name": "Alexion",
+      "relationship": "Sponsor",
+      "event": "Voices for Rare Advocacy Breakfast 2026",
+      "source": "https://www.instagram.com/p/DYS9SdnyUTM"
+    },
+    {
+      "name": "Novartis Canada",
+      "relationship": "Sponsor",
+      "event": "Voices for Rare Advocacy Breakfast 2026",
+      "source": "https://www.instagram.com/p/DYS9SdnyUTM"
+    }
+  ],
+  "supporters": [
+    {
+      "name": "3Sixty Public Affairs",
+      "relationship": "Event support",
+      "event": "Voices for Rare Advocacy Breakfast 2026",
+      "source": "https://www.instagram.com/p/DYS9SdnyUTM"
+    },
+    {
+      "name": "Global Public Affairs",
+      "relationship": "Event support",
+      "event": "Voices for Rare Advocacy Breakfast 2026",
+      "source": "https://www.instagram.com/p/DYS9SdnyUTM"
+    }
+  ],
+  "recruitmentCopy": {
+    "headline": "Rare disease organizations — join us. We're stronger together.",
+    "body": "Being rare isn't easy. When numbers are small, it can be difficult to ensure our communities are seen, heard, and prioritized. That's why OntarioRare is bringing rare disease organizations together to amplify our collective voice and strengthen advocacy across the province.",
+    "verbatim": true,
+    "source": "https://www.instagram.com/p/DaMNO2ixthi"
+  }
+}
