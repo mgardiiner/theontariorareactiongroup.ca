@@ -3,7 +3,7 @@
     <Head><Title>Preview · Ontario Rare Action Group</Title></Head>
 
     <main class="container">
-      <div class="brand-mark" aria-hidden="true">R</div>
+      <img class="brand-mark" src="/logo.png" width="88" height="88" alt="Ontario Rare Action Group" />
       <div class="org-name">Ontario Rare Action Group</div>
       <h1 class="headline">Site <em>preview.</em></h1>
       <p class="lede">Enter the password to access the full site.</p>
@@ -63,17 +63,11 @@ async function handleSubmit() {
   align-items: flex-start;
 }
 .brand-mark {
-  width: 48px;
-  height: 48px;
-  background: var(--accent);
-  color: var(--primary-deep);
-  display: grid;
-  place-items: center;
-  font-family: var(--serif);
-  font-weight: 600;
-  font-size: 28px;
-  border-radius: 3px;
+  width: 88px;
+  height: 88px;
+  border-radius: 6px;
   margin-bottom: 24px;
+  display: block;
 }
 .org-name {
   font-family: var(--mono);
