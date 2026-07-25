@@ -12,7 +12,7 @@
           <h2>Sign in to edit the website</h2>
           <p>
             Use the password the group shared with you. If you don't have it, email
-            <a href="mailto:hello@theontariorareactiongroup.ca">hello@theontariorareactiongroup.ca</a>
+            <a href="mailto:contact@ontariorare.ca">contact@ontariorare.ca</a>
             and someone will send it over.
           </p>
         </div>
