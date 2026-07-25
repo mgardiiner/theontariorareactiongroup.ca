@@ -25,7 +25,7 @@
     <p v-if="error" class="iu-error">{{ error }}</p>
 
     <div v-if="modelValue" class="iu-preview-wrap">
-      <img :src="modelValue" alt="" class="iu-preview" @error="onImgError" />
+      <img :src="previewSrc" alt="" class="iu-preview" @error="onImgError" />
       <button type="button" class="iu-clear" @click="clearValue">Remove</button>
     </div>
   </div>
@@ -44,6 +44,21 @@ const { token } = useAdminAuth()
 const uploading = ref(false)
 const error = ref('')
 
+// A freshly-picked file is previewed straight from its own bytes (an object URL)
+// so the thumbnail appears instantly. The committed /uploads/… path isn't served
+// until the site redeploys, which is what used to make the preview look broken.
+const localPreview = ref('')
+const previewSrc = computed(() => localPreview.value || props.modelValue)
+
+function setLocalPreview(file) {
+  if (localPreview.value) URL.revokeObjectURL(localPreview.value)
+  localPreview.value = file ? URL.createObjectURL(file) : ''
+}
+
+onBeforeUnmount(() => {
+  if (localPreview.value) URL.revokeObjectURL(localPreview.value)
+})
+
 function kebab(s) {
   return String(s || '')
     .toLowerCase()
@@ -52,11 +67,15 @@ function kebab(s) {
 }
 
 function onUrl(e) {
+  // A typed/pasted link should preview itself, not a stale just-uploaded file.
+  setLocalPreview(null)
+  error.value = ''
   emit('update:modelValue', e.target.value)
 }
 
 function clearValue() {
   error.value = ''
+  setLocalPreview(null)
   emit('update:modelValue', '')
 }
 
@@ -105,6 +124,8 @@ async function onFile(e) {
     const path = `uploads/${base}-${suffix}.${ext}`
 
     await saveBinaryFile(token.value, 'public/' + path, base64, 'Upload image ' + path)
+    setLocalPreview(file) // show the picked file immediately, before the deploy serves it
+    error.value = ''
     emit('update:modelValue', '/' + path)
   } catch (err) {
     error.value =
