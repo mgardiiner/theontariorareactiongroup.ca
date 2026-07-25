@@ -1,4 +1,6 @@
 <script setup>
+import content from '~/content/site.json'
+
 useHead({ bodyAttrs: { style: 'background:#FBF7EE;' } })
 </script>
 
@@ -7,19 +9,13 @@ useHead({ bodyAttrs: { style: 'background:#FBF7EE;' } })
     <header class="nav">
       <div class="wrap nav-inner">
         <NuxtLink to="/" class="brand">
-          <div class="brand-mark">R</div>
+          <img class="brand-mark" src="/logo.png" width="40" height="40" alt="Ontario Rare Action Group" />
           <div class="brand-name">Ontario Rare<span>Action Group</span></div>
         </NuxtLink>
         <nav class="nav-links" aria-label="Main navigation">
-          <NuxtLink to="/advocacy">Advocacy</NuxtLink>
-          <NuxtLink to="/challenges">Challenges</NuxtLink>
-          <NuxtLink to="/stories">Stories</NuxtLink>
-          <NuxtLink to="/events">Events</NuxtLink>
-          <NuxtLink to="/videos">Videos</NuxtLink>
-          <NuxtLink to="/partners">Partners</NuxtLink>
-          <NuxtLink to="/contact">Contact</NuxtLink>
+          <NuxtLink v-for="link in content.nav" :key="link.href" :to="link.href">{{ link.label }}</NuxtLink>
         </nav>
-        <NuxtLink to="/contact" class="nav-cta">Join the movement</NuxtLink>
+        <NuxtLink :to="content.cta.href" class="nav-cta">{{ content.cta.label }}</NuxtLink>
       </div>
     </header>
 
@@ -31,40 +27,32 @@ useHead({ bodyAttrs: { style: 'background:#FBF7EE;' } })
       <div class="wrap">
         <div class="foot-grid">
           <div>
-            <div class="foot-brand-name">Ontario Rare Action Group</div>
-            <p class="foot-tag">A patient-led, registered Ontario non-profit advocating for the 1.3 million Ontarians living with a rare disease.</p>
+            <div class="foot-brand-name">{{ content.footer.brandName }}</div>
+            <p class="foot-tag">{{ content.footer.tagline }}</p>
           </div>
           <div class="foot-col">
-            <h5>Explore</h5>
+            <h5>{{ content.footer.explore.heading }}</h5>
             <ul>
-              <li><NuxtLink to="/advocacy">Advocacy</NuxtLink></li>
-              <li><NuxtLink to="/challenges">Challenges</NuxtLink></li>
-              <li><NuxtLink to="/stories">Patient stories</NuxtLink></li>
-              <li><NuxtLink to="/events">Events</NuxtLink></li>
-              <li><NuxtLink to="/videos">Videos</NuxtLink></li>
-              <li><NuxtLink to="/partners">Partners</NuxtLink></li>
+              <li v-for="link in content.footer.explore.links" :key="link.label"><NuxtLink :to="link.href">{{ link.label }}</NuxtLink></li>
             </ul>
           </div>
           <div class="foot-col">
-            <h5>Get involved</h5>
+            <h5>{{ content.footer.getInvolved.heading }}</h5>
             <ul>
-              <li><NuxtLink to="/contact">Volunteer</NuxtLink></li>
-              <li><NuxtLink to="/contact">Donate</NuxtLink></li>
-              <li><NuxtLink to="/contact">Share your story</NuxtLink></li>
-              <li><NuxtLink to="/contact">Become a partner</NuxtLink></li>
+              <li v-for="link in content.footer.getInvolved.links" :key="link.label"><NuxtLink :to="link.href">{{ link.label }}</NuxtLink></li>
             </ul>
           </div>
           <div class="foot-col">
-            <h5>Contact</h5>
+            <h5>{{ content.footer.contact.heading }}</h5>
             <ul>
-              <li><a href="mailto:contact@ontariorare.ca">contact@ontariorare.ca</a></li>
-              <li>Toronto, ON</li>
+              <li><a :href="'mailto:' + content.footer.contact.email">{{ content.footer.contact.email }}</a></li>
+              <li>{{ content.footer.contact.location }}</li>
             </ul>
           </div>
         </div>
         <div class="foot-bottom">
-          <div>© 2026 The Ontario Rare Action Group · Non-Profit</div>
-          <div>Site by the rare community, for the rare community.</div>
+          <div>{{ content.footer.copyright }}</div>
+          <div>{{ content.footer.credit }}</div>
         </div>
       </div>
     </footer>
@@ -93,17 +81,11 @@ useHead({ bodyAttrs: { style: 'background:#FBF7EE;' } })
   text-decoration: none;
 }
 .brand-mark {
-  width: 38px;
-  height: 38px;
-  background: var(--primary);
-  color: var(--accent);
-  display: grid;
-  place-items: center;
-  font-family: var(--serif);
-  font-weight: 600;
-  font-size: 22px;
-  border-radius: 2px;
+  width: 40px;
+  height: 40px;
+  border-radius: 3px;
   flex-shrink: 0;
+  display: block;
 }
 .brand-name {
   font-family: var(--serif);

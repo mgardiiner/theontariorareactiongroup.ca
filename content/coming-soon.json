@@ -1,0 +1,18 @@
+{
+  "seo": {
+    "title": "Coming Soon · Ontario Rare Action Group",
+    "description": "A patient-led coalition advocating for Ontario's rare disease community. Website coming soon."
+  },
+  "orgName": "Ontario Rare Action Group",
+  "headline": "Something <em>rare</em><br>is coming.",
+  "lede": "We're building a home for Ontario's rare disease community — patients, caregivers, clinicians and advocates. Sign up to be the first to know when we launch.",
+  "placeholder": "your@email.ca",
+  "submitLabel": "Notify me",
+  "successText": "You're on the list. We'll be in touch.",
+  "contactEmail": "contact@ontariorare.ca",
+  "mailchimp": {
+    "url": "https://theontariorareactiongroup.us22.list-manage.com/subscribe/post-json",
+    "u": "a5e592f36a13ce41b8da32d71",
+    "id": "4ee9617924"
+  }
+}

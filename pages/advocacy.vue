@@ -1,8 +1,8 @@
 <template>
   <div>
     <Head>
-      <Title>Advocacy · Ontario Rare Action Group</Title>
-      <Meta name="description" content="Six commitments shape every meeting, every brief, and every campaign we bring to Queen's Park." />
+      <Title>{{ content.seo.title }}</Title>
+      <Meta name="description" :content="content.seo.description" />
     </Head>
 
     <header class="page-header">
@@ -10,10 +10,10 @@
         <div class="crumb">
           <NuxtLink to="/">Home</NuxtLink>
           <span>/</span>
-          Advocacy
+          {{ content.header.crumb }}
         </div>
-        <h1 class="page-title">What we are <em>fighting for.</em></h1>
-        <p class="page-lede">Six commitments shape every meeting, every brief, and every campaign we bring to Queen's Park. They were written by patients and caregivers — and they're updated each year alongside our community.</p>
+        <h1 class="page-title" v-html="content.header.title"></h1>
+        <p class="page-lede">{{ content.header.lede }}</p>
       </div>
     </header>
 
@@ -21,7 +21,7 @@
     <section>
       <div class="wrap">
         <div class="goals">
-          <article class="goal" v-for="goal in goals" :key="goal.num">
+          <article class="goal" v-for="goal in content.goals" :key="goal.num">
             <div class="goal-num">Goal<strong>{{ goal.num }}</strong></div>
             <div>
               <h3 class="goal-title">{{ goal.title }}</h3>
@@ -43,14 +43,14 @@
     <section class="progress-bg">
       <div class="wrap">
         <div class="sec-head">
-          <div class="sec-num">Progress tracker</div>
+          <div class="sec-num">{{ content.progressHead.eyebrow }}</div>
           <div>
-            <h2 class="sec-title">Where each <em>file</em> stands.</h2>
-            <p class="sec-sub">Live snapshot of where our advocacy work is moving — and where it's stuck. Updated quarterly.</p>
+            <h2 class="sec-title" v-html="content.progressHead.title"></h2>
+            <p class="sec-sub">{{ content.progressHead.sub }}</p>
           </div>
         </div>
         <div>
-          <div class="progress-row" v-for="item in progress" :key="item.title">
+          <div class="progress-row" v-for="item in content.progress" :key="item.title">
             <div>
               <h4 class="pr-title">{{ item.title }}</h4>
               <div class="pr-meta">{{ item.meta }}</div>
@@ -66,15 +66,15 @@
       <div class="wrap">
         <div class="cta-grid">
           <div>
-            <h2 class="cta-title">Want to put your name behind this <em>work?</em></h2>
-            <p class="cta-lede">Sign on as a community supporter, write to your MPP using our templates, or join one of our advocacy working groups.</p>
+            <h2 class="cta-title" v-html="content.ctaBand.title"></h2>
+            <p class="cta-lede">{{ content.ctaBand.lede }}</p>
           </div>
           <div class="cta-actions">
-            <NuxtLink to="/contact" class="btn btn-primary" style="justify-content:center;">
-              Sign the supporter list
+            <NuxtLink :to="content.ctaBand.primaryCta.href" class="btn btn-primary" style="justify-content:center;">
+              {{ content.ctaBand.primaryCta.label }}
               <svg class="btn-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
             </NuxtLink>
-            <NuxtLink to="/contact" class="btn btn-ghost" style="justify-content:center;">Get the MPP letter templates</NuxtLink>
+            <NuxtLink :to="content.ctaBand.secondaryCta.href" class="btn btn-ghost" style="justify-content:center;">{{ content.ctaBand.secondaryCta.label }}</NuxtLink>
           </div>
         </div>
       </div>
@@ -83,67 +83,9 @@
 </template>
 
 <script setup>
+import content from '~/content/advocacy.json'
+
 definePageMeta({ layout: 'default' })
-
-const goals = [
-  {
-    num: '01',
-    title: 'A Provincial Rare Disease Strategy',
-    desc: 'Implementation of Canada\'s National Strategy at the Ontario level — with funding, accountability and patient governance built in from the start.',
-    status: 'Tabled',
-    statusClass: '',
-    points: ['Standing patient council with binding input', 'Five-year funding tied to outcomes', 'Annual public reporting on equity'],
-  },
-  {
-    num: '02',
-    title: 'Faster, fairer diagnosis',
-    desc: 'Universal newborn screening expansion and reimbursed genetic testing, so families don\'t wait years for answers.',
-    status: 'Drafting',
-    statusClass: 'pill-draft',
-    points: ['Newborn panel aligned with U.S. RUSP', 'OHIP exome and genome sequencing', 'Adult diagnostic-odyssey program'],
-  },
-  {
-    num: '03',
-    title: 'Equitable drug access',
-    desc: 'A transparent, patient-informed reimbursement pathway for rare-disease therapies — including pediatric and ultra-rare medications.',
-    status: 'In review',
-    statusClass: 'pill-draft',
-    points: ['Defined post-approval timelines', 'A managed-access fund', 'Patient seats on EAP review'],
-  },
-  {
-    num: '04',
-    title: 'Caregiver and family supports',
-    desc: 'Recognition of unpaid caregivers in provincial labour and benefit policy, including respite and mental-health funding.',
-    status: 'Active',
-    statusClass: '',
-    points: ['Paid caregiver leave protections', 'Direct respite-care subsidies', 'Mental-health coverage for caregivers'],
-  },
-  {
-    num: '05',
-    title: 'Coordinated, multidisciplinary care',
-    desc: 'Designated Centres of Expertise across Ontario so rural and northern patients receive the same standard of care as those in the GTA.',
-    status: 'Piloting',
-    statusClass: 'pill-draft',
-    points: ['Centre of Expertise per Health Region', 'Permanent telehealth funding', 'Travel & accommodation grants'],
-  },
-  {
-    num: '06',
-    title: 'Research investment',
-    desc: 'Dedicated provincial funding for rare-disease research, registries and patient-reported outcome programs.',
-    status: 'Open',
-    statusClass: 'pill-open',
-    points: ['Provincial fund matched to federal', 'Connected patient registry network', 'Mandatory patient partners'],
-  },
-]
-
-const progress = [
-  { title: 'Newborn screening expansion (Bill 142)', meta: 'Ministry of Health · Standing Committee', status: 'In progress', statusClass: 'pr-progress' },
-  { title: 'Genetic testing OHIP coverage', meta: 'Ontario Health Technology Advisory Committee', status: 'Open', statusClass: 'pr-open' },
-  { title: 'Patient seat on EAP committee', meta: 'Exceptional Access Program', status: 'Win — Mar 2025', statusClass: 'pr-win' },
-  { title: 'Caregiver leave amendments (Bill 87)', meta: 'Ministry of Labour · Second reading', status: 'In progress', statusClass: 'pr-progress' },
-  { title: 'Northern Centre of Expertise pilot', meta: 'Ontario Health · Sudbury / Thunder Bay', status: 'Win — Nov 2025', statusClass: 'pr-win' },
-  { title: 'Provincial rare-disease research fund', meta: 'Treasury Board · Pre-budget submission', status: 'Open', statusClass: 'pr-open' },
-]
 </script>
 
 <style scoped>

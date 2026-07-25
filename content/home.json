@@ -1,0 +1,124 @@
+{
+  "seo": {
+    "title": "Ontario Rare Action Group",
+    "description": "A coalition of patients, caregivers and clinicians building a more humane rare-disease system for Ontario."
+  },
+  "hero": {
+    "eyebrow": "Patient-led · Ontario",
+    "title": "No one should face <em>rare</em> alone.",
+    "lede": "A coalition of patients, caregivers and clinicians building a more humane rare-disease system for Ontario.",
+    "primaryCta": { "label": "Add your voice", "href": "/contact" },
+    "secondaryCta": { "label": "See upcoming events", "href": "/events" }
+  },
+  "stats": [
+    { "num": "2.8M", "label": "Canadians live with one of more than 7,000 known rare diseases." },
+    { "num": "5+", "label": "Average years it takes to receive an accurate rare-disease diagnosis in Canada." },
+    { "num": "95%", "label": "Of rare diseases still have no approved treatment available to patients." }
+  ],
+  "marquee": ["Funding equity", "Faster diagnosis", "Drug access", "Caregiver support", "Research investment", "Patient voice"],
+  "mission": {
+    "eyebrow": "Who we are",
+    "cta": { "label": "Get involved", "href": "/contact" },
+    "text": "An Ontario non-profit network of patients, families and clinicians, working to <em>shape provincial policy and build a system that sees rare patients.</em>"
+  },
+  "overviewHead": {
+    "eyebrow": "Explore the site",
+    "title": "Everything we do, in <em>one place.</em>",
+    "sub": "Each section below has its own page with the full picture — open any one to dive in."
+  },
+  "overview": [
+    {
+      "href": "/advocacy",
+      "idx": "01",
+      "imgClass": "",
+      "visualTag": "Policy",
+      "tag": "Advocacy",
+      "title": "What we are fighting for at Queen's Park.",
+      "desc": "Six provincial commitments — strategy, faster diagnosis, drug access, caregiver supports, multidisciplinary care, research investment.",
+      "count": "6",
+      "countLabel": "Commitments",
+      "metaAriaLabel": "6 Commitments"
+    },
+    {
+      "href": "/challenges",
+      "idx": "02",
+      "imgClass": "ov-img-2",
+      "visualTag": "Reality",
+      "tag": "Rare Challenges",
+      "title": "The realities families face every day.",
+      "desc": "Five-year diagnostic odysseys, geographic inequity, caregiver burnout — the system was not built for the rare community.",
+      "count": "7",
+      "countLabel": "Issues",
+      "metaAriaLabel": "7 Issues"
+    },
+    {
+      "href": "/stories",
+      "idx": "03",
+      "imgClass": "ov-img-3",
+      "visualTag": "Voices",
+      "tag": "Patient Stories",
+      "title": "Patients, caregivers and clinicians, in their own words.",
+      "desc": "Behind every statistic is a person. The voices reshaping Ontario's approach to rare disease.",
+      "count": "24",
+      "countLabel": "Stories",
+      "metaAriaLabel": "24 Stories"
+    },
+    {
+      "href": "/events",
+      "idx": "04",
+      "imgClass": "ov-img-4",
+      "visualTag": "Live",
+      "tag": "Upcoming Events",
+      "title": "Town halls, briefings & meetups — most on Zoom.",
+      "desc": "Register for upcoming sessions and join the conversation from anywhere in Ontario.",
+      "count": "6",
+      "countLabel": "Upcoming",
+      "metaAriaLabel": "6 Upcoming events"
+    },
+    {
+      "href": "/videos",
+      "idx": "05",
+      "imgClass": "ov-img-5",
+      "visualTag": "Watch",
+      "tag": "Video Library",
+      "title": "Recorded panels, explainers and patient interviews.",
+      "desc": "A growing library — share with your community, your doctor, your MPP.",
+      "count": "38",
+      "countLabel": "Videos",
+      "metaAriaLabel": "38 Videos"
+    },
+    {
+      "href": "/partners",
+      "idx": "06",
+      "imgClass": "ov-img-6",
+      "visualTag": "Network",
+      "tag": "Affiliated Organizations",
+      "title": "Twenty-eight Ontario rare-disease organizations we work alongside.",
+      "desc": "From national umbrella bodies to single-condition patient groups — we don't do this work alone.",
+      "count": "28",
+      "countLabel": "Partners",
+      "metaAriaLabel": "28 Partners"
+    }
+  ],
+  "featuredEvent": {
+    "eyebrow": "Next event · Open to all",
+    "meta": "A conversation with patient leaders and invited MPPs about what implementation should look like for Ontario in 2026.",
+    "primaryCta": { "label": "Register on Zoom", "href": "/events" },
+    "secondaryCta": { "label": "All events", "href": "/events" },
+    "cardAriaLabel": "Event date: May 21, 2026, 7:00–8:30 PM ET, Zoom, Free",
+    "savedateLabel": "Save the date",
+    "monthLabel": "May 2026",
+    "locationLabel": "Zoom · Free"
+  },
+  "contactBand": {
+    "title": "Have a question? A story? A <em>rare</em> idea?",
+    "lede": "We read every message. Whether you're a patient, caregiver, clinician, policymaker — start a conversation.",
+    "email": "contact@ontariorare.ca"
+  },
+  "newsletter": {
+    "heading": "Stay in the loop",
+    "body": "One email a month. Policy updates, event invites, and the stories that matter. No spam, ever.",
+    "placeholder": "your@email.ca",
+    "submitLabel": "Subscribe"
+  }
+}

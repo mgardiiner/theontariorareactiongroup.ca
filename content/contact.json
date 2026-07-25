@@ -1,0 +1,35 @@
+{
+  "seo": {
+    "title": "Contact · Ontario Rare Action Group",
+    "description": "We read every message. Whether you're a patient, a caregiver, a clinician, a policymaker — start a conversation."
+  },
+  "header": {
+    "crumb": "Contact",
+    "title": "Have a question? A story? A <em>rare</em> idea?",
+    "lede": "We read every message. Whether you're a patient, a caregiver, a clinician, a policymaker — or just somebody who wants to help — start a conversation with us."
+  },
+  "form": {
+    "eyebrow": "Send us a message",
+    "title": "Tell us what's on your mind.",
+    "sub": "All messages go to a real person on our team — not a bot, not a queue.",
+    "emailPlaceholder": "you@email.ca",
+    "rolePlaceholder": "Select one",
+    "roleOptions": ["Patient", "Caregiver / family member", "Clinician or researcher", "Policymaker", "Journalist", "Partner organization", "Other"],
+    "topicPlaceholder": "Select a topic",
+    "topicOptions": ["General inquiry", "Sharing my story", "Volunteering", "Donating", "Press / media", "Partnership / affiliation", "Something else"],
+    "messagePlaceholder": "Tell us what's on your mind…",
+    "submit": "Send message",
+    "sending": "Sending…",
+    "success": {
+      "title": "Thank you — we got it.",
+      "body": "We'll be in touch within two business days."
+    }
+  },
+  "newsletter": {
+    "heading": "Or, just stay in <em>the loop.</em>",
+    "body": "One email a month. Policy updates, event invites, and the stories that matter. No spam, ever.",
+    "placeholder": "your@email.ca",
+    "submitLabel": "Subscribe"
+  },
+  "web3formsKey": "165cdb52-939e-4133-b974-3eed380701c7"
+}

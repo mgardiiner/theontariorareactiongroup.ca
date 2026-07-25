@@ -1,8 +1,8 @@
 <template>
   <div>
     <Head>
-      <Title>Ontario Rare Action Group</Title>
-      <Meta name="description" content="A coalition of patients, caregivers and clinicians building a more humane rare-disease system for Ontario." />
+      <Title>{{ content.seo.title }}</Title>
+      <Meta name="description" :content="content.seo.description" />
     </Head>
 
     <!-- HERO -->
@@ -10,29 +10,21 @@
       <div class="wrap">
         <div class="hero-grid">
           <div class="hero-main">
-            <div class="hero-eyebrow">Patient-led · Ontario</div>
-            <h1 class="hero-title">No one should face <em>rare</em> alone.</h1>
-            <p class="hero-lede">A coalition of patients, caregivers and clinicians building a more humane rare-disease system for Ontario.</p>
+            <div class="hero-eyebrow">{{ content.hero.eyebrow }}</div>
+            <h1 class="hero-title" v-html="content.hero.title"></h1>
+            <p class="hero-lede">{{ content.hero.lede }}</p>
             <div class="hero-actions">
-              <NuxtLink to="/contact" class="btn btn-primary">
-                Add your voice
+              <NuxtLink :to="content.hero.primaryCta.href" class="btn btn-primary">
+                {{ content.hero.primaryCta.label }}
                 <svg class="btn-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
               </NuxtLink>
-              <NuxtLink to="/events" class="btn btn-ghost">See upcoming events</NuxtLink>
+              <NuxtLink :to="content.hero.secondaryCta.href" class="btn btn-ghost">{{ content.hero.secondaryCta.label }}</NuxtLink>
             </div>
           </div>
           <aside class="hero-side" aria-label="Key statistics">
-            <div class="stat-card">
-              <div class="stat-num">2.8M</div>
-              <div class="stat-label">Canadians live with one of more than 7,000 known rare diseases.</div>
-            </div>
-            <div class="stat-card">
-              <div class="stat-num">5+</div>
-              <div class="stat-label">Average years it takes to receive an accurate rare-disease diagnosis in Canada.</div>
-            </div>
-            <div class="stat-card">
-              <div class="stat-num">95%</div>
-              <div class="stat-label">Of rare diseases still have no approved treatment available to patients.</div>
+            <div class="stat-card" v-for="stat in content.stats" :key="stat.num">
+              <div class="stat-num">{{ stat.num }}</div>
+              <div class="stat-label">{{ stat.label }}</div>
             </div>
           </aside>
         </div>
@@ -42,8 +34,8 @@
     <!-- MARQUEE -->
     <div class="hero-marquee" aria-hidden="true">
       <div class="marquee-track">
-        <span>Funding equity</span><span>Faster diagnosis</span><span>Drug access</span><span>Caregiver support</span><span>Research investment</span><span>Patient voice</span>
-        <span>Funding equity</span><span>Faster diagnosis</span><span>Drug access</span><span>Caregiver support</span><span>Research investment</span><span>Patient voice</span>
+        <span v-for="(term, i) in content.marquee" :key="'a' + i">{{ term }}</span>
+        <span v-for="(term, i) in content.marquee" :key="'b' + i">{{ term }}</span>
       </div>
     </div>
 
@@ -52,12 +44,10 @@
       <div class="wrap">
         <div class="mission-grid">
           <div>
-            <div class="mission-eyebrow">Who we are</div>
-            <NuxtLink to="/contact" class="btn btn-dark">Get involved</NuxtLink>
+            <div class="mission-eyebrow">{{ content.mission.eyebrow }}</div>
+            <NuxtLink :to="content.mission.cta.href" class="btn btn-dark">{{ content.mission.cta.label }}</NuxtLink>
           </div>
-          <p class="mission-text">
-            An Ontario non-profit network of patients, families and clinicians, working to <em>shape provincial policy and build a system that sees rare patients.</em>
-          </p>
+          <p class="mission-text" v-html="content.mission.text"></p>
         </div>
       </div>
     </section>
@@ -66,119 +56,29 @@
     <section>
       <div class="wrap">
         <div class="sec-head">
-          <div class="sec-num">Explore the site</div>
+          <div class="sec-num">{{ content.overviewHead.eyebrow }}</div>
           <div>
-            <h2 class="sec-title">Everything we do, in <em>one place.</em></h2>
-            <p class="sec-sub">Each section below has its own page with the full picture — open any one to dive in.</p>
+            <h2 class="sec-title" v-html="content.overviewHead.title"></h2>
+            <p class="sec-sub">{{ content.overviewHead.sub }}</p>
           </div>
         </div>
 
         <div class="overview-list">
-          <NuxtLink class="ov" to="/advocacy">
-            <div class="ov-idx" aria-hidden="true">01</div>
+          <NuxtLink class="ov" v-for="item in content.overview" :key="item.href" :to="item.href">
+            <div class="ov-idx" aria-hidden="true">{{ item.idx }}</div>
             <div class="ov-visual" aria-hidden="true">
-              <div class="ov-img-placeholder"></div>
-              <span class="ov-visual-tag">Policy</span>
+              <div class="ov-img-placeholder" :class="item.imgClass"></div>
+              <span class="ov-visual-tag">{{ item.visualTag }}</span>
               <span class="ov-visual-arrow" aria-hidden="true">→</span>
             </div>
             <div class="ov-body">
-              <div class="ov-tag">Advocacy</div>
-              <h3 class="ov-title">What we are fighting for at Queen's Park.</h3>
-              <p class="ov-desc">Six provincial commitments — strategy, faster diagnosis, drug access, caregiver supports, multidisciplinary care, research investment.</p>
+              <div class="ov-tag">{{ item.tag }}</div>
+              <h3 class="ov-title">{{ item.title }}</h3>
+              <p class="ov-desc">{{ item.desc }}</p>
             </div>
-            <div class="ov-meta" aria-label="6 Commitments">
-              <div class="ov-meta-num">6</div>
-              <div class="ov-meta-label">Commitments</div>
-            </div>
-          </NuxtLink>
-
-          <NuxtLink class="ov" to="/challenges">
-            <div class="ov-idx" aria-hidden="true">02</div>
-            <div class="ov-visual" aria-hidden="true">
-              <div class="ov-img-placeholder ov-img-2"></div>
-              <span class="ov-visual-tag">Reality</span>
-              <span class="ov-visual-arrow" aria-hidden="true">→</span>
-            </div>
-            <div class="ov-body">
-              <div class="ov-tag">Rare Challenges</div>
-              <h3 class="ov-title">The realities families face every day.</h3>
-              <p class="ov-desc">Five-year diagnostic odysseys, geographic inequity, caregiver burnout — the system was not built for the rare community.</p>
-            </div>
-            <div class="ov-meta" aria-label="7 Issues">
-              <div class="ov-meta-num">7</div>
-              <div class="ov-meta-label">Issues</div>
-            </div>
-          </NuxtLink>
-
-          <NuxtLink class="ov" to="/stories">
-            <div class="ov-idx" aria-hidden="true">03</div>
-            <div class="ov-visual" aria-hidden="true">
-              <div class="ov-img-placeholder ov-img-3"></div>
-              <span class="ov-visual-tag">Voices</span>
-              <span class="ov-visual-arrow" aria-hidden="true">→</span>
-            </div>
-            <div class="ov-body">
-              <div class="ov-tag">Patient Stories</div>
-              <h3 class="ov-title">Patients, caregivers and clinicians, in their own words.</h3>
-              <p class="ov-desc">Behind every statistic is a person. The voices reshaping Ontario's approach to rare disease.</p>
-            </div>
-            <div class="ov-meta" aria-label="24 Stories">
-              <div class="ov-meta-num">24</div>
-              <div class="ov-meta-label">Stories</div>
-            </div>
-          </NuxtLink>
-
-          <NuxtLink class="ov" to="/events">
-            <div class="ov-idx" aria-hidden="true">04</div>
-            <div class="ov-visual" aria-hidden="true">
-              <div class="ov-img-placeholder ov-img-4"></div>
-              <span class="ov-visual-tag">Live</span>
-              <span class="ov-visual-arrow" aria-hidden="true">→</span>
-            </div>
-            <div class="ov-body">
-              <div class="ov-tag">Upcoming Events</div>
-              <h3 class="ov-title">Town halls, briefings &amp; meetups — most on Zoom.</h3>
-              <p class="ov-desc">Register for upcoming sessions and join the conversation from anywhere in Ontario.</p>
-            </div>
-            <div class="ov-meta" aria-label="6 Upcoming events">
-              <div class="ov-meta-num">6</div>
-              <div class="ov-meta-label">Upcoming</div>
-            </div>
-          </NuxtLink>
-
-          <NuxtLink class="ov" to="/videos">
-            <div class="ov-idx" aria-hidden="true">05</div>
-            <div class="ov-visual" aria-hidden="true">
-              <div class="ov-img-placeholder ov-img-5"></div>
-              <span class="ov-visual-tag">Watch</span>
-              <span class="ov-visual-arrow" aria-hidden="true">→</span>
-            </div>
-            <div class="ov-body">
-              <div class="ov-tag">Video Library</div>
-              <h3 class="ov-title">Recorded panels, explainers and patient interviews.</h3>
-              <p class="ov-desc">A growing library — share with your community, your doctor, your MPP.</p>
-            </div>
-            <div class="ov-meta" aria-label="38 Videos">
-              <div class="ov-meta-num">38</div>
-              <div class="ov-meta-label">Videos</div>
-            </div>
-          </NuxtLink>
-
-          <NuxtLink class="ov" to="/partners">
-            <div class="ov-idx" aria-hidden="true">06</div>
-            <div class="ov-visual" aria-hidden="true">
-              <div class="ov-img-placeholder ov-img-6"></div>
-              <span class="ov-visual-tag">Network</span>
-              <span class="ov-visual-arrow" aria-hidden="true">→</span>
-            </div>
-            <div class="ov-body">
-              <div class="ov-tag">Affiliated Organizations</div>
-              <h3 class="ov-title">Twenty-eight Ontario rare-disease organizations we work alongside.</h3>
-              <p class="ov-desc">From national umbrella bodies to single-condition patient groups — we don't do this work alone.</p>
-            </div>
-            <div class="ov-meta" aria-label="28 Partners">
-              <div class="ov-meta-num">28</div>
-              <div class="ov-meta-label">Partners</div>
+            <div class="ov-meta" :aria-label="item.metaAriaLabel">
+              <div class="ov-meta-num">{{ item.count }}</div>
+              <div class="ov-meta-label">{{ item.countLabel }}</div>
             </div>
           </NuxtLink>
         </div>
@@ -190,24 +90,24 @@
       <div class="wrap">
         <div class="feat-grid">
           <div>
-            <div class="feat-eyebrow"><span class="feat-dot" aria-hidden="true"></span>Next event · Open to all</div>
-            <h2 class="feat-title">Town Hall: Ontario's Rare Disease Strategy — what's next?</h2>
-            <p class="feat-meta">A conversation with patient leaders and invited MPPs about what implementation should look like for Ontario in 2026.</p>
+            <div class="feat-eyebrow"><span class="feat-dot" aria-hidden="true"></span>{{ content.featuredEvent.eyebrow }}</div>
+            <h2 class="feat-title">{{ featured.title }}</h2>
+            <p class="feat-meta">{{ content.featuredEvent.meta }}</p>
             <div class="hero-actions">
-              <NuxtLink to="/events" class="btn btn-primary">
-                Register on Zoom
+              <NuxtLink :to="content.featuredEvent.primaryCta.href" class="btn btn-primary">
+                {{ content.featuredEvent.primaryCta.label }}
                 <svg class="btn-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
               </NuxtLink>
-              <NuxtLink to="/events" class="btn btn-ghost">All events</NuxtLink>
+              <NuxtLink :to="content.featuredEvent.secondaryCta.href" class="btn btn-ghost">{{ content.featuredEvent.secondaryCta.label }}</NuxtLink>
             </div>
           </div>
-          <div class="feat-card" aria-label="Event date: May 21, 2026, 7:00–8:30 PM ET, Zoom, Free">
-            <div class="feat-card-date">Save the date</div>
-            <div class="feat-day">21</div>
-            <div class="feat-month">May 2026</div>
+          <div class="feat-card" :aria-label="content.featuredEvent.cardAriaLabel">
+            <div class="feat-card-date">{{ content.featuredEvent.savedateLabel }}</div>
+            <div class="feat-day">{{ featured.day }}</div>
+            <div class="feat-month">{{ content.featuredEvent.monthLabel }}</div>
             <div class="feat-time">
-              <span>7:00–8:30 PM ET</span>
-              <span>Zoom · Free</span>
+              <span>{{ featured.time }}</span>
+              <span>{{ content.featuredEvent.locationLabel }}</span>
             </div>
           </div>
         </div>
@@ -219,16 +119,16 @@
       <div class="wrap">
         <div class="contact-band-grid">
           <div>
-            <h2 class="contact-band-title">Have a question? A story? A <em>rare</em> idea?</h2>
-            <p class="contact-band-lede">We read every message. Whether you're a patient, caregiver, clinician, policymaker — start a conversation.</p>
-            <a href="mailto:contact@ontariorare.ca" class="contact-band-email">contact@ontariorare.ca</a>
+            <h2 class="contact-band-title" v-html="content.contactBand.title"></h2>
+            <p class="contact-band-lede">{{ content.contactBand.lede }}</p>
+            <a :href="'mailto:' + content.contactBand.email" class="contact-band-email">{{ content.contactBand.email }}</a>
           </div>
           <div class="news-card">
-            <h3>Stay in the loop</h3>
-            <p>One email a month. Policy updates, event invites, and the stories that matter. No spam, ever.</p>
+            <h3>{{ content.newsletter.heading }}</h3>
+            <p>{{ content.newsletter.body }}</p>
             <form class="news-form" @submit.prevent="handleNewsSubscribe">
-              <input type="email" placeholder="your@email.ca" required aria-label="Email address" v-model="newsEmail" />
-              <button type="submit">{{ newsSubscribed ? '✓ Subscribed' : 'Subscribe' }}</button>
+              <input type="email" :placeholder="content.newsletter.placeholder" required aria-label="Email address" v-model="newsEmail" />
+              <button type="submit">{{ newsSubscribed ? '✓ Subscribed' : content.newsletter.submitLabel }}</button>
             </form>
           </div>
         </div>
@@ -238,7 +138,13 @@
 </template>
 
 <script setup>
+import content from '~/content/home.json'
+import events from '~/content/events.json'
+
 definePageMeta({ layout: 'default' })
+
+// Featured upcoming event is sourced from events.json (flagged with "featured": true)
+const featured = events.upcoming.find(e => e.featured)
 
 const newsEmail = ref('')
 const newsSubscribed = ref(false)

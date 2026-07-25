@@ -1,0 +1,80 @@
+{
+  "seo": {
+    "title": "Advocacy · Ontario Rare Action Group",
+    "description": "Six commitments shape every meeting, every brief, and every campaign we bring to Queen's Park."
+  },
+  "header": {
+    "crumb": "Advocacy",
+    "title": "What we are <em>fighting for.</em>",
+    "lede": "Six commitments shape every meeting, every brief, and every campaign we bring to Queen's Park. They were written by patients and caregivers — and they're updated each year alongside our community."
+  },
+  "goals": [
+    {
+      "num": "01",
+      "title": "A Provincial Rare Disease Strategy",
+      "desc": "Implementation of Canada's National Strategy at the Ontario level — with funding, accountability and patient governance built in from the start.",
+      "status": "Tabled",
+      "statusClass": "",
+      "points": ["Standing patient council with binding input", "Five-year funding tied to outcomes", "Annual public reporting on equity"]
+    },
+    {
+      "num": "02",
+      "title": "Faster, fairer diagnosis",
+      "desc": "Universal newborn screening expansion and reimbursed genetic testing, so families don't wait years for answers.",
+      "status": "Drafting",
+      "statusClass": "pill-draft",
+      "points": ["Newborn panel aligned with U.S. RUSP", "OHIP exome and genome sequencing", "Adult diagnostic-odyssey program"]
+    },
+    {
+      "num": "03",
+      "title": "Equitable drug access",
+      "desc": "A transparent, patient-informed reimbursement pathway for rare-disease therapies — including pediatric and ultra-rare medications.",
+      "status": "In review",
+      "statusClass": "pill-draft",
+      "points": ["Defined post-approval timelines", "A managed-access fund", "Patient seats on EAP review"]
+    },
+    {
+      "num": "04",
+      "title": "Caregiver and family supports",
+      "desc": "Recognition of unpaid caregivers in provincial labour and benefit policy, including respite and mental-health funding.",
+      "status": "Active",
+      "statusClass": "",
+      "points": ["Paid caregiver leave protections", "Direct respite-care subsidies", "Mental-health coverage for caregivers"]
+    },
+    {
+      "num": "05",
+      "title": "Coordinated, multidisciplinary care",
+      "desc": "Designated Centres of Expertise across Ontario so rural and northern patients receive the same standard of care as those in the GTA.",
+      "status": "Piloting",
+      "statusClass": "pill-draft",
+      "points": ["Centre of Expertise per Health Region", "Permanent telehealth funding", "Travel & accommodation grants"]
+    },
+    {
+      "num": "06",
+      "title": "Research investment",
+      "desc": "Dedicated provincial funding for rare-disease research, registries and patient-reported outcome programs.",
+      "status": "Open",
+      "statusClass": "pill-open",
+      "points": ["Provincial fund matched to federal", "Connected patient registry network", "Mandatory patient partners"]
+    }
+  ],
+  "progressHead": {
+    "eyebrow": "Progress tracker",
+    "title": "Where each <em>file</em> stands.",
+    "sub": "Live snapshot of where our advocacy work is moving — and where it's stuck. Updated quarterly."
+  },
+  "progress": [
+    { "title": "Newborn screening expansion (Bill 142)", "meta": "Ministry of Health · Standing Committee", "status": "In progress", "statusClass": "pr-progress" },
+    { "title": "Genetic testing OHIP coverage", "meta": "Ontario Health Technology Advisory Committee", "status": "Open", "statusClass": "pr-open" },
+    { "title": "Patient seat on EAP committee", "meta": "Exceptional Access Program", "status": "Win — Mar 2025", "statusClass": "pr-win" },
+    { "title": "Caregiver leave amendments (Bill 87)", "meta": "Ministry of Labour · Second reading", "status": "In progress", "statusClass": "pr-progress" },
+    { "title": "Northern Centre of Expertise pilot", "meta": "Ontario Health · Sudbury / Thunder Bay", "status": "Win — Nov 2025", "statusClass": "pr-win" },
+    { "title": "Provincial rare-disease research fund", "meta": "Treasury Board · Pre-budget submission", "status": "Open", "statusClass": "pr-open" }
+  ],
+  "ctaBand": {
+    "title": "Want to put your name behind this <em>work?</em>",
+    "lede": "Sign on as a community supporter, write to your MPP using our templates, or join one of our advocacy working groups.",
+    "primaryCta": { "label": "Sign the supporter list", "href": "/contact" },
+    "secondaryCta": { "label": "Get the MPP letter templates", "href": "/contact" }
+  }
+}

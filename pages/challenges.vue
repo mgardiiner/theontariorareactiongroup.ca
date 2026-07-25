@@ -1,8 +1,8 @@
 <template>
   <div>
     <Head>
-      <Title>Challenges · Ontario Rare Action Group</Title>
-      <Meta name="description" content="From the moment a symptom appears to decades into living with a rare condition, Ontario families navigate a healthcare system that wasn't built for them." />
+      <Title>{{ content.seo.title }}</Title>
+      <Meta name="description" :content="content.seo.description" />
     </Head>
 
     <header class="page-header">
@@ -10,10 +10,10 @@
         <div class="crumb">
           <NuxtLink to="/">Home</NuxtLink>
           <span>/</span>
-          Challenges
+          {{ content.header.crumb }}
         </div>
-        <h1 class="page-title">The challenges nobody <em>warns you about.</em></h1>
-        <p class="page-lede">From the moment a symptom appears to decades into living with a rare condition, Ontario families navigate a healthcare system that wasn't built for them. Here's what we hear, every day.</p>
+        <h1 class="page-title" v-html="content.header.title"></h1>
+        <p class="page-lede">{{ content.header.lede }}</p>
       </div>
     </header>
 
@@ -21,12 +21,12 @@
     <section>
       <div class="wrap">
         <div class="ch-list">
-          <div class="ch" v-for="item in challenges" :key="item.num">
+          <div class="ch" v-for="item in content.challenges" :key="item.num">
             <div class="ch-num">{{ item.num }}</div>
             <h3 class="ch-title">{{ item.title }}</h3>
             <p class="ch-desc">{{ item.desc }}</p>
             <div class="ch-stat">
-              <div class="ch-stat-num" v-html="item.stat"></div>
+              <div class="ch-stat-num">{{ item.stat }}</div>
               <div class="ch-stat-label">{{ item.statLabel }}</div>
             </div>
           </div>
@@ -40,8 +40,8 @@
         <div class="quote">
           <div class="quote-mark" aria-hidden="true">"</div>
           <div>
-            <p class="quote-text">Rare doesn't mean a small problem — it means <em>seven thousand small problems</em> the system has chosen not to solve at scale.</p>
-            <div class="quote-attr">Dr. Sofia Reyes · Pediatric geneticist · Hamilton Health Sciences</div>
+            <p class="quote-text" v-html="content.quote.text"></p>
+            <div class="quote-attr">{{ content.quote.attribution }}</div>
           </div>
         </div>
       </div>
@@ -50,14 +50,13 @@
     <!-- CTA BAND -->
     <section class="cta-band">
       <div class="wrap">
-        <h2>These challenges are <em>solvable.</em></h2>
-        <p>Each one of them maps to a concrete commitment in our advocacy platform. See what we're doing about it — and add your name.</p>
+        <h2 v-html="content.ctaBand.heading"></h2>
+        <p>{{ content.ctaBand.body }}</p>
         <div class="cta-actions">
-          <NuxtLink to="/advocacy" class="btn btn-dark">
-            See our advocacy platform
-            <svg class="btn-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+          <NuxtLink v-for="(action, i) in content.ctaBand.actions" :key="i" :to="action.href" :class="['btn', 'btn-' + action.style]">
+            {{ action.label }}
+            <svg v-if="action.arrow" class="btn-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
           </NuxtLink>
-          <NuxtLink to="/stories" class="btn btn-outline-ink">Read patient stories</NuxtLink>
         </div>
       </div>
     </section>
@@ -65,17 +64,9 @@
 </template>
 
 <script setup>
-definePageMeta({ layout: 'default' })
+import content from '~/content/challenges.json'
 
-const challenges = [
-  { num: '01', title: 'The diagnostic odyssey', desc: 'Most patients see seven or more specialists before receiving an accurate diagnosis. That delay costs jobs, marriages, savings — and in some cases, lives.', stat: '5.6 yrs', statLabel: 'avg. wait' },
-  { num: '02', title: 'No treatment, no roadmap', desc: 'Even with a diagnosis in hand, the majority of rare-disease patients have no approved therapy and no specialist clinic to manage their condition long-term.', stat: '95%', statLabel: 'no cure' },
-  { num: '03', title: 'Unaffordable and unfunded', desc: 'Where therapies do exist, costs can exceed $250,000 per year — and provincial coverage decisions can take half a decade to land.', stat: '$250K+', statLabel: 'per year' },
-  { num: '04', title: 'Geographic inequity', desc: 'Patients in rural and northern Ontario travel hours — sometimes days — to reach a specialist who has even heard of their condition.', stat: '11 hrs', statLabel: 'avg. travel' },
-  { num: '05', title: 'Caregivers carry it alone', desc: 'Family caregivers provide the equivalent of a full-time job in unpaid labour, with little recognition in provincial policy or labour law.', stat: '38 hrs', statLabel: 'per week' },
-  { num: '06', title: 'Mental health falls through the cracks', desc: 'Rare-disease patients and their caregivers report rates of anxiety and depression more than double the general population — yet specialized supports are scarce.', stat: '2.4×', statLabel: 'higher rate' },
-  { num: '07', title: 'A research gap that compounds', desc: 'Fewer than 5% of rare diseases attract a single dedicated research grant in Canada, leaving most conditions invisible to the systems meant to study them.', stat: '&lt;5%', statLabel: 'researched' },
-]
+definePageMeta({ layout: 'default' })
 </script>
 
 <style scoped>

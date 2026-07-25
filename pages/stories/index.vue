@@ -1,8 +1,8 @@
 <template>
   <div>
     <Head>
-      <Title>Patient Stories · Ontario Rare Action Group</Title>
-      <Meta name="description" content="These are the voices reshaping Ontario's approach to rare disease — caregivers, patients, clinicians and siblings sharing what they wish they had known." />
+      <Title>{{ content.seo.title }}</Title>
+      <Meta name="description" :content="content.seo.description" />
     </Head>
 
     <header class="page-header">
@@ -10,10 +10,10 @@
         <div class="crumb">
           <NuxtLink to="/">Home</NuxtLink>
           <span>/</span>
-          Patient Stories
+          {{ content.header.crumb }}
         </div>
-        <h1 class="page-title">Behind every statistic, a <em>person.</em></h1>
-        <p class="page-lede">These are the voices reshaping Ontario's approach to rare disease — caregivers, patients, clinicians and siblings sharing what they wish they had known.</p>
+        <h1 class="page-title" v-html="content.header.title"></h1>
+        <p class="page-lede">{{ content.header.lede }}</p>
       </div>
     </header>
 
@@ -66,12 +66,12 @@
       <div class="wrap">
         <div class="share-grid">
           <div>
-            <h2 class="share-title">Your story belongs <em>here, too.</em></h2>
-            <p>If you're a patient, caregiver, sibling or clinician, we want to hear from you. We can interview you, transcribe your words, or publish a piece you've already written.</p>
+            <h2 class="share-title" v-html="content.shareCta.title"></h2>
+            <p>{{ content.shareCta.body }}</p>
           </div>
           <div>
-            <NuxtLink to="/contact" class="btn btn-primary">
-              Share your story
+            <NuxtLink :to="content.shareCta.cta.href" class="btn btn-primary">
+              {{ content.shareCta.cta.label }}
               <svg class="btn-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
             </NuxtLink>
           </div>
@@ -82,9 +82,11 @@
 </template>
 
 <script setup>
+import content from '~/content/stories.json'
+
 definePageMeta({ layout: 'default' })
 
-const filters = ['All stories', 'Patients', 'Caregivers', 'Clinicians', 'Siblings', 'Newly diagnosed']
+const filters = content.filters
 const activeFilter = ref('All stories')
 
 const { stories } = useStories()

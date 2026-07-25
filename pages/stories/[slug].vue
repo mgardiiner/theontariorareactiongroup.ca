@@ -61,12 +61,12 @@
       <div class="wrap">
         <div class="share-grid">
           <div>
-            <h2 class="share-title">Your story belongs <em>here, too.</em></h2>
-            <p>If you're a patient, caregiver, sibling or clinician, we want to hear from you. We can interview you, transcribe your words, or publish a piece you've already written.</p>
+            <h2 class="share-title" v-html="content.shareCta.title"></h2>
+            <p>{{ content.shareCta.body }}</p>
           </div>
           <div>
-            <NuxtLink to="/contact" class="btn btn-primary">
-              Share your story
+            <NuxtLink :to="content.shareCta.cta.href" class="btn btn-primary">
+              {{ content.shareCta.cta.label }}
               <svg class="btn-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
             </NuxtLink>
           </div>
@@ -81,6 +81,8 @@
 </template>
 
 <script setup>
+import content from '~/content/stories.json'
+
 definePageMeta({ layout: 'default' })
 
 const route = useRoute()

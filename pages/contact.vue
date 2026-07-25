@@ -1,8 +1,8 @@
 <template>
   <div>
     <Head>
-      <Title>Contact · Ontario Rare Action Group</Title>
-      <Meta name="description" content="We read every message. Whether you're a patient, a caregiver, a clinician, a policymaker — start a conversation." />
+      <Title>{{ content.seo.title }}</Title>
+      <Meta name="description" :content="content.seo.description" />
     </Head>
 
     <header class="page-header">
@@ -10,10 +10,10 @@
         <div class="crumb">
           <NuxtLink to="/">Home</NuxtLink>
           <span>/</span>
-          Contact
+          {{ content.header.crumb }}
         </div>
-        <h1 class="page-title">Have a question? A story? A <em>rare</em> idea?</h1>
-        <p class="page-lede">We read every message. Whether you're a patient, a caregiver, a clinician, a policymaker — or just somebody who wants to help — start a conversation with us.</p>
+        <h1 class="page-title" v-html="content.header.title"></h1>
+        <p class="page-lede">{{ content.header.lede }}</p>
       </div>
     </header>
 
@@ -21,25 +21,11 @@
     <section>
       <div class="wrap">
         <div class="contact-grid">
-          <!-- CHANNELS -->
-          <div>
-            <div class="contact-channels">
-              <div class="channel" v-for="ch in channels" :key="ch.num">
-                <div class="ch-num">{{ ch.num }}</div>
-                <div>
-                  <div class="ch-label">{{ ch.label }}</div>
-                  <div class="ch-value" v-html="ch.value"></div>
-                  <div class="ch-note" v-if="ch.note">{{ ch.note }}</div>
-                </div>
-              </div>
-            </div>
-          </div>
-
           <!-- FORM CARD -->
           <div class="form-card">
-            <div class="form-eyebrow">Send us a message</div>
-            <h2 class="form-title">Tell us what's on your mind.</h2>
-            <p class="form-sub">All messages go to a real person on our team — not a bot, not a queue.</p>
+            <div class="form-eyebrow">{{ content.form.eyebrow }}</div>
+            <h2 class="form-title">{{ content.form.title }}</h2>
+            <p class="form-sub">{{ content.form.sub }}</p>
 
             <form class="form-grid" @submit.prevent="handleContact" v-if="!submitted" novalidate>
               <div class="form-row">
@@ -54,40 +40,28 @@
               </div>
               <div class="field">
                 <label for="c-email">Email</label>
-                <input id="c-email" type="email" required placeholder="you@email.ca" v-model="form.email" />
+                <input id="c-email" type="email" required :placeholder="content.form.emailPlaceholder" v-model="form.email" />
               </div>
               <div class="field">
                 <label for="c-role">I'm reaching out as</label>
                 <select id="c-role" required v-model="form.role">
-                  <option value="">Select one</option>
-                  <option>Patient</option>
-                  <option>Caregiver / family member</option>
-                  <option>Clinician or researcher</option>
-                  <option>Policymaker</option>
-                  <option>Journalist</option>
-                  <option>Partner organization</option>
-                  <option>Other</option>
+                  <option value="">{{ content.form.rolePlaceholder }}</option>
+                  <option v-for="opt in content.form.roleOptions" :key="opt">{{ opt }}</option>
                 </select>
               </div>
               <div class="field">
                 <label for="c-topic">What can we help with?</label>
                 <select id="c-topic" required v-model="form.topic">
-                  <option value="">Select a topic</option>
-                  <option>General inquiry</option>
-                  <option>Sharing my story</option>
-                  <option>Volunteering</option>
-                  <option>Donating</option>
-                  <option>Press / media</option>
-                  <option>Partnership / affiliation</option>
-                  <option>Something else</option>
+                  <option value="">{{ content.form.topicPlaceholder }}</option>
+                  <option v-for="opt in content.form.topicOptions" :key="opt">{{ opt }}</option>
                 </select>
               </div>
               <div class="field">
                 <label for="c-message">Your message</label>
-                <textarea id="c-message" required placeholder="Tell us what's on your mind…" v-model="form.message"></textarea>
+                <textarea id="c-message" required :placeholder="content.form.messagePlaceholder" v-model="form.message"></textarea>
               </div>
               <button type="submit" class="submit-btn" :disabled="sending">
-                {{ sending ? 'Sending…' : 'Send message' }}
+                {{ sending ? content.form.sending : content.form.submit }}
                 <svg v-if="!sending" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
               </button>
               <p v-if="sendError" class="send-error">{{ sendError }}</p>
@@ -95,8 +69,8 @@
 
             <div class="form-success" v-if="submitted" role="status">
               <div class="success-check" aria-hidden="true">✓</div>
-              <h4>Thank you — we got it.</h4>
-              <p>We'll be in touch within two business days.</p>
+              <h4>{{ content.form.success.title }}</h4>
+              <p>{{ content.form.success.body }}</p>
             </div>
           </div>
         </div>
@@ -108,12 +82,12 @@
       <div class="wrap">
         <div class="news-grid">
           <div>
-            <h2>Or, just stay in <em>the loop.</em></h2>
-            <p>One email a month. Policy updates, event invites, and the stories that matter. No spam, ever.</p>
+            <h2 v-html="content.newsletter.heading"></h2>
+            <p>{{ content.newsletter.body }}</p>
           </div>
           <form class="news-form" @submit.prevent="handleNewsSubscribe" novalidate>
-            <input type="email" placeholder="your@email.ca" required aria-label="Email address for newsletter" v-model="newsEmail" />
-            <button type="submit">{{ newsSubscribed ? '✓ Subscribed' : 'Subscribe' }}</button>
+            <input type="email" :placeholder="content.newsletter.placeholder" required aria-label="Email address for newsletter" v-model="newsEmail" />
+            <button type="submit">{{ newsSubscribed ? '✓ Subscribed' : content.newsletter.submitLabel }}</button>
           </form>
           <p v-if="newsError" class="news-error">{{ newsError }}</p>
         </div>
@@ -123,40 +97,9 @@
 </template>
 
 <script setup>
-definePageMeta({ layout: 'default' })
+import content from '~/content/contact.json'
 
-const channels = [
-  {
-    num: '01',
-    label: 'General inquiries',
-    value: '<a href="mailto:contact@ontariorare.ca?subject=General%20Inquiry%3A%20Website%20Submission">contact@ontariorare.ca</a>',
-    note: 'We aim to reply within two business days.',
-  },
-  {
-    num: '02',
-    label: 'Patient support & story sharing',
-    value: '<a href="mailto:contact@ontariorare.ca?subject=Story%20Submission%3A%20Website%20Submission">contact@ontariorare.ca</a>',
-    note: 'Confidential. We can interview you, transcribe your words, or publish a piece you\'ve written.',
-  },
-  {
-    num: '03',
-    label: 'Partnerships & affiliation',
-    value: '<a href="mailto:contact@ontariorare.ca?subject=Partnership%20Inquiry%3A%20Website%20Submission">contact@ontariorare.ca</a>',
-    note: 'For other rare-disease organizations, clinics and researchers.',
-  },
-  {
-    num: '04',
-    label: 'Volunteering',
-    value: '<a href="mailto:contact@ontariorare.ca?subject=Volunteering%3A%20Website%20Submission">contact@ontariorare.ca</a>',
-    note: 'Tell us a bit about yourself and how you\'d like to help.',
-  },
-  {
-    num: '05',
-    label: 'Donations & giving',
-    value: '<a href="mailto:contact@ontariorare.ca?subject=Donations%20%26%20Giving%3A%20Website%20Submission">contact@ontariorare.ca</a>',
-    note: 'Questions about giving, receipts, or how funds are used.',
-  },
-]
+definePageMeta({ layout: 'default' })
 
 const submitted = ref(false)
 const sending = ref(false)
@@ -178,7 +121,7 @@ async function handleContact() {
     const res = await $fetch('https://api.web3forms.com/submit', {
       method: 'POST',
       body: {
-        access_key: '165cdb52-939e-4133-b974-3eed380701c7',
+        access_key: content.web3formsKey,
         subject: 'Website Contact Form Submission',
         name: `${form.firstName} ${form.lastName}`,
         email: form.email,
@@ -214,49 +157,9 @@ function handleNewsSubscribe() {
 
 <style scoped>
 .contact-grid {
-  display: grid;
-  grid-template-columns: 1fr 1.2fr;
-  gap: 80px;
-  align-items: start;
+  max-width: 640px;
+  margin: 0 auto;
 }
-
-.contact-channels { display: flex; flex-direction: column; gap: 0; border-top: 1px solid var(--ink); }
-.channel {
-  padding: 24px 0;
-  border-bottom: 1px solid var(--line);
-  display: grid;
-  grid-template-columns: 32px 1fr;
-  gap: 16px;
-  align-items: start;
-}
-.ch-num {
-  font-family: var(--mono);
-  font-size: 11px;
-  color: var(--muted);
-  padding-top: 4px;
-  letter-spacing: 0.08em;
-}
-.ch-label {
-  font-family: var(--mono);
-  font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: var(--muted);
-  margin-bottom: 6px;
-}
-.ch-value {
-  font-family: var(--serif);
-  font-size: 22px;
-  font-weight: 500;
-  letter-spacing: -0.01em;
-  line-height: 1.25;
-}
-:deep(.ch-value a) {
-  border-bottom: 1px solid var(--ink);
-  transition: color .15s ease, border-color .15s ease;
-}
-:deep(.ch-value a:hover) { color: var(--primary); border-color: var(--primary); }
-.ch-note { font-size: 13.5px; color: var(--muted); margin-top: 6px; }
 
 .form-card {
   background: #fff;
@@ -367,11 +270,11 @@ function handleNewsSubscribe() {
 .news-error { font-size: 13.5px; color: #ff8a8a; margin: 8px 0 0; }
 
 @media (max-width: 980px) {
-  .contact-grid { grid-template-columns: 1fr; gap: 40px; }
   .news-grid { grid-template-columns: 1fr; }
   .form-row { grid-template-columns: 1fr; }
 }
 @media (max-width: 600px) {
+  .form-card { padding: 28px 22px; }
   .news-form { flex-direction: column; }
   .news-form button { padding: 14px; }
 }

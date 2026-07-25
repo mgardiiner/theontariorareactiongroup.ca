@@ -1,36 +1,38 @@
 <template>
   <div class="page">
     <Head>
-      <Title>Coming Soon · Ontario Rare Action Group</Title>
-      <Meta name="description" content="A patient-led coalition advocating for Ontario's rare disease community. Website coming soon." />
+      <Title>{{ content.seo.title }}</Title>
+      <Meta name="description" :content="content.seo.description" />
     </Head>
 
     <main class="container">
-      <div class="brand-mark" aria-hidden="true">R</div>
-      <div class="org-name">Ontario Rare Action Group</div>
-      <h1 class="headline">Something <em>rare</em><br>is coming.</h1>
-      <p class="lede">We're building a home for Ontario's rare disease community — patients, caregivers, clinicians and advocates. Sign up to be the first to know when we launch.</p>
+      <img class="brand-mark" src="/logo.png" width="88" height="88" :alt="content.orgName" />
+      <div class="org-name">{{ content.orgName }}</div>
+      <h1 class="headline" v-html="content.headline"></h1>
+      <p class="lede">{{ content.lede }}</p>
 
       <form class="signup-form" @submit.prevent="handleSubmit" v-if="!submitted" novalidate>
-        <input type="email" placeholder="your@email.ca" required aria-label="Email address" v-model="email" />
-        <button type="submit">Notify me</button>
+        <input type="email" :placeholder="content.placeholder" required aria-label="Email address" v-model="email" />
+        <button type="submit">{{ content.submitLabel }}</button>
       </form>
 
       <p v-if="error" class="error">{{ error }}</p>
 
       <div class="success" v-if="submitted" role="status">
         <span class="check" aria-hidden="true">✓</span>
-        You're on the list. We'll be in touch.
+        {{ content.successText }}
       </div>
 
-      <a href="mailto:contact@ontariorare.ca" class="contact-link">
-        contact@ontariorare.ca
+      <a :href="'mailto:' + content.contactEmail" class="contact-link">
+        {{ content.contactEmail }}
       </a>
     </main>
   </div>
 </template>
 
 <script setup>
+import content from '~/content/coming-soon.json'
+
 definePageMeta({ layout: 'empty' })
 useHead({ bodyAttrs: { style: 'background:rgb(30,1,119);' } })
 
@@ -46,7 +48,7 @@ function handleSubmit() {
   }
 
   const callbackName = 'mcCallback_' + Date.now()
-  const url = `https://theontariorareactiongroup.us22.list-manage.com/subscribe/post-json?u=a5e592f36a13ce41b8da32d71&id=4ee9617924&EMAIL=${encodeURIComponent(email.value)}&c=${callbackName}`
+  const url = `${content.mailchimp.url}?u=${content.mailchimp.u}&id=${content.mailchimp.id}&EMAIL=${encodeURIComponent(email.value)}&c=${callbackName}`
 
   window[callbackName] = (data) => {
     delete window[callbackName]
@@ -83,18 +85,12 @@ function handleSubmit() {
   align-items: flex-start;
 }
 .brand-mark {
-  width: 48px;
-  height: 48px;
-  background: var(--accent);
-  color: var(--primary-deep);
-  display: grid;
-  place-items: center;
-  font-family: var(--serif);
-  font-weight: 600;
-  font-size: 28px;
-  border-radius: 3px;
+  width: 88px;
+  height: 88px;
+  border-radius: 6px;
   margin-bottom: 24px;
   flex-shrink: 0;
+  display: block;
 }
 .org-name {
   font-family: var(--mono);

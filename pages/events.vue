@@ -1,8 +1,8 @@
 <template>
   <div>
     <Head>
-      <Title>Events · Ontario Rare Action Group</Title>
-      <Meta name="description" content="Town halls, policy briefings, family meetups and learning sessions — most of them open to anyone, most of them on Zoom." />
+      <Title>{{ content.seo.title }}</Title>
+      <Meta name="description" :content="content.seo.description" />
     </Head>
 
     <header class="page-header">
@@ -10,10 +10,10 @@
         <div class="crumb">
           <NuxtLink to="/">Home</NuxtLink>
           <span>/</span>
-          Events
+          {{ content.header.crumb }}
         </div>
-        <h1 class="page-title">Show up. <em>Be counted.</em></h1>
-        <p class="page-lede">Town halls, policy briefings, family meetups and learning sessions — most of them open to anyone, most of them on Zoom so you can join from anywhere in Ontario.</p>
+        <h1 class="page-title" v-html="content.header.title"></h1>
+        <p class="page-lede">{{ content.header.lede }}</p>
       </div>
     </header>
 
@@ -24,7 +24,7 @@
           <!-- EVENT LIST -->
           <div>
             <div class="sec-head">
-              <div class="sec-num" style="color:rgba(255,255,255,0.6);border-color:var(--accent);">Upcoming events</div>
+              <div class="sec-num" style="color:rgba(255,255,255,0.6);border-color:var(--accent);">{{ content.upcomingLabel }}</div>
               <div>
               </div>
             </div>
@@ -60,7 +60,7 @@
           <div class="zoom-card" aria-label="Event registration form">
             <div class="zoom-eyebrow">
               <span class="zoom-dot" aria-hidden="true"></span>
-              Register · {{ events[activeIdx].tag === 'ZOOM' ? 'Zoom webinar' : 'In-person event' }}
+              {{ content.registration.eyebrowPrefix }} {{ events[activeIdx].tag === 'ZOOM' ? content.registration.zoomLabel : content.registration.inPersonLabel }}
             </div>
             <h3 class="zoom-title">{{ events[activeIdx].title }}</h3>
             <div class="zoom-when">{{ events[activeIdx].date }} · {{ events[activeIdx].time }}</div>
@@ -78,34 +78,29 @@
               </div>
               <div class="field">
                 <label for="email">Email</label>
-                <input id="email" type="email" required placeholder="you@email.ca" v-model="form.email" />
+                <input id="email" type="email" required :placeholder="content.registration.emailPlaceholder" v-model="form.email" />
               </div>
               <div class="field">
                 <label for="role">I'm joining as</label>
                 <select id="role" required v-model="form.role">
-                  <option value="">Select one</option>
-                  <option>Patient</option>
-                  <option>Caregiver / family member</option>
-                  <option>Clinician or researcher</option>
-                  <option>Policymaker</option>
-                  <option>Allied advocate</option>
-                  <option>Other</option>
+                  <option value="">{{ content.registration.rolePlaceholder }}</option>
+                  <option v-for="opt in content.registration.roleOptions" :key="opt">{{ opt }}</option>
                 </select>
               </div>
               <label class="check">
                 <input type="checkbox" v-model="form.calendarInvite" />
-                <span>Email me a calendar invite and a reminder one hour before the event.</span>
+                <span>{{ content.registration.calendarInvite }}</span>
               </label>
               <button type="submit" class="zoom-submit">
-                Reserve my spot
+                {{ content.registration.submit }}
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
               </button>
             </form>
 
             <div class="zoom-success" v-if="registered" role="status">
               <div class="success-check" aria-hidden="true">✓</div>
-              <h4>You're registered.</h4>
-              <p>Check your inbox for the Zoom link and calendar invite.</p>
+              <h4>{{ content.registration.success.title }}</h4>
+              <p>{{ content.registration.success.body }}</p>
             </div>
           </div>
         </div>
@@ -116,10 +111,10 @@
     <section class="past-bg">
       <div class="wrap">
         <div class="sec-head">
-          <div class="sec-num">Past events</div>
+          <div class="sec-num">{{ content.pastHead.eyebrow }}</div>
           <div>
-            <h2 class="sec-title">Missed one? <em>Catch up.</em></h2>
-            <p class="sec-sub">Recordings and slide decks from recent sessions, free to watch and share.</p>
+            <h2 class="sec-title" v-html="content.pastHead.title"></h2>
+            <p class="sec-sub">{{ content.pastHead.sub }}</p>
           </div>
         </div>
         <div class="past-grid">
@@ -135,25 +130,12 @@
 </template>
 
 <script setup>
+import content from '~/content/events.json'
+
 definePageMeta({ layout: 'default' })
 
-const events = [
-  { day: '21', month: 'May', title: "Town Hall: Ontario's Rare Disease Strategy — what's next?", time: '7:00–8:30 PM ET', tag: 'ZOOM', date: 'May 21, 2026' },
-  { day: '04', month: 'Jun', title: 'Caregiver Roundtable: navigating ODSP and respite', time: '12:00–1:00 PM ET', tag: 'ZOOM', date: 'Jun 4, 2026' },
-  { day: '12', month: 'Jun', title: 'Family Meetup: Toronto picnic in High Park', time: '11:00 AM–3:00 PM ET', tag: 'IRL', date: 'Jun 12, 2026' },
-  { day: '26', month: 'Jun', title: 'Policy Briefing: drug-access reform in Ontario', time: '1:00–2:00 PM ET', tag: 'ZOOM', date: 'Jun 26, 2026' },
-  { day: '10', month: 'Jul', title: 'Self-advocacy 101 for newly diagnosed adults', time: '6:30–8:00 PM ET', tag: 'ZOOM', date: 'Jul 10, 2026' },
-  { day: '24', month: 'Jul', title: 'Researcher Q&A: rare-disease registries in Canada', time: '12:00–1:00 PM ET', tag: 'ZOOM', date: 'Jul 24, 2026' },
-]
-
-const pastEvents = [
-  { date: 'Mar 18, 2026', title: 'Rare in Ontario: a roadmap for the next ten years' },
-  { date: 'Feb 26, 2026', title: 'Caregiver mental health: building a real support system' },
-  { date: 'Feb 11, 2026', title: 'Drug-access reform: a conversation with Ontario Health' },
-  { date: 'Jan 22, 2026', title: 'Newborn screening: what changes in 2026' },
-  { date: 'Dec 5, 2025', title: 'Year-end town hall: 2025 wins and what\'s next' },
-  { date: 'Nov 14, 2025', title: 'Self-advocacy 101 for newly diagnosed adults' },
-]
+const events = content.upcoming
+const pastEvents = content.past
 
 const activeIdx = ref(0)
 const registered = ref(false)

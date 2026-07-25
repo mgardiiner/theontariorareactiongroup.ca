@@ -1,8 +1,8 @@
 <template>
   <div>
     <Head>
-      <Title>Videos · Ontario Rare Action Group</Title>
-      <Meta name="description" content="Recorded panels, explainers and conversations with Ontario's rare-disease community. Free to watch and share." />
+      <Title>{{ content.seo.title }}</Title>
+      <Meta name="description" :content="content.seo.description" />
     </Head>
 
     <header class="page-header">
@@ -10,10 +10,10 @@
         <div class="crumb">
           <NuxtLink to="/">Home</NuxtLink>
           <span>/</span>
-          Videos
+          {{ content.header.crumb }}
         </div>
-        <h1 class="page-title">Watch, learn, <em>share.</em></h1>
-        <p class="page-lede">Recorded panels, explainers and conversations with Ontario's rare-disease community. Free to watch — and free to share with your doctor, your family, or your MPP.</p>
+        <h1 class="page-title" v-html="content.header.title"></h1>
+        <p class="page-lede">{{ content.header.lede }}</p>
       </div>
     </header>
 
@@ -21,7 +21,7 @@
       <div class="wrap">
         <div class="filter-bar" role="group" aria-label="Filter videos by category">
           <button
-            v-for="f in filters"
+            v-for="f in content.filters"
             :key="f"
             class="chip"
             :class="{ on: activeFilter === f }"
@@ -31,19 +31,19 @@
         </div>
 
         <div class="videos-grid">
-          <article class="video feature v1" tabindex="0" role="button" aria-label="Featured Panel: Rare in Ontario: a roadmap for the next ten years, 42 min">
+          <article class="video feature v1" tabindex="0" role="button" :aria-label="content.featured.ariaLabel">
             <div class="video-thumb"></div>
             <div class="video-play" aria-hidden="true">
               <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
             </div>
             <div class="video-info">
-              <div class="video-cat">Featured Panel</div>
-              <h4 class="video-title">Rare in Ontario: a roadmap for the next ten years</h4>
-              <div class="video-dur">42 min · Recorded Mar 2026</div>
+              <div class="video-cat">{{ content.featured.cat }}</div>
+              <h4 class="video-title">{{ content.featured.title }}</h4>
+              <div class="video-dur">{{ content.featured.dur }}</div>
             </div>
           </article>
 
-          <article class="video v2" v-for="v in sideVideos" :key="v.title" tabindex="0" role="button" :aria-label="`${v.cat}: ${v.title}, ${v.dur}`">
+          <article class="video v2" v-for="v in content.sideVideos" :key="v.title" tabindex="0" role="button" :aria-label="`${v.cat}: ${v.title}, ${v.dur}`">
             <div class="video-thumb"></div>
             <div class="video-play" aria-hidden="true">
               <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
@@ -57,7 +57,7 @@
         </div>
 
         <div class="more-grid">
-          <article class="video" :class="v.cls" v-for="v in moreVideos" :key="v.title" tabindex="0" role="button" :aria-label="`${v.cat}: ${v.title}, ${v.dur}`">
+          <article class="video" :class="v.cls" v-for="v in content.moreVideos" :key="v.title" tabindex="0" role="button" :aria-label="`${v.cat}: ${v.title}, ${v.dur}`">
             <div class="video-thumb"></div>
             <div class="video-play" aria-hidden="true">
               <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
@@ -75,23 +75,11 @@
 </template>
 
 <script setup>
+import content from '~/content/videos.json'
+
 definePageMeta({ layout: 'default' })
 
-const filters = ['All videos', 'Featured', 'Explainers', 'Patient voices', 'Briefings', 'Workshops']
 const activeFilter = ref('All videos')
-
-const sideVideos = [
-  { cls: 'v2', cat: 'Explainer', title: 'How drug access works in Ontario', dur: '8 min' },
-  { cls: 'v3', cat: 'Patient Voice', title: "Lila's story, in her own words", dur: '12 min' },
-  { cls: 'v4', cat: 'Briefing', title: 'Newborn screening: what changes in 2026', dur: '15 min' },
-  { cls: 'v5', cat: 'Workshop', title: 'Self-advocacy 101 for caregivers', dur: '28 min' },
-]
-
-const moreVideos = [
-  { cls: 'v6', cat: 'Briefing', title: 'Reading a Health Canada drug review', dur: '19 min' },
-  { cls: 'v7', cat: 'Patient Voice', title: 'David on the wait for an approved therapy', dur: '9 min' },
-  { cls: 'v8', cat: 'Explainer', title: 'What "rare" really means: 60-second primer', dur: '1 min' },
-]
 </script>
 
 <style scoped>

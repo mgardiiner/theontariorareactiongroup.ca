@@ -1,8 +1,8 @@
 <template>
   <div>
     <Head>
-      <Title>Affiliated Organizations · Ontario Rare Action Group</Title>
-      <Meta name="description" content="Twenty-eight rare-disease organizations across Ontario partner with us on advocacy, research and patient support." />
+      <Title>{{ content.seo.title }}</Title>
+      <Meta name="description" :content="content.seo.description" />
     </Head>
 
     <header class="page-header">
@@ -10,16 +10,16 @@
         <div class="crumb">
           <NuxtLink to="/">Home</NuxtLink>
           <span>/</span>
-          Affiliated Organizations
+          {{ content.header.crumb }}
         </div>
-        <h1 class="page-title">We do this work <em>together.</em></h1>
-        <p class="page-lede">Twenty-eight rare-disease organizations across Ontario partner with us on advocacy, research and patient support. Each one brings deep expertise in their condition area — together, we represent more than a million Ontarians.</p>
+        <h1 class="page-title" v-html="content.header.title"></h1>
+        <p class="page-lede">{{ content.header.lede }}</p>
       </div>
     </header>
 
     <section>
       <div class="wrap">
-        <div v-for="group in partnerGroups" :key="group.label">
+        <div v-for="group in content.partnerGroups" :key="group.label">
           <div class="group-label">{{ group.label }}</div>
           <div class="partners-grid">
             <article class="partner" v-for="p in group.partners" :key="p.abbr" tabindex="0">
@@ -41,12 +41,12 @@
       <div class="wrap">
         <div class="become-grid">
           <div>
-            <h2 class="become-title">Run a rare-disease organization in Ontario? <em>Let's talk.</em></h2>
-            <p>We host a quarterly leaders' roundtable, share advocacy infrastructure, and amplify member campaigns. Affiliation is free.</p>
+            <h2 class="become-title" v-html="content.becomePartner.title"></h2>
+            <p>{{ content.becomePartner.body }}</p>
           </div>
           <div>
-            <NuxtLink to="/contact" class="btn btn-dark">
-              Become an affiliated organization
+            <NuxtLink :to="content.becomePartner.cta.href" class="btn btn-dark">
+              {{ content.becomePartner.cta.label }}
               <svg class="btn-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
             </NuxtLink>
           </div>
@@ -57,41 +57,9 @@
 </template>
 
 <script setup>
-definePageMeta({ layout: 'default' })
+import content from '~/content/partners.json'
 
-const partnerGroups = [
-  {
-    label: 'National umbrella organizations',
-    partners: [
-      { abbr: 'CORD', region: 'National', name: 'Canadian Organization for Rare Disorders', focus: 'National advocacy network and umbrella body for Canada\'s rare-disease patient groups.' },
-      { abbr: 'RDC', region: 'National', name: 'Rare Disease Canada', focus: 'Federation of patient organizations advocating for the National Strategy implementation.' },
-      { abbr: 'NORD', region: 'Cross-border', name: 'National Organization for Rare Disorders (US)', focus: 'Cross-border partner for research, registries and policy benchmarking.' },
-      { abbr: 'RDF', region: 'Ontario', name: 'Rare Disease Foundation of Ontario', focus: 'Microgrant research funding for under-studied conditions affecting Ontario families.' },
-    ],
-  },
-  {
-    label: 'Condition-specific patient organizations',
-    partners: [
-      { abbr: 'SCS', region: 'National', name: 'Sickle Cell Society of Canada', focus: 'Patient support, education and equity advocacy for the sickle-cell community.' },
-      { abbr: 'MDC', region: 'National', name: 'Muscular Dystrophy Canada', focus: 'Service, research and advocacy for over 160 neuromuscular conditions.' },
-      { abbr: 'CCFF', region: 'National', name: 'Cystic Fibrosis Canada', focus: 'Funding research and advocating for affordable access to CF therapies.' },
-      { abbr: 'EBC', region: 'National', name: 'Epidermolysis Bullosa Canada', focus: 'Family support and advocacy for those living with the "butterfly skin" condition.' },
-      { abbr: 'HSC', region: 'National', name: 'Huntington Society of Canada', focus: 'Resources, research and advocacy for Huntington\'s disease families.' },
-      { abbr: 'PWS', region: 'Ontario', name: 'Prader-Willi Syndrome Ontario', focus: 'Family connection, education and provincial advocacy for PWS households.' },
-      { abbr: 'PHA', region: 'National', name: 'Pulmonary Hypertension Association Canada', focus: 'Patient support and treatment-access advocacy for the PH community.' },
-      { abbr: 'SMA', region: 'National', name: 'Cure SMA Canada', focus: 'Family support and access advocacy for spinal muscular atrophy.' },
-    ],
-  },
-  {
-    label: 'Research, clinical & academic partners',
-    partners: [
-      { abbr: 'SK', region: 'Toronto', name: 'SickKids Centre for Genetic Medicine', focus: 'Clinical and research collaboration on pediatric rare-disease care.' },
-      { abbr: 'CHEO', region: 'Ottawa', name: 'CHEO Research Institute', focus: 'Genetic research and pediatric rare-disease registries.' },
-      { abbr: 'UHN', region: 'Toronto', name: 'UHN Adult Rare Disease Program', focus: 'Adult clinical care, transition planning and research enrolment.' },
-      { abbr: '+13', region: 'Partners', name: 'Full network directory', focus: 'Thirteen additional partners across Ontario — by region and condition area.' },
-    ],
-  },
-]
+definePageMeta({ layout: 'default' })
 </script>
 
 <style scoped>
