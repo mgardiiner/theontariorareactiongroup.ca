@@ -4,9 +4,9 @@
 export const GH_REPO = {
   owner: 'mgardiiner',
   repo: 'theontariorareactiongroup.ca',
-  // TESTING: pointed at the feature branch so saves don't touch the live site.
-  // Change back to 'main' at go-live.
-  branch: 'feature/admin-panel',
+  // Live: the admin reads and publishes content to the default branch, which
+  // rebuilds and deploys the site on push.
+  branch: 'main',
 }
 
 const API = 'https://api.github.com'
