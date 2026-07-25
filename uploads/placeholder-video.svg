@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 250" width="400" height="250" role="img" aria-label="">
+  <defs>
+    <pattern id="pdots" width="22" height="22" patternUnits="userSpaceOnUse">
+      <circle cx="2" cy="2" r="1" fill="#FFFFFF" opacity="0.05"/>
+    </pattern>
+    <pattern id="perf" width="34" height="250" patternUnits="userSpaceOnUse">
+      <rect x="9" y="16" width="16" height="10" rx="2" fill="#FFFFFF" opacity="0.1"/>
+      <rect x="9" y="224" width="16" height="10" rx="2" fill="#FFFFFF" opacity="0.1"/>
+    </pattern>
+  </defs>
+  <rect width="400" height="250" fill="url(#pdots)"/>
+  <rect width="400" height="250" fill="url(#perf)"/>
+  <rect x="132" y="66" width="136" height="102" rx="8" fill="none" stroke="#FFFFFF" stroke-width="2" opacity="0.12"/>
+</svg>

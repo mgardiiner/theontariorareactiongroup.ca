@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="400" height="300" role="img" aria-label="Upcoming events">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#2E1188"/>
+      <stop offset="1" stop-color="#1E0177"/>
+    </linearGradient>
+    <pattern id="dots" width="22" height="22" patternUnits="userSpaceOnUse">
+      <circle cx="2" cy="2" r="1" fill="#FFFFFF" opacity="0.06"/>
+    </pattern>
+  </defs>
+  <rect width="400" height="300" fill="url(#bg)"/>
+  <rect width="400" height="300" fill="url(#dots)"/>
+  <g fill="none" stroke="#FED700" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="120" y="98" width="160" height="124" rx="12"/>
+    <line x1="120" y1="134" x2="280" y2="134"/>
+    <line x1="158" y1="88" x2="158" y2="108"/>
+    <line x1="242" y1="88" x2="242" y2="108"/>
+  </g>
+  <g fill="#FFFFFF" opacity="0.55">
+    <circle cx="150" cy="158" r="5"/>
+    <circle cx="186" cy="158" r="5"/>
+    <circle cx="258" cy="158" r="5"/>
+    <circle cx="150" cy="192" r="5"/>
+    <circle cx="222" cy="192" r="5"/>
+    <circle cx="258" cy="192" r="5"/>
+  </g>
+  <circle cx="222" cy="158" r="14" fill="#FED700"/>
+  <circle cx="222" cy="158" r="21" fill="none" stroke="#FED700" stroke-width="2.5" opacity="0.5"/>
+</svg>
