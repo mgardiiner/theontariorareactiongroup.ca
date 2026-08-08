@@ -6,9 +6,8 @@
     </Head>
 
     <!-- HERO -->
-    <div class="story-hero" :style="{ background: story.imgGradient }">
-      <img v-if="story.image" :src="story.image" alt="" class="hero-photo" />
-      <div class="hero-overlay" />
+    <div class="story-hero">
+      <div class="hero-tint" :style="{ background: story.imgGradient }" />
       <div class="wrap hero-inner">
         <div class="crumb">
           <NuxtLink to="/">Home</NuxtLink>
@@ -17,17 +16,24 @@
           <span>/</span>
           {{ story.authorName }}
         </div>
-        <div class="hero-meta">
-          <span class="hero-tag">{{ story.category }}</span>
-          <span class="hero-dot" aria-hidden="true">·</span>
-          <span class="hero-time">{{ story.readTime }}</span>
-        </div>
-        <h1 class="hero-title">{{ story.title }}</h1>
-        <div class="hero-author">
-          <div class="hero-avatar" aria-hidden="true">{{ story.initials }}</div>
-          <div>
-            <div class="hero-author-name">{{ story.authorName }}</div>
-            <div class="hero-author-role">{{ story.authorRole }}</div>
+        <div class="hero-grid" :class="{ 'no-photo': !showPhoto }">
+          <figure v-if="showPhoto" class="hero-figure">
+            <img :src="story.image" :alt="`Photo of ${story.authorName}`" @error="imgFailed = true" />
+          </figure>
+          <div class="hero-text">
+            <div class="hero-meta">
+              <span class="hero-tag">{{ story.category }}</span>
+              <span class="hero-dot" aria-hidden="true">·</span>
+              <span class="hero-time">{{ story.readTime }}</span>
+            </div>
+            <h1 class="hero-title">{{ story.title }}</h1>
+            <div class="hero-author">
+              <div class="hero-avatar" aria-hidden="true">{{ story.initials }}</div>
+              <div>
+                <div class="hero-author-name">{{ story.authorName }}</div>
+                <div class="hero-author-role">{{ story.authorRole }}</div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -89,6 +95,9 @@ definePageMeta({ layout: 'default' })
 const route = useRoute()
 const story = useStory(route.params.slug)
 
+const imgFailed = ref(false)
+const showPhoto = computed(() => !!story?.image && !imgFailed.value)
+
 const paragraphs = computed(() =>
   story?.body.split('\n\n').filter(p => p.trim()) ?? []
 )
@@ -98,27 +107,52 @@ const paragraphs = computed(() =>
 /* HERO */
 .story-hero {
   position: relative;
-  min-height: 520px;
-  display: flex;
-  align-items: flex-end;
-  padding-bottom: 64px;
+  overflow: hidden;
+  background: var(--primary-deep);
 }
-.hero-photo {
+/* The story gradient reads as a soft glow behind the photo rather than flooding
+   the hero — the text side stays brand purple, so white text is always legible
+   no matter which gradient a story uses. */
+.hero-tint {
   position: absolute;
   inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-.hero-overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to bottom, rgba(0,0,0,0.08) 0%, rgba(0,0,0,0.55) 100%);
+  opacity: 0.45;
+  -webkit-mask-image: radial-gradient(58% 78% at 76% 48%, #000 0%, transparent 72%);
+  mask-image: radial-gradient(58% 78% at 76% 48%, #000 0%, transparent 72%);
 }
 .hero-inner {
   position: relative;
   z-index: 1;
   color: #fff;
+  padding-top: 44px;
+  padding-bottom: 72px;
+}
+.hero-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 56px;
+  align-items: center;
+  min-height: 380px;
+}
+.hero-text { grid-column: 1; grid-row: 1; }
+.hero-grid.no-photo { grid-template-columns: 1fr; min-height: 300px; }
+
+/* Story photos are portrait social cards with baked-in text — show them whole
+   rather than cropping them into a full-bleed band. */
+.hero-figure {
+  grid-column: 2;
+  grid-row: 1;
+  margin: 0;
+  width: 100%;
+  max-width: 380px;
+  justify-self: end;
+}
+.hero-figure img {
+  width: 100%;
+  height: auto;
+  border-radius: 6px;
+  border: 1px solid rgba(255,255,255,0.18);
+  box-shadow: 0 24px 60px rgba(0,0,0,0.35);
 }
 .crumb {
   display: flex;
@@ -245,10 +279,30 @@ const paragraphs = computed(() =>
 
 @media (max-width: 980px) {
   .share-grid { grid-template-columns: 1fr; }
-  .story-hero { min-height: 420px; }
+  .hero-grid {
+    grid-template-columns: 1fr;
+    gap: 32px;
+    min-height: 0;
+  }
+  .hero-figure {
+    grid-column: 1;
+    grid-row: 1;
+    max-width: 300px;
+    justify-self: start;
+  }
+  .hero-text { grid-column: 1; grid-row: 2; }
+  .hero-title { max-width: none; }
+  /* Follow the photo as it moves to the top-left of the stack. */
+  .hero-tint {
+    -webkit-mask-image: radial-gradient(70% 42% at 26% 24%, #000 0%, transparent 74%);
+    mask-image: radial-gradient(70% 42% at 26% 24%, #000 0%, transparent 74%);
+  }
 }
 @media (max-width: 600px) {
   .article-wrap { padding: 0 20px; }
-  .story-hero { padding-bottom: 40px; }
+  .hero-inner { padding-top: 28px; padding-bottom: 48px; }
+  .crumb { margin-bottom: 22px; }
+  .hero-figure { max-width: 240px; }
+  .hero-title { margin-bottom: 28px; }
 }
 </style>
