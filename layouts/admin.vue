@@ -142,7 +142,20 @@ function handleSignOut() {
   router.push('/admin/login')
 }
 function previewSite() {
-  showToast('Opening a private preview of the site with your changes.')
+  // The public site is gated by the coming-soon middleware; /preview is the page
+  // that sets the cookie unlocking it. Skip that step if this browser already has it.
+  const unlocked = useCookie('preview').value
+  const win = window.open(unlocked ? '/' : '/preview', 'orag-preview')
+  if (!win) {
+    showToast('Your browser blocked the preview tab. Allow pop-ups for this page, then try again.')
+    return
+  }
+  win.focus()
+  showToast(
+    pendingCount.value > 0
+      ? "Opened the site in a new tab. It shows what's live now — your waiting changes appear there once you publish."
+      : 'Opened the site in a new tab.',
+  )
 }
 function openPublish() {
   publishError.value = ''

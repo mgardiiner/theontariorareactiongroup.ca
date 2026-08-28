@@ -1,7 +1,53 @@
 <script setup>
 import content from '~/content/site.json'
 
-useHead({ bodyAttrs: { style: 'background:#FBF7EE;' } })
+const route = useRoute()
+const menuOpen = ref(false)
+const toggleEl = ref(null)
+const panelEl = ref(null)
+
+useHead({
+  bodyAttrs: {
+    style: 'background:#FBF7EE;',
+    class: computed(() => (menuOpen.value ? 'nav-open' : ''))
+  }
+})
+
+function closeMenu () {
+  if (!menuOpen.value) return
+  menuOpen.value = false
+  toggleEl.value?.focus()
+}
+
+// Close on navigation so tapping a link actually takes you somewhere.
+watch(() => route.fullPath, () => { menuOpen.value = false })
+
+// Move focus into the drawer when it opens.
+watch(menuOpen, async (open) => {
+  if (!open) return
+  await nextTick()
+  panelEl.value?.focus()
+})
+
+function onKeydown (e) {
+  if (e.key === 'Escape') closeMenu()
+}
+
+let mq
+function onBreakpoint (e) {
+  if (!e.matches) menuOpen.value = false
+}
+
+onMounted(() => {
+  window.addEventListener('keydown', onKeydown)
+  mq = window.matchMedia('(max-width: 980px)')
+  mq.addEventListener('change', onBreakpoint)
+})
+
+onBeforeUnmount(() => {
+  window.removeEventListener('keydown', onKeydown)
+  mq?.removeEventListener('change', onBreakpoint)
+})
 </script>
 
 <template>
@@ -16,8 +62,54 @@ useHead({ bodyAttrs: { style: 'background:#FBF7EE;' } })
           <NuxtLink v-for="link in content.nav" :key="link.href" :to="link.href">{{ link.label }}</NuxtLink>
         </nav>
         <NuxtLink :to="content.cta.href" class="nav-cta">{{ content.cta.label }}</NuxtLink>
+        <button
+          ref="toggleEl"
+          type="button"
+          class="nav-toggle"
+          :class="{ 'is-open': menuOpen }"
+          :aria-expanded="menuOpen"
+          :aria-label="menuOpen ? 'Close menu' : 'Open menu'"
+          aria-controls="mobile-nav"
+          @click="menuOpen = !menuOpen"
+        >
+          <span class="nav-toggle-bars" aria-hidden="true"><i /><i /><i /></span>
+        </button>
       </div>
     </header>
+
+    <!-- Fixed + clipped so the drawer's slide-out never widens the page. -->
+    <div class="nav-overlay">
+      <Transition name="scrim">
+        <div v-if="menuOpen" class="nav-scrim" @click="closeMenu" />
+      </Transition>
+
+      <Transition name="drawer">
+        <nav
+          v-if="menuOpen"
+          id="mobile-nav"
+          ref="panelEl"
+          class="mobile-nav"
+          tabindex="-1"
+          aria-label="Main navigation"
+        >
+          <div class="mobile-nav-head">
+            <span class="mobile-nav-label">Menu</span>
+            <button type="button" class="mobile-nav-close" aria-label="Close menu" @click="closeMenu">
+              <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+                <path d="M1 1l16 16M17 1L1 17" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+              </svg>
+            </button>
+          </div>
+          <ul class="mobile-nav-links">
+            <li><NuxtLink to="/" @click="closeMenu">Home</NuxtLink></li>
+            <li v-for="link in content.nav" :key="link.href">
+              <NuxtLink :to="link.href" @click="closeMenu">{{ link.label }}</NuxtLink>
+            </li>
+          </ul>
+          <NuxtLink :to="content.cta.href" class="mobile-nav-cta" @click="closeMenu">{{ content.cta.label }}</NuxtLink>
+        </nav>
+      </Transition>
+    </div>
 
     <main>
       <slot />
@@ -142,6 +234,153 @@ useHead({ bodyAttrs: { style: 'background:#FBF7EE;' } })
 }
 .nav-cta:hover { background: var(--primary-deep); transform: translateY(-1px); }
 
+/* ---- MOBILE NAV TOGGLE ---- */
+.nav-toggle {
+  display: none;
+  width: 44px;
+  height: 44px;
+  margin-right: -10px;
+  border-radius: 8px;
+  align-items: center;
+  justify-content: center;
+  color: var(--ink);
+  flex-shrink: 0;
+}
+.nav-toggle:hover { background: rgba(30, 1, 119, 0.06); }
+.nav-toggle:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+.nav-toggle-bars {
+  position: relative;
+  display: block;
+  width: 22px;
+  height: 14px;
+}
+.nav-toggle-bars i {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  border-radius: 2px;
+  background: currentColor;
+  transition: transform .22s ease, opacity .18s ease;
+}
+.nav-toggle-bars i:nth-child(1) { top: 0; }
+.nav-toggle-bars i:nth-child(2) { top: 6px; }
+.nav-toggle-bars i:nth-child(3) { top: 12px; }
+.nav-toggle.is-open .nav-toggle-bars i:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+.nav-toggle.is-open .nav-toggle-bars i:nth-child(2) { opacity: 0; }
+.nav-toggle.is-open .nav-toggle-bars i:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+
+/* ---- MOBILE NAV DRAWER ---- */
+.nav-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  overflow: hidden;
+  pointer-events: none;
+}
+.nav-overlay > * { pointer-events: auto; }
+.nav-scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: rgba(26, 22, 38, 0.45);
+  backdrop-filter: blur(2px);
+}
+.mobile-nav {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 2;
+  width: min(340px, 86vw);
+  bottom: 0;
+  background: var(--bg);
+  border-left: 1px solid var(--line);
+  box-shadow: -18px 0 48px rgba(26, 22, 38, 0.14);
+  display: flex;
+  flex-direction: column;
+  padding: 20px 24px calc(28px + env(safe-area-inset-bottom));
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+.mobile-nav:focus { outline: none; }
+.mobile-nav-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 44px;
+  margin-bottom: 12px;
+}
+.mobile-nav-label {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.mobile-nav-close {
+  width: 40px;
+  height: 40px;
+  margin-right: -10px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ink);
+}
+.mobile-nav-close:hover { background: rgba(30, 1, 119, 0.06); }
+.mobile-nav-close:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+.mobile-nav-links {
+  list-style: none;
+  margin: 0 0 28px;
+  padding: 0;
+  flex: 1;
+}
+.mobile-nav-links li + li { border-top: 1px solid var(--line); }
+.mobile-nav-links a {
+  display: block;
+  padding: 15px 0;
+  font-family: var(--serif);
+  font-size: 22px;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  transition: color .15s ease;
+}
+.mobile-nav-links a:hover { color: var(--primary); }
+.mobile-nav-links a.router-link-exact-active { color: var(--primary); }
+.mobile-nav-links a.router-link-exact-active::before {
+  content: "";
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  margin-right: 10px;
+  vertical-align: middle;
+}
+.mobile-nav-cta {
+  display: block;
+  text-align: center;
+  background: var(--primary);
+  color: #fff;
+  padding: 15px 20px;
+  border-radius: 999px;
+  font-size: 15px;
+  font-weight: 600;
+}
+.mobile-nav-cta:hover { background: var(--primary-deep); }
+
+.drawer-enter-active, .drawer-leave-active { transition: transform .26s cubic-bezier(.4, 0, .2, 1); }
+.drawer-enter-from, .drawer-leave-to { transform: translateX(100%); }
+.scrim-enter-active, .scrim-leave-active { transition: opacity .26s ease; }
+.scrim-enter-from, .scrim-leave-to { opacity: 0; }
+
+@media (prefers-reduced-motion: reduce) {
+  .drawer-enter-active, .drawer-leave-active,
+  .scrim-enter-active, .scrim-leave-active,
+  .nav-toggle-bars i { transition: none; }
+}
+
 /* ---- FOOTER ---- */
 footer {
   background: var(--primary-deep);
@@ -205,10 +444,21 @@ footer {
 
 @media (max-width: 980px) {
   .nav-links { display: none; }
+  .nav-toggle { display: flex; }
+  .nav-inner { gap: 16px; }
+  /* Keeps the CTA grouped with the toggle instead of floating mid-header. */
+  .nav-cta { margin-left: auto; }
   .foot-grid { grid-template-columns: 1fr 1fr; gap: 40px; }
 }
 @media (max-width: 600px) {
-  .foot-grid { grid-template-columns: 1fr; }
+  .nav-inner { height: 64px; }
+  .nav-cta { display: none; }
+  .brand-mark { width: 34px; height: 34px; }
+  .brand { gap: 10px; }
+  .brand-name { font-size: 17px; }
+  .brand-name span { font-size: 10px; letter-spacing: 0.1em; }
+  footer { padding: 56px 0 28px; }
+  .foot-grid { grid-template-columns: 1fr; gap: 32px; margin-bottom: 40px; }
   .foot-bottom { flex-direction: column; align-items: flex-start; }
 }
 </style>

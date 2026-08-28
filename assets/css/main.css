@@ -28,6 +28,9 @@ a { color: inherit; text-decoration: none; }
 img { max-width: 100%; display: block; }
 button { font-family: inherit; cursor: pointer; border: 0; background: none; color: inherit; }
 
+/* Locks the page behind the mobile nav drawer. */
+body.nav-open { overflow: hidden; }
+
 /* ---- LAYOUT ---- */
 .wrap { max-width: 1240px; margin: 0 auto; padding: 0 32px; }
 .wrap-narrow { max-width: 900px; margin: 0 auto; padding: 0 32px; }
@@ -216,4 +219,12 @@ section { padding: 110px 0; }
 @media (max-width: 600px) {
   section { padding: 72px 0; }
   .wrap, .wrap-narrow { padding: 0 20px; }
+  .sec-head { margin-bottom: 40px; }
+  .page-header { padding: 48px 0 56px; }
+  .page-header .crumb { margin-bottom: 20px; }
+  .page-title { margin-bottom: 18px; }
+  .page-lede { font-size: 17px; }
+  .sec-sub { font-size: 17px; }
+  .btn { padding: 13px 20px; font-size: 14.5px; }
+  .filter-bar { padding-bottom: 24px; margin-bottom: 32px; }
 }
