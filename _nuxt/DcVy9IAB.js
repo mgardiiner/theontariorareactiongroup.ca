@@ -1,1 +1,0 @@
-import{u as e}from"./CTo26fUl.js";import{_ as s,H as n,C as a,c,o as u}from"./CLpRe1e4.js";const r={class:"logout-note"},_={__name:"logout",setup(l){const{logout:o}=e(),t=n();return a(()=>{o(),t.replace("/admin/login")}),(i,p)=>(u(),c("div",r,"Signing you out…"))}},g=s(_,[["__scopeId","data-v-99c45a62"]]);export{g as default};
