@@ -7,18 +7,43 @@
     "eyebrow": "Patient-led · Ontario",
     "title": "No one should face <em>rare</em> alone.",
     "lede": "A coalition of patients, caregivers and clinicians building a more humane rare-disease system for Ontario.",
-    "primaryCta": { "label": "Add your voice", "href": "/contact" },
-    "secondaryCta": { "label": "See upcoming events", "href": "/events" }
+    "primaryCta": {
+      "label": "Add your voice",
+      "href": "/contact"
+    },
+    "secondaryCta": {
+      "label": "See upcoming events",
+      "href": "/events"
+    }
   },
   "stats": [
-    { "num": "2.8M", "label": "Canadians live with one of more than 7,000 known rare diseases." },
-    { "num": "5+", "label": "Average years it takes to receive an accurate rare-disease diagnosis in Canada." },
-    { "num": "95%", "label": "Of rare diseases still have no approved treatment available to patients." }
+    {
+      "num": "1.3M",
+      "label": "1.3 million Ontarians live with one of more than 7,000 known rare diseases."
+    },
+    {
+      "num": "5+",
+      "label": "Average years it takes to receive an accurate rare-disease diagnosis in Canada."
+    },
+    {
+      "num": "95%",
+      "label": "Of rare diseases still have no approved treatment available to patients."
+    }
   ],
-  "marquee": ["Funding equity", "Faster diagnosis", "Drug access", "Caregiver support", "Research investment", "Patient voice"],
+  "marquee": [
+    "Funding equity",
+    "Faster diagnosis",
+    "Drug access",
+    "Caregiver support",
+    "Research investment",
+    "Patient voice"
+  ],
   "mission": {
     "eyebrow": "Who we are",
-    "cta": { "label": "Get involved", "href": "/contact" },
+    "cta": {
+      "label": "Get involved",
+      "href": "/contact"
+    },
     "text": "An Ontario non-profit network of patients, families and clinicians, working to <em>shape provincial policy and build a system that sees rare patients.</em>"
   },
   "overviewHead": {
@@ -103,8 +128,14 @@
   "featuredEvent": {
     "eyebrow": "Next event · Open to all",
     "meta": "A conversation with patient leaders and invited MPPs about what implementation should look like for Ontario in 2026.",
-    "primaryCta": { "label": "Register on Zoom", "href": "/events" },
-    "secondaryCta": { "label": "All events", "href": "/events" },
+    "primaryCta": {
+      "label": "Register on Zoom",
+      "href": "/events"
+    },
+    "secondaryCta": {
+      "label": "All events",
+      "href": "/events"
+    },
     "savedateLabel": "Save the date",
     "monthLabel": "May 2026",
     "locationLabel": "Zoom · Free"
