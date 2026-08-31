@@ -6,7 +6,7 @@
   "header": {
     "crumb": "Affiliated Organizations",
     "title": "We do this work <em>together.</em>",
-    "lede": "Twenty-eight rare-disease organizations across Ontario partner with us on advocacy, research and patient support. Each one brings deep expertise in their condition area — together, we represent more than a million Ontarians."
+    "lede": "Many rare disease organizations across Ontario partner with us on advocacy, research and patient support. Each one brings deep expertise in their condition area — together, we represent more than a million Ontarians."
   },
   "partnerGroups": [
     {
@@ -79,6 +79,13 @@
           "name": "Cure SMA Canada",
           "focus": "Family support and access advocacy for spinal muscular atrophy.",
           "url": ""
+        },
+        {
+          "abbr": "WDA ",
+          "region": "Canada ",
+          "name": "Wilson Disease Association, Canada Chapter ",
+          "focus": "Advocacy for Wilson disease. ",
+          "url": "www.wilsondisease.org "
         }
       ]
     },
@@ -89,7 +96,7 @@
   ],
   "becomePartner": {
     "title": "Run a rare-disease organization in Ontario? <em>Let's talk.</em>",
-    "body": "We host a quarterly leaders' roundtable, share advocacy infrastructure, and amplify member campaigns. Affiliation is free.",
+    "body": "We host a quarterly leaders' roundtable, share advocacy updates, and amplify member campaigns. Affiliation is free.",
     "cta": {
       "label": "Become an affiliated organization",
       "href": "/contact"
