@@ -1,1 +1,0 @@
-import{m as a,p as s,c as n,q as c,o as r}from"./CfKx3-l-.js";const m={__name:"logout",async setup(_){let e,o;const t=a("preview");return t.value=null,[e,o]=s(()=>c("/coming-soon")),await e,o(),(i,p)=>(r(),n("div"))}};export{m as default};
