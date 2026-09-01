@@ -203,6 +203,7 @@ onBeforeUnmount(() => {
   gap: 28px;
   font-size: 14.5px;
   font-weight: 500;
+  white-space: nowrap;
 }
 .nav-links a {
   color: var(--ink);

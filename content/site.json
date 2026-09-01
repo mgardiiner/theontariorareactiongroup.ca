@@ -1,12 +1,12 @@
 {
   "nav": [
+    { "label": "About", "href": "/about" },
     { "label": "Advocacy", "href": "/advocacy" },
     { "label": "Challenges", "href": "/challenges" },
     { "label": "Stories", "href": "/stories" },
     { "label": "Events", "href": "/events" },
-    { "label": "Videos", "href": "/videos" },
-    { "label": "Partners", "href": "/partners" },
-    { "label": "Contact", "href": "/contact" }
+    { "label": "Media", "href": "/media" },
+    { "label": "Partners", "href": "/partners" }
   ],
   "cta": { "label": "Join the movement", "href": "/contact" },
   "footer": {
@@ -15,11 +15,12 @@
     "explore": {
       "heading": "Explore",
       "links": [
+        { "label": "About us", "href": "/about" },
         { "label": "Advocacy", "href": "/advocacy" },
         { "label": "Challenges", "href": "/challenges" },
         { "label": "Patient stories", "href": "/stories" },
         { "label": "Events", "href": "/events" },
-        { "label": "Videos", "href": "/videos" },
+        { "label": "Media", "href": "/media" },
         { "label": "Partners", "href": "/partners" }
       ]
     },

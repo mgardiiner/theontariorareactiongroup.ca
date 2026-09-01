@@ -93,7 +93,7 @@
           <div>
             <div class="feat-eyebrow"><span class="feat-dot" aria-hidden="true"></span>{{ content.featuredEvent.eyebrow }}</div>
             <h2 class="feat-title">{{ featured.title }}</h2>
-            <p class="feat-meta">{{ content.featuredEvent.meta }}</p>
+            <p class="feat-meta" v-if="content.featuredEvent.meta">{{ content.featuredEvent.meta }}</p>
             <div class="hero-actions">
               <NuxtLink :to="content.featuredEvent.primaryCta.href" class="btn btn-primary">
                 {{ content.featuredEvent.primaryCta.label }}

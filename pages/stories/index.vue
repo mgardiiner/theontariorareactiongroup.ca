@@ -117,8 +117,10 @@ const filteredStories = computed(() => {
   color: inherit;
 }
 .story:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(23,2,105,0.08); }
+/* Story photos are portrait social cards with baked-in text — a landscape box
+   cropped away the top third of every one. Portrait box, anchored to the top. */
 .story-img {
-  aspect-ratio: 4/3;
+  aspect-ratio: 4/5;
   position: relative;
   display: flex;
   align-items: flex-end;
@@ -129,6 +131,7 @@ const filteredStories = computed(() => {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: top center;
 }
 .story-img.s1 { background: linear-gradient(135deg, #2E1188, #5634C9); }
 .story-img.s2 { background: linear-gradient(135deg, #170269, #1E0177); }

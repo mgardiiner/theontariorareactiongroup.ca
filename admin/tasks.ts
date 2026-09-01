@@ -1,7 +1,7 @@
 // The "task engine" for the task-first admin editor.
 //
 // This is a pure-logic module: it owns the four guided "tasks" (event, story,
-// partner, video), the wizard field definitions copied from the design, and the
+// partner, media), the wizard field definitions copied from the design, and the
 // functions that turn a wizard's collected `vals` into NEW content-data objects.
 //
 // The UI never mutates content directly — it reads items with readItems(),
@@ -10,7 +10,7 @@
 //
 // EVERY function here works on an immutable clone and never mutates its argument.
 
-export type TaskKey = 'event' | 'story' | 'partner' | 'video'
+export type TaskKey = 'event' | 'story' | 'partner' | 'media'
 
 export interface TaskField {
   key: string
@@ -55,7 +55,7 @@ export interface TaskItem {
   //   event   -> { index }
   //   story   -> { index }
   //   partner -> { group, index }
-  //   video   -> { where: 'featured' } | { where: 'videos', index }
+  //   media   -> { index }
   ref: any
 }
 
@@ -232,55 +232,54 @@ export const tasks: Record<TaskKey, TaskConfig> = {
       { q: 'Here it is — does this look right?', review: true, fields: [] },
     ],
   },
-  video: {
-    key: 'video',
-    file: 'content/videos.json',
-    tile: 'Add a video',
-    glyph: '▷', // ▷
-    desc: 'Paste a YouTube or Vimeo link and it appears in the video library.',
-    pickTitle: 'Videos',
-    pickDesc: 'Add a video, or change the details of one in the library.',
-    newLabel: 'Add a new video',
-    existing: 'Videos already on the site',
-    newTitle: 'Adding a video',
-    editTitle: 'Changing a video',
-    done: 'The video is ready',
+  media: {
+    key: 'media',
+    file: 'content/media.json',
+    tile: 'Add media coverage',
+    glyph: '◈', // ◈
+    desc: 'Paste a link to an article, interview or podcast episode and it appears on the Media page.',
+    pickTitle: 'Media coverage',
+    pickDesc: 'Add a piece of coverage, or change the details of one already listed.',
+    newLabel: 'Add new coverage',
+    existing: 'Coverage already on the site',
+    newTitle: 'Adding media coverage',
+    editTitle: 'Changing media coverage',
+    done: 'The coverage is ready',
     steps: [
       {
-        q: 'Paste the link to the video.',
+        q: 'Paste the link to the coverage.',
         fields: [
           {
             key: 'date',
-            label: 'Video link',
+            label: 'Link',
             kind: 'text',
             required: true,
-            placeholder: 'https://youtube.com/watch?v=…',
-            help: 'Copy the address from your browser bar while the video is playing.',
+            placeholder: 'https://…',
+            help: 'Copy the address from your browser bar while the article or episode is open.',
           },
           {
             key: 'title',
-            label: 'Video title',
+            label: 'Headline',
             kind: 'text',
             required: true,
-            placeholder: 'Navigating a rare diagnosis',
+            placeholder: 'New group launches to advocate for rare disease patients in Ontario',
           },
         ],
       },
       {
         q: 'A couple of details.',
         fields: [
-          { key: 'time', label: 'How long is it?', kind: 'text', placeholder: '19 min' },
           {
-            key: 'format',
-            label: 'What kind of video is it?',
-            kind: 'choice',
-            choices: ['Webinar', 'Family story', 'Explainer'],
+            key: 'time',
+            label: 'Which publication or show?',
+            kind: 'text',
+            placeholder: 'BradfordToday',
           },
           {
-            key: 'feature',
-            label: 'Show it as the big video at the top?',
+            key: 'format',
+            label: 'What kind of coverage is it?',
             kind: 'choice',
-            choices: ['Yes', 'No'],
+            choices: ['Article', 'TV', 'Radio', 'Podcast', 'Video'],
           },
         ],
       },
@@ -428,27 +427,21 @@ export function readItems(task: TaskKey, content: any): TaskItem[] {
         })
       })
     })
-  } else if (task === 'video') {
-    const push = (v: any, ref: any) =>
+  } else if (task === 'media') {
+    ;((content && content.coverage) || []).forEach((m: any, index: number) =>
       items.push({
-        big: '▷', // ▷
-        small: v.dur || '',
-        title: v.title || '',
-        meta: [v.cat, v.dur].filter(Boolean).join(DOT),
+        big: '◈', // ◈
+        small: m.type || '',
+        title: m.title || '',
+        meta: [m.type, m.outlet].filter(Boolean).join(DOT),
         vals: {
-          date: v.url || '',
-          title: v.title || '',
-          time: v.dur || '',
-          format: v.cat || '',
-          feature: ref.where === 'featured' ? 'Yes' : 'No',
+          date: m.url || '',
+          title: m.title || '',
+          time: m.outlet || '',
+          format: m.type || '',
         },
-        ref,
+        ref: { index },
       })
-    if (content && content.featured && Object.keys(content.featured).length) {
-      push(content.featured, { where: 'featured' })
-    }
-    ;((content && content.videos) || []).forEach((v: any, index: number) =>
-      push(v, { where: 'videos', index })
     )
   }
 
@@ -571,42 +564,28 @@ function applyPartner(content: any, vals: Record<string, string>, ref: any): any
   return c
 }
 
-function applyVideo(content: any, vals: Record<string, string>, ref: any): any {
+function applyMedia(content: any, vals: Record<string, string>, ref: any): any {
   const c = clone(content) || {}
-  if (!Array.isArray(c.videos)) c.videos = []
-  const featureYes = vals.feature === 'Yes'
+  if (!Array.isArray(c.coverage)) c.coverage = []
 
   const buildInto = (target: any) => {
-    target.url = vals.date || ''
     target.title = vals.title || ''
-    target.dur = vals.time || ''
-    target.cat = vals.format || ''
+    target.outlet = vals.time || ''
+    target.type = vals.format || ''
+    target.url = vals.date || ''
     return target
   }
-  const nextCls = () => 'v' + ((c.videos.length % 8) + 1)
 
-  if (ref && ref.where) {
-    // EDIT in place at the item's current location. `feature` keeps the item
-    // where it already lives (ref is authoritative); we never relocate on edit.
-    let target: any
-    if (ref.where === 'featured') target = c.featured = c.featured || {}
-    else target = c.videos[ref.index]
+  const isEdit = ref && typeof ref.index === 'number'
+  if (isEdit) {
+    const target = c.coverage[ref.index]
     if (!target) return c
     buildInto(target)
-    if (!target.cls) target.cls = nextCls() // featured keeps its own cls when editing
     return c
   }
 
-  // ADD
-  const target = buildInto({})
-  target.cls = nextCls()
-  if (featureYes) {
-    // Single featured slot: move any current featured video into the grid so it isn't lost.
-    if (c.featured && Object.keys(c.featured).length) c.videos.push(c.featured)
-    c.featured = target
-  } else {
-    c.videos.push(target)
-  }
+  // ADD — newest coverage goes to the top of the list.
+  c.coverage.unshift(buildInto({}))
   return c
 }
 
@@ -619,7 +598,7 @@ export function applyItem(
   if (task === 'event') return applyEvent(content, vals, ref)
   if (task === 'story') return applyStory(content, vals, ref)
   if (task === 'partner') return applyPartner(content, vals, ref)
-  return applyVideo(content, vals, ref)
+  return applyMedia(content, vals, ref)
 }
 
 // ---------------------------------------------------------------------------
@@ -635,9 +614,8 @@ export function removeItem(task: TaskKey, content: any, ref: any): any {
   } else if (task === 'partner') {
     const grp = c.partnerGroups && c.partnerGroups[ref.group]
     if (grp && Array.isArray(grp.partners)) grp.partners.splice(ref.index, 1)
-  } else if (task === 'video') {
-    if (ref.where === 'featured') c.featured = {}
-    else if (Array.isArray(c.videos)) c.videos.splice(ref.index, 1)
+  } else if (task === 'media') {
+    if (Array.isArray(c.coverage) && ref && typeof ref.index === 'number') c.coverage.splice(ref.index, 1)
   }
   return c
 }
@@ -662,8 +640,8 @@ export function preview(
     const big = vals.small && vals.small.trim() ? vals.small.trim() : abbrOf(vals.title)
     return { big, small: '', title, meta, body }
   }
-  if (task === 'video') {
-    return { big: '▷', small: vals.time || '', title, meta, body }
+  if (task === 'media') {
+    return { big: '◈', small: vals.format || '', title, meta, body }
   }
   // story
   return { big: initialsOf(vals.title), small: '', title, meta, body }

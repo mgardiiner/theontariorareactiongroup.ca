@@ -19,7 +19,8 @@
 
     <section>
       <div class="wrap">
-        <div v-for="group in content.partnerGroups" :key="group.label">
+        <!-- A group with no partners yet would otherwise render an orphan heading. -->
+        <div v-for="group in content.partnerGroups" :key="group.label" v-show="group.partners.length">
           <div class="group-label">{{ group.label }}</div>
           <div class="partners-grid">
             <article class="partner" v-for="p in group.partners" :key="p.abbr" tabindex="0">
@@ -30,11 +31,11 @@
               <h4 class="partner-name">{{ p.name }}</h4>
               <p class="partner-focus">{{ p.focus }}</p>
               <component
-                :is="p.url ? 'a' : 'span'"
+                :is="webUrl(p.url) ? 'a' : 'span'"
                 class="partner-link"
-                :href="p.url || undefined"
-                :target="p.url ? '_blank' : undefined"
-                :rel="p.url ? 'noopener' : undefined"
+                :href="webUrl(p.url) || undefined"
+                :target="webUrl(p.url) ? '_blank' : undefined"
+                :rel="webUrl(p.url) ? 'noopener' : undefined"
               >Visit ↗</component>
             </article>
           </div>
@@ -66,6 +67,15 @@
 import content from '~/content/partners.json'
 
 definePageMeta({ layout: 'default' })
+
+// Partner links get typed into the editor by hand, so a bare "example.org" is
+// as likely as a full URL. Without a protocol the browser treats it as a path
+// (/partners/example.org), so add one. Returns '' when there's nothing usable.
+function webUrl(url) {
+  const u = String(url || '').trim()
+  if (!u) return ''
+  return /^(https?:)?\/\//i.test(u) || /^mailto:/i.test(u) ? u : `https://${u}`
+}
 </script>
 
 <style scoped>

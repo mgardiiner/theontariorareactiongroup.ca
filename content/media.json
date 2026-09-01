@@ -1,0 +1,43 @@
+{
+  "seo": {
+    "title": "Media · Ontario Rare Action Group",
+    "description": "News coverage, interviews and podcast appearances featuring the Ontario Rare Action Group and the rare-disease community we advocate for."
+  },
+  "header": {
+    "crumb": "Media",
+    "title": "In the <em>news.</em>",
+    "lede": "News coverage, interviews and podcast appearances featuring the Ontario Rare Action Group and the community we advocate for."
+  },
+  "coverage": [
+    {
+      "title": "Rare voices, real change: Community-based advocacy efforts driving big impact",
+      "outlet": "Patient Voice",
+      "type": "Article",
+      "url": "https://www.patientvoice.io/perspectives/rare-voices-real-change-community-based-advocacy-efforts-driving-big-impact"
+    },
+    {
+      "title": "New group launches to advocate for rare disease patients in Ontario",
+      "outlet": "BradfordToday",
+      "type": "Article",
+      "url": "https://www.bradfordtoday.ca/local-news/new-group-launches-to-advocate-for-rare-disease-patients-in-ontario-11796390"
+    },
+    {
+      "title": "Rare Community Profiles: How Beth and Madison Advocated for Public Funding for the First Cystic Fibrosis (CF) Modulator in Canada",
+      "outlet": "Patient Worthy",
+      "type": "Article",
+      "url": "https://patientworthy.com/2024/04/11/rare-community-profiles-advocating-cystic-fibrosis-drug-access/"
+    },
+    {
+      "title": "The reality of living with Wilson Disease",
+      "outlet": "Your Morning",
+      "type": "TV",
+      "url": "https://www.youtube.com/watch?v=_zbpnxTmArI"
+    },
+    {
+      "title": "Episode 4: The Hidden Disease: Navigating Life with Wilson Disease",
+      "outlet": "Impact Gap Podcast · Spotify",
+      "type": "Podcast",
+      "url": "https://open.spotify.com/episode/3KcUvhTpf64c2uiEvPVJHA"
+    }
+  ]
+}

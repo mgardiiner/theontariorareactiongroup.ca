@@ -17,6 +17,21 @@
       </div>
     </header>
 
+    <!-- INTRO — hidden entirely until there is body copy to show -->
+    <section v-if="introParagraphs.length" class="intro-bg">
+      <div class="wrap">
+        <div class="sec-head">
+          <div class="sec-num">{{ content.intro.eyebrow }}</div>
+          <div>
+            <h2 v-if="content.intro.title" class="sec-title" v-html="content.intro.title"></h2>
+            <div class="intro-body">
+              <p v-for="(para, p) in introParagraphs" :key="p">{{ para }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- UPCOMING EVENTS + REGISTRATION -->
     <section class="events-bg">
       <div class="wrap">
@@ -122,11 +137,21 @@
           </div>
         </div>
         <div class="past-grid">
-          <NuxtLink class="past" to="/videos" v-for="past in pastEvents" :key="past.title">
-            <div class="past-date">{{ past.date }}</div>
+          <!-- Only past events with a write-up are clickable. -->
+          <component
+            :is="past.slug ? PastLink : 'div'"
+            class="past"
+            :class="{ 'is-link': past.slug }"
+            v-for="past in pastEvents"
+            :key="past.title"
+            :to="past.slug ? `/events/${past.slug}` : undefined"
+          >
+            <div class="past-date">
+              {{ past.date }}<template v-if="past.location"> · {{ past.location }}</template>
+            </div>
             <h3 class="past-title">{{ past.title }}</h3>
-            <span class="past-link">Watch recording →</span>
-          </NuxtLink>
+            <span class="past-link" v-if="past.slug">{{ past.linkLabel || 'Read article' }} →</span>
+          </component>
         </div>
       </div>
     </section>
@@ -142,6 +167,14 @@ definePageMeta({ layout: 'default' })
 const byDateDesc = (a, b) => new Date(b.date) - new Date(a.date)
 const events = [...content.upcoming].sort(byDateDesc)
 const pastEvents = [...content.past].sort(byDateDesc)
+
+// Past-event cards are links only when the event has a write-up page.
+const PastLink = resolveComponent('NuxtLink')
+
+// Same convention as story bodies: a blank line starts a new paragraph.
+const introParagraphs = computed(() =>
+  (content.intro?.body || '').split('\n\n').map(p => p.trim()).filter(Boolean)
+)
 
 const activeIdx = ref(0)
 const registered = ref(false)
@@ -162,6 +195,20 @@ function handleRegister() {
 </script>
 
 <style scoped>
+.intro-bg { padding: 88px 0; }
+/* The body sits in the .sec-head text column, so it lines up under the heading
+   whether or not a heading has been set. */
+.intro-bg .sec-head { margin-bottom: 0; }
+.intro-body { max-width: 68ch; }
+.intro-body p {
+  font-size: 17px;
+  line-height: 1.65;
+  color: var(--muted);
+  margin: 0 0 20px;
+  text-wrap: pretty;
+}
+.intro-body p:last-child { margin-bottom: 0; }
+
 .events-bg { background: var(--primary); color: #fff; padding: 96px 0; }
 .events-layout {
   display: grid;
@@ -362,13 +409,13 @@ function handleRegister() {
   border: 1px solid var(--line);
   border-radius: 4px;
   padding: 24px;
-  cursor: pointer;
   transition: transform .15s ease, box-shadow .15s ease;
   display: block;
   text-decoration: none;
   color: var(--ink);
 }
-.past:hover { transform: translateY(-3px); box-shadow: 0 12px 32px rgba(23,2,105,0.06); }
+.past.is-link { cursor: pointer; }
+.past.is-link:hover { transform: translateY(-3px); box-shadow: 0 12px 32px rgba(23,2,105,0.06); }
 .past-date {
   font-family: var(--mono);
   font-size: 11px;

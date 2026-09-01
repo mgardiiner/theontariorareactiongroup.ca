@@ -18,8 +18,8 @@
   },
   "stats": [
     {
-      "num": "1.3M",
-      "label": "1.3 million Ontarians live with one of more than 7,000 known rare diseases."
+      "num": "1.3 M",
+      "label": "1.3 million Ontarians live with a rare disease"
     },
     {
       "num": "5+",
@@ -97,20 +97,20 @@
       "tag": "Upcoming Events",
       "title": "Town halls, briefings & meetups — most on Zoom.",
       "desc": "Register for upcoming sessions and join the conversation from anywhere in Ontario.",
-      "count": "6",
+      "count": "1",
       "countLabel": "Upcoming"
     },
     {
-      "href": "/videos",
+      "href": "/media",
       "image": "/uploads/home-videos.svg",
       "idx": "05",
       "imgClass": "ov-img-5",
-      "visualTag": "Watch",
-      "tag": "Video Library",
-      "title": "Recorded panels, explainers and patient interviews.",
-      "desc": "A growing library — share with your community, your doctor, your MPP.",
-      "count": "38",
-      "countLabel": "Videos"
+      "visualTag": "Press",
+      "tag": "Media",
+      "title": "Our work, covered in the news.",
+      "desc": "Articles, interviews and podcast appearances featuring the rare-disease community we advocate for.",
+      "count": "5",
+      "countLabel": "Stories"
     },
     {
       "href": "/partners",
@@ -127,7 +127,7 @@
   ],
   "featuredEvent": {
     "eyebrow": "Next event · Open to all",
-    "meta": "A conversation with patient leaders and invited MPPs about what implementation should look like for Ontario in 2026.",
+    "meta": "",
     "primaryCta": {
       "label": "Register on Zoom",
       "href": "/events"
@@ -137,7 +137,7 @@
       "href": "/events"
     },
     "savedateLabel": "Save the date",
-    "monthLabel": "May 2026",
+    "monthLabel": "September 2026",
     "locationLabel": "Zoom · Free"
   },
   "contactBand": {

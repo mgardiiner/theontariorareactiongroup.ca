@@ -308,7 +308,7 @@ definePageMeta({ layout: 'admin', middleware: 'admin-auth' })
 const { getData, stageChange, undo, pending, pendingCount } = useDrafts()
 const { screen, showToast, editorName } = useAdminUi()
 
-const taskKeys = ['event', 'story', 'partner', 'video']
+const taskKeys = ['event', 'story', 'partner', 'media']
 
 // ---- Screen-machine / wizard state (page-local) ----
 const task = ref(null) // TaskKey | null

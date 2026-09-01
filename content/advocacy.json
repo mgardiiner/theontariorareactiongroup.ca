@@ -12,71 +12,39 @@
     {
       "num": "01",
       "title": "A Provincial Rare Disease Strategy",
-      "desc": "Implementation of Canada's National Strategy at the Ontario level — with funding, accountability and patient governance built in from the start.",
-      "status": "Tabled",
-      "statusClass": "",
-      "briefUrl": "",
-      "points": ["Standing patient council with binding input", "Five-year funding tied to outcomes", "Annual public reporting on equity"]
+      "desc": "Implementation of Canada's National Strategy at the Ontario level — with funding, accountability and patient governance built in from the start."
     },
     {
       "num": "02",
       "title": "Faster, fairer diagnosis",
-      "desc": "Universal newborn screening expansion and reimbursed genetic testing, so families don't wait years for answers.",
-      "status": "Drafting",
-      "statusClass": "pill-draft",
-      "briefUrl": "",
-      "points": ["Newborn panel aligned with U.S. RUSP", "OHIP exome and genome sequencing", "Adult diagnostic-odyssey program"]
+      "desc": "Universal newborn screening expansion and reimbursed genetic testing, so families don't wait years for answers."
     },
     {
       "num": "03",
       "title": "Equitable drug access",
-      "desc": "A transparent, patient-informed reimbursement pathway for rare-disease therapies — including pediatric and ultra-rare medications.",
-      "status": "In review",
-      "statusClass": "pill-draft",
-      "briefUrl": "",
-      "points": ["Defined post-approval timelines", "A managed-access fund", "Patient seats on EAP review"]
+      "desc": "A transparent, patient-informed reimbursement pathway for rare-disease therapies — including pediatric and ultra-rare medications."
     },
     {
       "num": "04",
       "title": "Caregiver and family supports",
-      "desc": "Recognition of unpaid caregivers in provincial labour and benefit policy, including respite and mental-health funding.",
-      "status": "Active",
-      "statusClass": "",
-      "briefUrl": "",
-      "points": ["Paid caregiver leave protections", "Direct respite-care subsidies", "Mental-health coverage for caregivers"]
+      "desc": "Recognition of unpaid caregivers in provincial labour and benefit policy, including respite and mental-health funding."
     },
     {
       "num": "05",
       "title": "Coordinated, multidisciplinary care",
-      "desc": "Designated Centres of Expertise across Ontario so rural and northern patients receive the same standard of care as those in the GTA.",
-      "status": "Piloting",
-      "statusClass": "pill-draft",
-      "briefUrl": "",
-      "points": ["Centre of Expertise per Health Region", "Permanent telehealth funding", "Travel & accommodation grants"]
+      "desc": "Designated Centres of Expertise across Ontario so rural and northern patients receive the same standard of care as those in the GTA."
     },
     {
       "num": "06",
       "title": "Research investment",
-      "desc": "Dedicated provincial funding for rare-disease research, registries and patient-reported outcome programs.",
-      "status": "Open",
-      "statusClass": "pill-open",
-      "briefUrl": "",
-      "points": ["Provincial fund matched to federal", "Connected patient registry network", "Mandatory patient partners"]
+      "desc": "Dedicated provincial funding for rare-disease research, registries and patient-reported outcome programs."
     }
   ],
   "progressHead": {
     "eyebrow": "Progress tracker",
     "title": "Where each <em>file</em> stands.",
-    "sub": "Live snapshot of where our advocacy work is moving — and where it's stuck. Updated quarterly."
+    "sub": "We are building a provincial progress report card on how patient advocacy is shaping stronger policy for the rare disease community and where it's stuck. Stay tuned for our first report."
   },
-  "progress": [
-    { "title": "Newborn screening expansion (Bill 142)", "meta": "Ministry of Health · Standing Committee", "status": "In progress", "statusClass": "pr-progress" },
-    { "title": "Genetic testing OHIP coverage", "meta": "Ontario Health Technology Advisory Committee", "status": "Open", "statusClass": "pr-open" },
-    { "title": "Patient seat on EAP committee", "meta": "Exceptional Access Program", "status": "Win — Mar 2025", "statusClass": "pr-win" },
-    { "title": "Caregiver leave amendments (Bill 87)", "meta": "Ministry of Labour · Second reading", "status": "In progress", "statusClass": "pr-progress" },
-    { "title": "Northern Centre of Expertise pilot", "meta": "Ontario Health · Sudbury / Thunder Bay", "status": "Win — Nov 2025", "statusClass": "pr-win" },
-    { "title": "Provincial rare-disease research fund", "meta": "Treasury Board · Pre-budget submission", "status": "Open", "statusClass": "pr-open" }
-  ],
   "ctaBand": {
     "title": "Want to put your name behind this <em>work?</em>",
     "lede": "Sign on as a community supporter, write to your MPP using our templates, or join one of our advocacy working groups.",

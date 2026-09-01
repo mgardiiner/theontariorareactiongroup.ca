@@ -36,7 +36,7 @@
       ]
     },
     {
-      "label": "Condition-specific patient organizations",
+      "label": "Patient organizations",
       "partners": [
         {
           "abbr": "SCS",
@@ -81,11 +81,11 @@
           "url": ""
         },
         {
-          "abbr": "WDA ",
-          "region": "Canada ",
-          "name": "Wilson Disease Association, Canada Chapter ",
-          "focus": "Advocacy for Wilson disease. ",
-          "url": "www.wilsondisease.org "
+          "abbr": "WDA",
+          "region": "Canada",
+          "name": "Wilson Disease Association, Canada Chapter",
+          "focus": "Advocacy for Wilson disease.",
+          "url": "https://www.wilsondisease.org"
         }
       ]
     },

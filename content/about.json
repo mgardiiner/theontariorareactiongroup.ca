@@ -1,0 +1,31 @@
+{
+  "seo": {
+    "title": "About · Ontario Rare Action Group",
+    "description": "[PLACEHOLDER — replace at /admin] Who we are, why we exist, and how we work."
+  },
+  "header": {
+    "crumb": "About",
+    "title": "Who we <em>are.</em>",
+    "lede": "[PLACEHOLDER — replace at /admin] A short introduction to the Ontario Rare Action Group: who we are, why we exist, and who we work for."
+  },
+  "blocks": [
+    {
+      "eyebrow": "Our story",
+      "title": "[PLACEHOLDER — replace at /admin]",
+      "body": "[PLACEHOLDER — replace at /admin] Paragraphs go here. Leave a blank line between paragraphs and each one becomes its own paragraph on the page.\n\nThis second paragraph is here to show how the spacing works. Delete it once the real copy is in."
+    },
+    {
+      "eyebrow": "What we do",
+      "title": "[PLACEHOLDER — replace at /admin]",
+      "body": "[PLACEHOLDER — replace at /admin] A second section. Add or remove sections at /admin — there is no fixed number."
+    }
+  ],
+  "ctaBand": {
+    "heading": "Want to be part of <em>this?</em>",
+    "body": "[PLACEHOLDER — replace at /admin] A closing line inviting people to get involved.",
+    "actions": [
+      { "label": "Get in touch", "href": "/contact", "style": "dark", "arrow": true },
+      { "label": "See our advocacy platform", "href": "/advocacy", "style": "outline-ink", "arrow": false }
+    ]
+  }
+}

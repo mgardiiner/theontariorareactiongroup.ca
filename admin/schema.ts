@@ -115,18 +115,6 @@ function ctaField(key: string, label: string): Field {
   }
 }
 
-// Friendly names for the video thumbnail gradients (v1..v8, defined in pages/videos.vue).
-const videoThumbOptions: SelectOption[] = [
-  { label: 'Dark blue', value: 'v1' },
-  { label: 'Blue indigo', value: 'v2' },
-  { label: 'Gold', value: 'v3' },
-  { label: 'Indigo', value: 'v4' },
-  { label: 'Amber', value: 'v5' },
-  { label: 'Deep blue', value: 'v6' },
-  { label: 'Violet', value: 'v7' },
-  { label: 'Yellow-gold', value: 'v8' },
-]
-
 export const sections: Section[] = [
   {
     key: 'site',
@@ -363,6 +351,80 @@ export const sections: Section[] = [
     ],
   },
   {
+    key: 'about',
+    label: 'About us',
+    file: 'content/about.json',
+    description: 'The About us page: the header, the content sections, and the closing call-to-action band.',
+    path: '/about',
+    fields: [
+      seoField,
+      {
+        key: 'header',
+        label: 'Page header',
+        type: 'object',
+        fields: [
+          { key: 'crumb', label: 'Breadcrumb label', type: 'text' },
+          {
+            key: 'title',
+            label: 'Page title',
+            type: 'html',
+            help: 'Wrap words in <em>…</em> for the italic accent.',
+          },
+          { key: 'lede', label: 'Intro paragraph', type: 'textarea' },
+        ],
+      },
+      {
+        key: 'blocks',
+        label: 'Content sections',
+        type: 'list',
+        itemLabelKey: 'eyebrow',
+        addLabel: 'Add a section',
+        fields: [
+          { key: 'eyebrow', label: 'Small label above the heading', type: 'text' },
+          {
+            key: 'title',
+            label: 'Heading',
+            type: 'html',
+            help: 'Wrap words in <em>…</em> for the italic accent.',
+          },
+          {
+            key: 'body',
+            label: 'Body text',
+            type: 'textarea',
+            help: 'Leave a blank line between paragraphs.',
+          },
+        ],
+      },
+      {
+        key: 'ctaBand',
+        label: 'Call-to-action band',
+        type: 'object',
+        fields: [
+          {
+            key: 'heading',
+            label: 'Heading',
+            type: 'html',
+            help: 'Wrap words in <em>…</em> for the italic accent.',
+          },
+          { key: 'body', label: 'Body text', type: 'textarea' },
+          {
+            key: 'actions',
+            label: 'Buttons',
+            type: 'list',
+            itemLabelKey: 'label',
+            addLabel: 'Add a button',
+            fields: [
+              { key: 'label', label: 'Button label', type: 'text' },
+              { key: 'href', label: 'Link (a /path or full URL)', type: 'text' },
+              { key: 'style', label: 'Style', type: 'select', options: ['dark', 'outline-ink'] },
+              { key: 'arrow', label: 'Show arrow →', type: 'boolean' },
+            ],
+          },
+        ],
+      },
+    ],
+  },
+  {
     key: 'stories',
     label: 'Patient stories',
     file: 'content/stories.json',
@@ -503,6 +565,26 @@ export const sections: Section[] = [
           { key: 'lede', label: 'Intro paragraph', type: 'textarea' },
         ],
       },
+      {
+        key: 'intro',
+        label: 'Intro section',
+        type: 'object',
+        fields: [
+          { key: 'eyebrow', label: 'Small label above the heading', type: 'text' },
+          {
+            key: 'title',
+            label: 'Heading',
+            type: 'html',
+            help: 'Wrap words in <em>…</em> for the italic accent.',
+          },
+          {
+            key: 'body',
+            label: 'Body text',
+            type: 'textarea',
+            help: 'Leave a blank line between paragraphs. Clear this field to hide the whole section.',
+          },
+        ],
+      },
       { key: 'upcomingLabel', label: '"Upcoming events" label', type: 'text' },
       {
         key: 'upcoming',
@@ -548,9 +630,41 @@ export const sections: Section[] = [
         type: 'list',
         itemLabelKey: 'title',
         addLabel: 'Add a past event',
+        help: 'Give a past event a web address to publish a write-up page for it. Leave it blank and the card just shows the date and title, with no link.',
         fields: [
           { key: 'date', label: 'Date (e.g. Mar 18, 2026)', type: 'text' },
           { key: 'title', label: 'Title', type: 'text' },
+          { key: 'location', label: 'Where it happened', type: 'text' },
+          {
+            key: 'slug',
+            label: 'Web address for the write-up',
+            type: 'text',
+            help: 'Lowercase words joined by hyphens, e.g. voices-for-rare-advocacy-breakfast — the page becomes /events/voices-for-rare-advocacy-breakfast. Leave blank for no write-up page.',
+          },
+          {
+            key: 'linkLabel',
+            label: 'Link text on the card',
+            type: 'text',
+            help: 'Defaults to "Read article".',
+          },
+          { key: 'image', label: 'Main photo', type: 'image' },
+          {
+            key: 'body',
+            label: 'Write-up',
+            type: 'textarea',
+            help: 'Leave a blank line between paragraphs.',
+          },
+          {
+            key: 'photos',
+            label: 'Photo gallery',
+            type: 'list',
+            itemLabelKey: 'caption',
+            addLabel: 'Add a photo',
+            fields: [
+              { key: 'src', label: 'Photo', type: 'image' },
+              { key: 'caption', label: 'Caption (optional)', type: 'text' },
+            ],
+          },
         ],
       },
       {
@@ -693,25 +807,6 @@ export const sections: Section[] = [
           { key: 'num', label: 'Number (e.g. 01)', type: 'text' },
           { key: 'title', label: 'Title', type: 'text' },
           { key: 'desc', label: 'Description', type: 'textarea' },
-          { key: 'briefUrl', label: "'Read the brief' link", type: 'url' },
-          { key: 'status', label: 'Status label', type: 'text' },
-          {
-            key: 'statusClass',
-            label: 'Status badge colour',
-            type: 'select',
-            options: [
-              { label: 'Neutral', value: '' },
-              { label: 'Draft', value: 'pill-draft' },
-              { label: 'Open', value: 'pill-open' },
-            ],
-          },
-          {
-            key: 'points',
-            label: 'Key points',
-            type: 'list',
-            itemType: 'text',
-            addLabel: 'Add a point',
-          },
         ],
       },
       {
@@ -727,28 +822,6 @@ export const sections: Section[] = [
             help: 'Wrap words in <em>…</em> for the italic accent.',
           },
           { key: 'sub', label: 'Subheading', type: 'textarea' },
-        ],
-      },
-      {
-        key: 'progress',
-        label: 'Progress items',
-        type: 'list',
-        itemLabelKey: 'title',
-        addLabel: 'Add a progress item',
-        fields: [
-          { key: 'title', label: 'Title', type: 'text' },
-          { key: 'meta', label: 'Subtitle / where it stands', type: 'text' },
-          { key: 'status', label: 'Status label', type: 'text' },
-          {
-            key: 'statusClass',
-            label: 'Status badge colour',
-            type: 'select',
-            options: [
-              { label: 'In progress', value: 'pr-progress' },
-              { label: 'Open', value: 'pr-open' },
-              { label: 'Won', value: 'pr-win' },
-            ],
-          },
         ],
       },
       {
@@ -770,11 +843,11 @@ export const sections: Section[] = [
     ],
   },
   {
-    key: 'videos',
-    label: 'Videos',
-    file: 'content/videos.json',
-    description: 'The video library: filters, the featured video, and the grid of all other videos.',
-    path: '/videos',
+    key: 'media',
+    label: 'Media',
+    file: 'content/media.json',
+    description: 'The Media page: news articles, interviews and podcast appearances covering our work.',
+    path: '/media',
     fields: [
       seoField,
       {
@@ -787,55 +860,33 @@ export const sections: Section[] = [
             key: 'title',
             label: 'Page title',
             type: 'html',
-            help: 'Wrap words in <em>…</em> for the italic accent.',
+            help: 'Wrap words in <em>\u2026</em> for the italic accent.',
           },
           { key: 'lede', label: 'Intro paragraph', type: 'textarea' },
         ],
       },
       {
-        key: 'filters',
-        label: 'Filter buttons',
-        type: 'list',
-        itemType: 'text',
-        addLabel: 'Add a filter',
-      },
-      {
-        key: 'featured',
-        label: 'Featured video',
-        type: 'object',
-        fields: [
-          { key: 'cat', label: 'Category', type: 'text' },
-          { key: 'title', label: 'Title', type: 'text' },
-          { key: 'dur', label: 'Duration / meta (e.g. 42 min · Recorded Mar 2026)', type: 'text' },
-          { key: 'url', label: 'Video link', type: 'url' },
-          {
-            key: 'image',
-            label: 'Thumbnail image',
-            type: 'image',
-            help: 'Optional — overrides the colour below.',
-          },
-          { key: 'cls', label: 'Thumbnail colour', type: 'select', options: videoThumbOptions },
-        ],
-      },
-      {
-        key: 'videos',
-        label: 'Videos',
+        key: 'coverage',
+        label: 'Media coverage',
         type: 'list',
         itemLabelKey: 'title',
-        addLabel: 'Add a video',
-        help: 'Every video below the featured one, shown in a grid. Use the category to control which filter tab it appears under.',
+        addLabel: 'Add a media item',
+        help: 'Each item links out to the article, segment or episode. Leave the link blank and it still appears, just not clickable.',
         fields: [
-          { key: 'cat', label: 'Category', type: 'text' },
-          { key: 'title', label: 'Title', type: 'text' },
-          { key: 'dur', label: 'Duration (e.g. 8 min)', type: 'text' },
-          { key: 'url', label: 'Video link', type: 'url' },
+          { key: 'title', label: 'Headline', type: 'text' },
           {
-            key: 'image',
-            label: 'Thumbnail image',
-            type: 'image',
-            help: 'Optional — overrides the colour below.',
+            key: 'outlet',
+            label: 'Publication / show',
+            type: 'text',
+            help: 'e.g. BradfordToday, Patient Worthy, Your Morning.',
           },
-          { key: 'cls', label: 'Thumbnail colour', type: 'select', options: videoThumbOptions },
+          {
+            key: 'type',
+            label: 'Kind of coverage',
+            type: 'select',
+            options: ['Article', 'TV', 'Radio', 'Podcast', 'Video'],
+          },
+          { key: 'url', label: 'Link', type: 'url' },
         ],
       },
     ],
