@@ -1,31 +1,36 @@
 {
   "seo": {
     "title": "About · Ontario Rare Action Group",
-    "description": "[PLACEHOLDER — replace at /admin] Who we are, why we exist, and how we work."
+    "description": "1.3 million Ontarians. Thousands of rare diseases. One collective voice."
   },
   "header": {
     "crumb": "About",
     "title": "Who we <em>are.</em>",
-    "lede": "[PLACEHOLDER — replace at /admin] A short introduction to the Ontario Rare Action Group: who we are, why we exist, and who we work for."
+    "lede": "What If We Could Change the Next Rare Disease Story?\n\nFor 1.3 million Ontarians living with a rare disease, the journey can be filled with uncertainty — waiting for a diagnosis, searching for answers, fighting for care and hoping that the treatment they need will be within reach.\n\nWe believe it can be different.\n"
   },
   "blocks": [
     {
       "eyebrow": "Our story",
       "title": "[PLACEHOLDER — replace at /admin]",
-      "body": "[PLACEHOLDER — replace at /admin] Paragraphs go here. Leave a blank line between paragraphs and each one becomes its own paragraph on the page.\n\nThis second paragraph is here to show how the spacing works. Delete it once the real copy is in."
-    },
-    {
-      "eyebrow": "What we do",
-      "title": "[PLACEHOLDER — replace at /admin]",
-      "body": "[PLACEHOLDER — replace at /admin] A second section. Add or remove sections at /admin — there is no fixed number."
+      "body": "For OntarioRare co-founders Beth Vanstone and Alice Williams, this is more than advocacy. It is personal.\n\nBeth watched her daughter, Madi, grow up with Cystic Fibrosis and experienced firsthand the extraordinary difference that medical innovation can make — and the frustration when a life-changing treatment is approved but still out of reach.\n\nAlice’s two children have Wilson disease. Her daughter’s disease was discovered only after she experienced acute liver failure and needed a life-saving liver transplant. Her son was diagnosed only because his sister’s diagnosis revealed the family’s genetic condition.\n\nTheir experiences led to one powerful question:\n\nWhat if the family that comes next could have a different story?\n\nThat question became OntarioRare.\n\nA Voice for Ontario’s Rare Disease Community\n\nRare diseases may be individually rare, but together they affect an estimated 1.3 million Ontarians.\n\nAcross the province, patients and families are waiting — for answers, for specialists, for treatments, for hope.\n\nOntarioRare brings these voices together to advocate for a better, more coordinated rare disease system in Ontario.\n\nWe believe patients and families must have a seat at the table alongside researchers, clinicians, policymakers and the life sciences community.\n\nBecause a breakthrough means little if a patient cannot access it.\n\nA diagnosis means little if it comes too late.\n\nAnd innovation reaches its true potential only when it changes someone's life.\n\nOntario has the research, expertise, innovation and talent to become a leader in rare disease care.\n\nNow we need to bring it together.\n\nOntarioRare is building a stronger collective voice for rare disease patients and families — advocating for earlier diagnosis, better care, more research, improved access to treatments and a provincial rare disease strategy shaped by the people who live this reality every day.\n\nWe cannot change what happened to our families.\n\nBut together, we can change what happens to the family that comes next.\nOntarioRare\n\n1.3 million people. Thousands of rare diseases. One collective voice.\n\nTogether, we can change the next rare disease story.\n"
     }
   ],
   "ctaBand": {
     "heading": "Want to be part of <em>this?</em>",
     "body": "[PLACEHOLDER — replace at /admin] A closing line inviting people to get involved.",
     "actions": [
-      { "label": "Get in touch", "href": "/contact", "style": "dark", "arrow": true },
-      { "label": "See our advocacy platform", "href": "/advocacy", "style": "outline-ink", "arrow": false }
+      {
+        "label": "Get in touch",
+        "href": "/contact",
+        "style": "dark",
+        "arrow": true
+      },
+      {
+        "label": "See our advocacy platform",
+        "href": "/advocacy",
+        "style": "outline-ink",
+        "arrow": false
+      }
     ]
   }
 }
