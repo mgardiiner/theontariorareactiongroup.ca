@@ -32,6 +32,55 @@
           "name": "Rare Disease Foundation of Ontario",
           "focus": "Microgrant research funding for under-studied conditions affecting Ontario families.",
           "url": ""
+        },
+        {
+          "abbr": "The Canadian Addison Society ",
+          "region": "",
+          "name": "",
+          "focus": "The Canadian Addison Society provides advocacy, education, and support for Canadians with Adrenal Disorders",
+          "url": ""
+        },
+        {
+          "abbr": "ALS Canada",
+          "region": "",
+          "name": "ALS Society of Canada ",
+          "focus": "The ALS Society of Canada is working to change what it means to live with amyotrophic lateral sclerosis (ALS), an unrelenting and currently terminal disease.",
+          "url": ""
+        },
+        {
+          "abbr": "CAPA",
+          "region": "",
+          "name": "Canadian Arthritis Patient Alliance ",
+          "focus": "CAPA uses the power of information, research, and communication to help people living with arthritis find their voice and support others.",
+          "url": ""
+        },
+        {
+          "abbr": "Canadian XLH Network",
+          "region": "",
+          "name": "Canadian XLH Network ",
+          "focus": "A Canadian patient support organization for people living and dealing with X-Linked Hypophosphatemia (XLH)\n\n",
+          "url": ""
+        },
+        {
+          "abbr": "CPFF",
+          "region": "",
+          "name": "Canadian Pulmonary Fibrosis Foundation ",
+          "focus": "The Canadian Pulmonary Fibrosis Foundation is committed to accelerating research, empowering our community, and transforming care so that everyone with pulmonary fibrosis can live a better life.",
+          "url": ""
+        },
+        {
+          "abbr": "CML Society of Canada ",
+          "region": "",
+          "name": "Chronic Myeloid Leukemia Society of Canada ",
+          "focus": "CML Society of Canada is dedicated to supporting and advocating for patients with chronic myeloid leukemia. ",
+          "url": ""
+        },
+        {
+          "abbr": "",
+          "region": "",
+          "name": "Cure SMA Canada ",
+          "focus": "",
+          "url": ""
         }
       ]
     },
