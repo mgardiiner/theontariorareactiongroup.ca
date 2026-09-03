@@ -20,6 +20,10 @@
               </NuxtLink>
               <NuxtLink :to="content.hero.secondaryCta.href" class="btn btn-ghost">{{ content.hero.secondaryCta.label }}</NuxtLink>
             </div>
+            <div v-if="site.footer.socials?.length" class="hero-socials">
+              <span class="hero-socials-label">Follow us</span>
+              <SocialLinks :links="site.footer.socials" />
+            </div>
           </div>
           <aside class="hero-side" aria-label="Key statistics">
             <div class="stat-card" v-for="stat in content.stats" :key="stat.num">
@@ -145,6 +149,7 @@
 
 <script setup>
 import content from '~/content/home.json'
+import site from '~/content/site.json'
 import events from '~/content/events.json'
 import stories from '~/content/stories.json'
 import partners from '~/content/partners.json'
@@ -238,6 +243,19 @@ function handleNewsSubscribe() {
   margin: 0 0 36px;
 }
 .hero-actions { display: flex; gap: 14px; flex-wrap: wrap; }
+.hero-socials {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: 32px;
+}
+.hero-socials-label {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.55);
+}
 .hero-side { display: flex; flex-direction: column; gap: 16px; }
 .stat-card {
   background: rgba(255,255,255,0.06);
