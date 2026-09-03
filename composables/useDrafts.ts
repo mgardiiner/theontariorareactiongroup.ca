@@ -131,6 +131,7 @@ export function useDrafts() {
       if (baseSha && current && current !== baseSha) {
         const err: any = new Error('Someone else changed the website while you were working.')
         err.code = 'conflict'
+        err.file = file
         throw err
       }
     }
@@ -165,20 +166,30 @@ export function useDrafts() {
       const { data: remote, sha } = await loadJsonFile<any>(token.value, file)
       // The snapshot taken before the editor's first change to this file = what they started from.
       const base = state.value.pending.find((p) => p.file === file)?.before ?? null
+      const mergeable = base && remote && typeof remote === 'object' && !Array.isArray(remote)
 
-      let merged: any = draft.data
-      const sections: string[] = []
-      if (base && remote && typeof remote === 'object' && !Array.isArray(remote)) {
-        merged = { ...remote }
-        const keys = new Set([...Object.keys(base), ...Object.keys(draft.data ?? {})])
+      // Rebuild `snapshot` on top of `remote`: sections the editor changed (vs base) win, the rest
+      // take the latest published version. Returns the merged data and the sections changed on both sides.
+      const rebase = (snapshot: any): { data: any; sections: string[] } => {
+        if (!mergeable) return { data: snapshot, sections: [] }
+        const merged: any = { ...remote }
+        const sections: string[] = []
+        const keys = new Set([...Object.keys(base), ...Object.keys(snapshot ?? {})])
         for (const key of keys) {
-          const editorChanged = !same(base[key], draft.data?.[key])
-          if (!editorChanged) continue
-          merged[key] = draft.data[key]
+          if (same(base[key], snapshot?.[key])) continue
+          merged[key] = snapshot[key]
           if (!same(base[key], remote[key])) sections.push(key)
         }
+        return { data: merged, sections }
       }
+
+      const { data: merged, sections } = rebase(draft.data)
       state.value.files[file] = { data: merged, baseSha: sha, dirty: true }
+      // Keep Undo consistent: each pending entry's "before" snapshot moves onto the latest version too,
+      // so undoing one change can't quietly resurrect the stale copy of someone else's edits.
+      for (const p of state.value.pending) {
+        if (p.file === file && p.before != null) p.before = rebase(p.before).data
+      }
       if (sections.length) overlaps.push({ file, sections })
     }
     persist()

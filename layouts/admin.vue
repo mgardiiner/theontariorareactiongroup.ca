@@ -95,7 +95,7 @@
             :disabled="rebasing"
             @click="doRebase"
           >
-            {{ rebasing ? 'Getting the latest…' : 'Get the latest and keep my changes' }}
+            {{ rebasing ? 'Publishing…' : 'Publish anyway' }}
           </button>
           <button v-else-if="canPublish" type="button" class="sheet-confirm" @click="doPublish">
             Yes, publish it
@@ -223,12 +223,33 @@ function onToastUndo() {
   hideToast()
 }
 
+function describeOverlaps(overlaps) {
+  return overlaps
+    .map((o) => `${pageNameFor(o.file)} (${o.sections.join(', ')})`)
+    .join('; ')
+}
+
 async function doPublish() {
   publishing.value = true
   publishError.value = ''
   publishNotice.value = ''
+  conflict.value = false
   try {
-    await publishAll()
+    try {
+      await publishAll()
+    } catch (e) {
+      if (!e || e.code !== 'conflict') throw e
+      // Someone published since these drafts were loaded. Pick up their version, keep our edits
+      // on top, and publish straight away unless we both touched the same section.
+      const overlaps = await rebaseOnLatest()
+      if (overlaps.length) {
+        publishing.value = false
+        conflict.value = true
+        publishError.value = `Someone else also edited ${describeOverlaps(overlaps)} since you started. Your changes are safe and now sit on top of the latest version. Publishing will replace their version of those parts with yours — undo the ones below you'd rather not, then click "Publish anyway".`
+        return
+      }
+      await publishAll()
+    }
     publishing.value = false
     publishOpen.value = false
     publishedJustNow.value = true
@@ -236,9 +257,7 @@ async function doPublish() {
   } catch (e) {
     publishing.value = false
     if (e && e.code === 'conflict') {
-      conflict.value = true
-      publishError.value =
-        'Someone else changed the website while you were working. Your changes are safe — click below to pick up the latest version with your changes kept on top, then publish again.'
+      publishError.value = `The website changed again while publishing (${pageNameFor(e.file || '')}). Please try again.`
     } else {
       publishError.value = (e && e.message) || 'Something went wrong publishing. Please try again.'
     }
@@ -246,21 +265,19 @@ async function doPublish() {
 }
 
 async function doRebase() {
+  // Reached only via "Publish anyway": drafts are already on the latest version, so just publish.
   rebasing.value = true
-  publishError.value = ''
+  conflict.value = false
   try {
-    const overlaps = await rebaseOnLatest()
-    conflict.value = false
-    if (overlaps.length) {
-      const where = overlaps
-        .map((o) => `${o.file.replace(/^content\//, '').replace(/\.json$/, '')} (${o.sections.join(', ')})`)
-        .join('; ')
-      publishNotice.value = `Updated to the latest version. Heads up: someone else also edited ${where}. Your version of those parts will replace theirs when you publish — undo them below if you'd rather keep what's live.`
-    } else {
-      publishNotice.value = 'Updated to the latest version with your changes kept on top. You can publish now.'
-    }
+    await publishAll()
+    publishOpen.value = false
+    publishedJustNow.value = true
+    showToast('Published. Your website is updating now.')
   } catch (e) {
-    publishError.value = (e && e.message) || 'Could not fetch the latest version. Please try again.'
+    publishError.value =
+      e && e.code === 'conflict'
+        ? `The website changed again while publishing (${pageNameFor(e.file || '')}). Please try again.`
+        : (e && e.message) || 'Something went wrong publishing. Please try again.'
   } finally {
     rebasing.value = false
   }
