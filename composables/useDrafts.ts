@@ -1,4 +1,5 @@
 import { loadJsonFile, getFileSha, commitFiles } from '~/utils/adminGithub'
+import { describeChange, pageNameFor, type DiffLine } from '~/admin/diff'
 
 // Local draft store: every edit autosaves to localStorage; nothing touches GitHub
 // until the user deliberately Publishes, which commits all changed files in ONE commit.
@@ -102,6 +103,18 @@ export function useDrafts() {
     persist()
   }
 
+  /** Friendly per-field summary of one pending change, for the publish sheet. */
+  function changeDetails(key: string): { page: string; lines: DiffLine[] } | null {
+    const idx = state.value.pending.findIndex((p) => p.key === key)
+    if (idx < 0) return null
+    const entry = state.value.pending[idx]
+    // "After" this change = the snapshot the next change to the same file started from,
+    // or the current draft if this was the latest edit to that file.
+    const next = state.value.pending.slice(idx + 1).find((p) => p.file === entry.file)
+    const after = next ? next.before : state.value.files[entry.file]?.data
+    return { page: pageNameFor(entry.file), lines: describeChange(entry.file, entry.before, after) }
+  }
+
   const pending = computed(() => state.value.pending)
   const pendingCount = computed(() => state.value.pending.length)
   const hasChanges = computed(() => state.value.pending.length > 0)
@@ -187,6 +200,7 @@ export function useDrafts() {
     hasChanges,
     publishAll,
     rebaseOnLatest,
+    changeDetails,
     clearAll,
   }
 }

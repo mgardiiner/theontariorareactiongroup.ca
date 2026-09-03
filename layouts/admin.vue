@@ -49,9 +49,32 @@
         </div>
 
         <div v-if="sheetList" class="sheet-list">
-          <div v-for="p in pending" :key="p.key" class="sheet-row">
-            <span class="sheet-row-what">{{ p.what }}</span>
-            <button type="button" class="sheet-undo" @click="undoOne(p.key)">Undo this one</button>
+          <div v-for="p in pending" :key="p.key" class="sheet-row" :class="{ open: openKey === p.key }">
+            <div class="sheet-row-top">
+              <div class="sheet-row-main">
+                <span class="sheet-row-what">{{ p.what }}</span>
+                <span class="sheet-row-meta">
+                  {{ pageNameFor(p.file) }} ·
+                  <button type="button" class="sheet-row-toggle" @click="toggleDetails(p.key)">
+                    {{ openKey === p.key ? 'Hide details' : 'See what changed' }}
+                  </button>
+                </span>
+              </div>
+              <button type="button" class="sheet-undo" @click="undoOne(p.key)">Undo this one</button>
+            </div>
+            <ul v-if="openKey === p.key" class="sheet-diff">
+              <li v-for="(d, i) in detailsFor(p.key)" :key="i" class="sheet-diff-line" :class="d.kind">
+                <span class="sheet-diff-label">{{ d.label }}</span>
+                <span class="sheet-diff-vals">
+                  <template v-if="d.kind === 'added'">Added {{ d.after }}</template>
+                  <template v-else-if="d.kind === 'removed'">Removed {{ d.before }}</template>
+                  <template v-else-if="d.before != null && d.after">
+                    <s>{{ d.before }}</s> <span class="sheet-diff-new">{{ d.after }}</span>
+                  </template>
+                  <template v-else>{{ d.after }}</template>
+                </span>
+              </li>
+            </ul>
           </div>
         </div>
 
@@ -90,8 +113,18 @@
 </template>
 
 <script setup>
+import { pageNameFor } from '~/admin/diff'
+
 const router = useRouter()
-const { pending, pendingCount, publishAll, rebaseOnLatest, undo } = useDrafts()
+const { pending, pendingCount, publishAll, rebaseOnLatest, changeDetails, undo } = useDrafts()
+
+const openKey = ref(null)
+function toggleDetails(key) {
+  openKey.value = openKey.value === key ? null : key
+}
+function detailsFor(key) {
+  return changeDetails(key)?.lines ?? []
+}
 const { screen, toast, showToast, hideToast, editorName, editorInitials } = useAdminUi()
 const { logout } = useAdminAuth()
 
@@ -462,14 +495,73 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKey))
   gap: 9px;
 }
 .sheet-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 14px;
   background: #fff;
   border: 1px solid var(--line);
   border-radius: 9px;
   padding: 13px 16px;
+}
+.sheet-row-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+.sheet-row-main {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+.sheet-row-meta {
+  font-size: 12.5px;
+  color: var(--muted);
+}
+.sheet-row-toggle {
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  color: var(--primary);
+  cursor: pointer;
+  text-decoration: underline;
+}
+.sheet-diff {
+  list-style: none;
+  margin: 12px 0 0;
+  padding: 10px 0 0;
+  border-top: 1px dashed var(--line);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.sheet-diff-line {
+  display: grid;
+  grid-template-columns: minmax(120px, 38%) 1fr;
+  gap: 12px;
+  font-size: 13.5px;
+  line-height: 1.45;
+}
+.sheet-diff-label {
+  color: var(--muted);
+}
+.sheet-diff-vals {
+  color: var(--ink);
+  overflow-wrap: anywhere;
+}
+.sheet-diff-vals s {
+  color: #a6203a;
+  opacity: 0.8;
+  margin-right: 6px;
+}
+.sheet-diff-new {
+  color: #1f5a33;
+  font-weight: 600;
+}
+.sheet-diff-line.added .sheet-diff-vals {
+  color: #1f5a33;
+}
+.sheet-diff-line.removed .sheet-diff-vals {
+  color: #a6203a;
 }
 .sheet-row-what {
   font-size: 14.5px;
