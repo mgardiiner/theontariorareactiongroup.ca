@@ -140,12 +140,14 @@ onBeforeUnmount(() => {
               <li><a :href="'mailto:' + content.footer.contact.email">{{ content.footer.contact.email }}</a></li>
               <li>{{ content.footer.contact.location }}</li>
             </ul>
-            <SocialLinks :links="content.footer.socials" class="foot-socials" />
           </div>
         </div>
         <div class="foot-bottom">
-          <div>{{ content.footer.copyright }}</div>
-          <div>{{ content.footer.credit }}</div>
+          <div class="foot-legal">
+            <span>{{ content.footer.copyright }}</span>
+            <span>{{ content.footer.credit }}</span>
+          </div>
+          <SocialLinks :links="content.footer.socials" class="foot-socials" />
         </div>
       </div>
     </footer>
@@ -430,7 +432,8 @@ footer {
 }
 .foot-col a:hover { color: #fff; }
 .foot-col li { transition: color .15s ease; }
-.foot-socials { margin-top: 18px; }
+.foot-legal { display: flex; flex-wrap: wrap; gap: 8px 24px; }
+.foot-socials { flex-shrink: 0; }
 .foot-bottom {
   border-top: 1px solid rgba(255,255,255,0.12);
   padding-top: 24px;
