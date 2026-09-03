@@ -23,6 +23,8 @@ export interface Field {
   label: string
   type: FieldType
   help?: string
+  advanced?: boolean // tucked into a collapsed "Advanced" block at the bottom of the form
+  helper?: 'zoom-link' // renders a fold-out how-to component under the field
   options?: SelectOption[] // for 'select' (static choices)
   optionsFrom?: string // for 'select': key of a sibling/root string-list whose values become the choices (e.g. 'filters')
   fields?: Field[] // for 'object' and 'list' (the per-item fields, when items are objects)
@@ -96,6 +98,8 @@ const seoField: Field = {
   key: 'seo',
   label: 'Search / social (SEO)',
   type: 'object',
+  advanced: true,
+  help: 'What Google and social previews show for this page. The page itself looks the same either way.',
   fields: [
     { key: 'title', label: 'Browser tab title', type: 'text' },
     { key: 'description', label: 'Search-result description', type: 'textarea' },
@@ -280,8 +284,12 @@ export const sections: Section[] = [
           { key: 'tag', label: 'Category tag', type: 'text' },
           { key: 'title', label: 'Title', type: 'text' },
           { key: 'desc', label: 'Description', type: 'textarea' },
-          { key: 'count', label: 'Count number (e.g. 6)', type: 'text' },
-          { key: 'countLabel', label: 'Count label', type: 'text' },
+          {
+            key: 'countLabel',
+            label: 'Count label',
+            type: 'text',
+            help: 'The number itself is counted automatically from what\'s on the site (e.g. 8 stories).',
+          },
           { key: 'href', label: 'Link (a /path or full URL)', type: 'text' },
           {
             key: 'image',
@@ -565,26 +573,6 @@ export const sections: Section[] = [
           { key: 'lede', label: 'Intro paragraph', type: 'textarea' },
         ],
       },
-      {
-        key: 'intro',
-        label: 'Intro section',
-        type: 'object',
-        fields: [
-          { key: 'eyebrow', label: 'Small label above the heading', type: 'text' },
-          {
-            key: 'title',
-            label: 'Heading',
-            type: 'html',
-            help: 'Wrap words in <em>…</em> for the italic accent.',
-          },
-          {
-            key: 'body',
-            label: 'Body text',
-            type: 'textarea',
-            help: 'Leave a blank line between paragraphs. Clear this field to hide the whole section.',
-          },
-        ],
-      },
       { key: 'upcomingLabel', label: '"Upcoming events" label', type: 'text' },
       {
         key: 'upcoming',
@@ -593,8 +581,6 @@ export const sections: Section[] = [
         itemLabelKey: 'title',
         addLabel: 'Add an event',
         fields: [
-          { key: 'day', label: 'Day (e.g. 21)', type: 'text' },
-          { key: 'month', label: 'Month (e.g. May)', type: 'text' },
           { key: 'title', label: 'Title', type: 'text' },
           { key: 'desc', label: 'Short description', type: 'textarea' },
           {
@@ -605,7 +591,19 @@ export const sections: Section[] = [
           },
           { key: 'time', label: 'Time (e.g. 7:00–8:30 PM ET)', type: 'text' },
           { key: 'tag', label: 'Format', type: 'select', options: ['ZOOM', 'IRL'] },
-          { key: 'date', label: 'Full date (e.g. May 21, 2026)', type: 'text' },
+          {
+            key: 'date',
+            label: 'Date (e.g. May 21, 2026)',
+            type: 'text',
+            help: 'The calendar badge on the site is worked out from this automatically.',
+          },
+          {
+            key: 'registerUrl',
+            label: 'Registration link',
+            type: 'url',
+            help: 'Paste the Zoom registration link once the host shares it.',
+            helper: 'zoom-link',
+          },
           { key: 'featured', label: 'Feature on the home page', type: 'boolean' },
         ],
       },
@@ -669,27 +667,29 @@ export const sections: Section[] = [
       },
       {
         key: 'registration',
-        label: 'Registration form',
+        label: 'Registration card',
         type: 'object',
         fields: [
           { key: 'eyebrowPrefix', label: 'Eyebrow prefix', type: 'text' },
           { key: 'zoomLabel', label: 'Zoom event label', type: 'text' },
           { key: 'inPersonLabel', label: 'In-person event label', type: 'text' },
-          { key: 'emailPlaceholder', label: 'Email field placeholder', type: 'text' },
-          { key: 'rolePlaceholder', label: 'Role dropdown placeholder', type: 'text' },
           {
-            key: 'roleOptions',
-            label: 'Role options',
-            type: 'list',
-            itemType: 'text',
-            addLabel: 'Add a role',
+            key: 'buttonLabel',
+            label: 'Register button label',
+            type: 'text',
+            help: 'Shown when the event has a registration link.',
           },
-          { key: 'calendarInvite', label: 'Calendar-invite checkbox label', type: 'textarea' },
-          { key: 'submit', label: 'Submit button label', type: 'text' },
           {
-            key: 'success',
-            label: 'Success message',
+            key: 'buttonNote',
+            label: 'Note under the button',
+            type: 'textarea',
+            help: 'e.g. "You\'ll get your join link and a reminder by email."',
+          },
+          {
+            key: 'comingSoon',
+            label: 'No link yet',
             type: 'object',
+            help: 'Shown in place of the button until a registration link is added to the event.',
             fields: [
               { key: 'title', label: 'Title', type: 'text' },
               { key: 'body', label: 'Body text', type: 'textarea' },
@@ -1035,16 +1035,11 @@ export const sections: Section[] = [
         ],
       },
       {
-        key: '_advanced',
-        label: "Advanced — don't change unless you know what you're doing",
-        type: 'heading',
-        help: 'This connects the contact form to the service that delivers messages. Editing it wrong will stop submissions from arriving.',
-      },
-      {
         key: 'web3formsKey',
         label: 'Web3Forms access key',
         type: 'text',
-        help: 'The API key that delivers form submissions. Only change this if you regenerate the key.',
+        advanced: true,
+        help: 'Connects the contact form to the service that delivers messages. Editing it wrong will stop submissions from arriving — only change it if you regenerate the key.',
       },
     ],
   },
@@ -1069,15 +1064,11 @@ export const sections: Section[] = [
       { key: 'successText', label: 'Success message', type: 'text' },
       { key: 'contactEmail', label: 'Contact email', type: 'text' },
       {
-        key: '_advanced',
-        label: "Advanced — don't change unless you know what you're doing",
-        type: 'heading',
-        help: 'This connects the signup form to Mailchimp. Editing these wrong will stop signups from being recorded.',
-      },
-      {
         key: 'mailchimp',
         label: 'Mailchimp connection',
         type: 'object',
+        advanced: true,
+        help: 'Connects the signup form to Mailchimp. Editing these wrong will stop signups from being recorded.',
         fields: [
           { key: 'url', label: 'Subscribe endpoint URL', type: 'text' },
           { key: 'u', label: 'Audience "u" value', type: 'text' },

@@ -112,7 +112,7 @@ import { commitFiles } from '~/utils/adminGithub'
 
 definePageMeta({ layout: false })
 
-const { login } = useAdminAuth()
+const { login, devAutoLogin } = useAdminAuth()
 const router = useRouter()
 
 const mode = ref('password')
@@ -122,8 +122,10 @@ const tokenInput = ref('')
 const busy = ref(false)
 const error = ref('')
 
-onMounted(() => {
+onMounted(async () => {
   mode.value = isConfigured() ? 'password' : 'setup'
+  // On localhost, skip the form entirely if .env can unlock the vault.
+  if (mode.value === 'password' && (await devAutoLogin())) router.push('/admin')
 })
 
 function suggest() {

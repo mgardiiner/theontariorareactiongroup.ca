@@ -170,6 +170,7 @@
               This one is needed before you can carry on.
             </span>
             <span v-if="f.help" class="wiz-help">{{ f.help }}</span>
+            <ZoomLinkHelp v-if="f.helper === 'zoom-link'" />
           </div>
 
           <!-- Review (Step 3) -->

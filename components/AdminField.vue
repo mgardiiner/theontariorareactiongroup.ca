@@ -14,11 +14,14 @@
   </label>
 
   <!-- url / link -->
-  <label v-else-if="field.type === 'url'" class="afld">
-    <span class="afld-label">{{ field.label }}</span>
-    <input type="text" inputmode="url" v-model="obj[field.key]" placeholder="https://…  or  /a-page" />
-    <span class="afld-help">{{ field.help || 'A full web address (https://…) or an internal page like /stories. Leave blank for no link.' }}</span>
-  </label>
+  <div v-else-if="field.type === 'url'" class="afld">
+    <label>
+      <span class="afld-label">{{ field.label }}</span>
+      <input type="text" inputmode="url" v-model="obj[field.key]" placeholder="https://…  or  /a-page" />
+      <span class="afld-help">{{ field.help || 'A full web address (https://…) or an internal page like /stories. Leave blank for no link.' }}</span>
+    </label>
+    <ZoomLinkHelp v-if="field.helper === 'zoom-link'" />
+  </div>
 
   <!-- heading / divider (display only) -->
   <p v-else-if="field.type === 'heading'" class="afld-heading">
@@ -27,11 +30,11 @@
   </p>
 
   <!-- html / rich prose -->
-  <label v-else-if="field.type === 'html'" class="afld">
-    <span class="afld-label">{{ field.label }} <em class="afld-tag">formatting allowed</em></span>
-    <textarea rows="2" class="mono" v-model="obj[field.key]"></textarea>
-    <span class="afld-help">{{ field.help || 'You can use <em>…</em> for italics and <strong>…</strong> for bold.' }}</span>
-  </label>
+  <div v-else-if="field.type === 'html'" class="afld">
+    <span class="afld-label">{{ field.label }}</span>
+    <RichText v-model="obj[field.key]" />
+    <span class="afld-help">{{ field.help || 'Select some words and press I to italicize them — that\'s the accent style used in headings across the site.' }}</span>
+  </div>
 
   <!-- number -->
   <label v-else-if="field.type === 'number'" class="afld">

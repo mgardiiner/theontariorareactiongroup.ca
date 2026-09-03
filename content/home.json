@@ -85,7 +85,7 @@
       "tag": "Patient Stories",
       "title": "Patients, caregivers and clinicians, in their own words.",
       "desc": "Behind every statistic is a person. The patients and caregivers reshaping Ontario's approach to rare disease.",
-      "count": "3",
+      "count": "8",
       "countLabel": "Stories"
     },
     {
@@ -119,9 +119,9 @@
       "imgClass": "ov-img-6",
       "visualTag": "Network",
       "tag": "Affiliated Organizations",
-      "title": "Twenty-eight Ontario rare-disease organizations we work alongside.",
-      "desc": "From national umbrella bodies to single-condition patient groups — we don't do this work alone.",
-      "count": "28",
+      "title": "The rare-disease organizations we work alongside.",
+      "desc": "Patient organizations from across Canada and Ontario, each bringing deep expertise in their condition — we don't do this work alone.",
+      "count": "7",
       "countLabel": "Partners"
     }
   ],
@@ -147,7 +147,7 @@
   },
   "newsletter": {
     "heading": "Stay in the loop",
-    "body": "One email a month. Policy updates, event invites, and the stories that matter. No spam, ever.",
+    "body": "Occasional updates only — event invites, policy news, and the stories that matter. No spam, ever.",
     "placeholder": "your@email.ca",
     "submitLabel": "Subscribe"
   }

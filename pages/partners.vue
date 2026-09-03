@@ -88,6 +88,7 @@ function webUrl(url) {
   margin-bottom: 0;
 }
 .partner {
+  position: relative;
   padding: 32px 24px;
   border-right: 1px solid var(--line);
   border-bottom: 1px solid var(--line);
@@ -142,7 +143,17 @@ function webUrl(url) {
   display: inline-flex;
   gap: 6px;
   align-items: center;
+  align-self: flex-start;
 }
+/* The whole card shows a pointer cursor, so make the whole card the click
+   target — otherwise only the small "Visit ↗" text actually opens the link. */
+a.partner-link::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+}
+/* No link for this partner yet: don't promise a click the card can't deliver. */
+.partner:not(:has(a.partner-link)) { cursor: default; }
 
 .group-label {
   font-family: var(--mono);

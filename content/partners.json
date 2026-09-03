@@ -13,9 +13,9 @@
       "label": "Patient organizations",
       "partners": [
         {
-          "abbr": "SCS",
+          "abbr": "SCDAC",
           "region": "National",
-          "name": "Sickle Cell Society of Canada",
+          "name": "Sickle Cell Disease Association of Canada",
           "focus": "Patient support, education and equity advocacy for the sickle-cell community.",
           "url": "https://sicklecelldiseasecanada.com/"
         },
@@ -38,21 +38,21 @@
           "region": "National",
           "name": "Huntington Society of Canada",
           "focus": "Resources, research and advocacy for Huntington's disease families.",
-          "url": ""
+          "url": "https://www.huntingtonsociety.ca/"
         },
         {
           "abbr": "PHA",
           "region": "National",
           "name": "Pulmonary Hypertension Association Canada",
           "focus": "Patient support and treatment-access advocacy for the PH community.",
-          "url": ""
+          "url": "https://www.phacanada.ca/"
         },
         {
           "abbr": "SMA",
           "region": "National",
           "name": "Cure SMA Canada",
           "focus": "Family support and access advocacy for spinal muscular atrophy.",
-          "url": ""
+          "url": "https://curesma.ca/"
         },
         {
           "abbr": "WDA",
@@ -62,10 +62,6 @@
           "url": "https://www.wilsondisease.org"
         }
       ]
-    },
-    {
-      "label": "Research, clinical & academic partners",
-      "partners": []
     }
   ],
   "becomePartner": {

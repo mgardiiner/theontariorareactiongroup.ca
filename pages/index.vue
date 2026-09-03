@@ -77,8 +77,8 @@
               <h3 class="ov-title">{{ item.title }}</h3>
               <p class="ov-desc">{{ item.desc }}</p>
             </div>
-            <div class="ov-meta" :aria-label="`${item.count} ${item.countLabel}`">
-              <div class="ov-meta-num">{{ item.count }}</div>
+            <div class="ov-meta" :aria-label="`${countFor(item)} ${item.countLabel}`">
+              <div class="ov-meta-num">{{ countFor(item) }}</div>
               <div class="ov-meta-label">{{ item.countLabel }}</div>
             </div>
           </NuxtLink>
@@ -95,17 +95,22 @@
             <h2 class="feat-title">{{ featured.title }}</h2>
             <p class="feat-meta" v-if="content.featuredEvent.meta">{{ content.featuredEvent.meta }}</p>
             <div class="hero-actions">
-              <NuxtLink :to="content.featuredEvent.primaryCta.href" class="btn btn-primary">
-                {{ content.featuredEvent.primaryCta.label }}
+              <!-- Goes straight to Zoom once the event has a registration link; otherwise to the events page. -->
+              <NuxtLink
+                :to="featured.registerUrl || content.featuredEvent.primaryCta.href"
+                :target="featured.registerUrl ? '_blank' : undefined"
+                class="btn btn-primary"
+              >
+                {{ featured.registerUrl ? content.featuredEvent.primaryCta.label : 'Event details' }}
                 <svg class="btn-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
               </NuxtLink>
               <NuxtLink :to="content.featuredEvent.secondaryCta.href" class="btn btn-ghost">{{ content.featuredEvent.secondaryCta.label }}</NuxtLink>
             </div>
           </div>
-          <div class="feat-card" :aria-label="`${content.featuredEvent.savedateLabel} ${featured.day} ${content.featuredEvent.monthLabel}, ${featured.time}, ${content.featuredEvent.locationLabel}`">
+          <div class="feat-card" :aria-label="`${content.featuredEvent.savedateLabel} ${featured.day} ${featuredMonth}, ${featured.time}, ${content.featuredEvent.locationLabel}`">
             <div class="feat-card-date">{{ content.featuredEvent.savedateLabel }}</div>
             <div class="feat-day">{{ featured.day }}</div>
-            <div class="feat-month">{{ content.featuredEvent.monthLabel }}</div>
+            <div class="feat-month">{{ featuredMonth }}</div>
             <div class="feat-time">
               <span>{{ featured.time }}</span>
               <span>{{ content.featuredEvent.locationLabel }}</span>
@@ -141,11 +146,38 @@
 <script setup>
 import content from '~/content/home.json'
 import events from '~/content/events.json'
+import stories from '~/content/stories.json'
+import partners from '~/content/partners.json'
+import media from '~/content/media.json'
+import advocacy from '~/content/advocacy.json'
+import challenges from '~/content/challenges.json'
 
 definePageMeta({ layout: 'default' })
 
+// The overview cards' numbers come from the content itself, so they can't go
+// stale when someone adds a story or removes a partner in the editor.
+const liveCounts = {
+  '/advocacy': advocacy.goals.length,
+  '/challenges': challenges.challenges.length,
+  '/stories': stories.stories.length,
+  '/events': events.upcoming.length,
+  '/media': media.coverage.length,
+  '/partners': partners.partnerGroups.reduce((n, g) => n + g.partners.length, 0),
+}
+const countFor = (item) => liveCounts[item.href] ?? item.count ?? ''
+
 // Featured upcoming event is sourced from events.json (flagged with "featured": true)
 const featured = events.upcoming.find(e => e.featured)
+
+// "September 2026" from the event's own date, so the home card can't drift out
+// of sync with events.json. Falls back to the hand-typed label if the date
+// doesn't parse.
+const featuredMonth = computed(() => {
+  const d = new Date(featured?.date || '')
+  return isNaN(d)
+    ? content.featuredEvent.monthLabel
+    : d.toLocaleDateString('en-CA', { month: 'long', year: 'numeric' })
+})
 
 const newsEmail = ref('')
 const newsSubscribed = ref(false)

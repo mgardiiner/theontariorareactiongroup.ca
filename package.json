@@ -11,12 +11,8 @@
     "sync-secrets": "gh secret set --env-file .env"
   },
   "dependencies": {
-    "nodemailer": "^8.0.7",
     "nuxt": "^3.21.4",
     "vue": "^3.5.33",
     "vue-router": "^5.0.6"
-  },
-  "devDependencies": {
-    "@types/nodemailer": "^8.0.0"
   }
 }

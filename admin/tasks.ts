@@ -19,6 +19,7 @@ export interface TaskField {
   required?: boolean
   placeholder?: string
   help?: string
+  helper?: 'zoom-link' // renders a fold-out how-to component under the field
   choices?: string[]
 }
 
@@ -116,6 +117,14 @@ export const tasks: Record<TaskKey, TaskConfig> = {
             label: 'How do people attend?',
             kind: 'choice',
             choices: ['Online (Zoom)', 'In person'],
+          },
+          {
+            key: 'link',
+            label: 'Registration link',
+            kind: 'text',
+            placeholder: 'https://us02web.zoom.us/meeting/register/…',
+            help: 'Paste the Zoom registration link once the host shares it.',
+            helper: 'zoom-link',
           },
           {
             key: 'feature',
@@ -301,7 +310,7 @@ const MONTHS = [
 ]
 
 /** Parse a free-text date like "May 21, 2026" into a padded day ("21") + 3-letter month ("May"). */
-function parseEventDate(date: string): { day: string; month: string } {
+export function parseEventDate(date: string): { day: string; month: string } {
   const tokens = String(date || '').replace(/,/g, ' ').split(/\s+/).filter(Boolean)
   let day = ''
   let month = ''
@@ -382,6 +391,7 @@ export function readItems(task: TaskKey, content: any): TaskItem[] {
           date: e.date || '',
           time: e.time || '',
           format: e.tag === 'IRL' ? 'In person' : 'Online (Zoom)',
+          link: e.registerUrl || '',
           feature: e.featured ? 'Yes' : 'No',
         },
         ref: { index },
@@ -467,6 +477,7 @@ function applyEvent(content: any, vals: Record<string, string>, ref: any): any {
   target.date = vals.date || ''
   target.featured = vals.feature === 'Yes'
   target.desc = vals.blurb || ''
+  target.registerUrl = (vals.link || '').trim()
 
   // Only one upcoming event can be featured on the home page.
   if (target.featured) {

@@ -6,6 +6,10 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       previewPassword: process.env.PREVIEW_PASSWORD ?? '',
+      // Dev-only convenience: unlocks the admin vault automatically on localhost.
+      // Baked in as '' for any non-development build, so it never ships.
+      devAdminPassword:
+        process.env.NODE_ENV === 'development' ? (process.env.ADMIN_PASSWORD ?? '') : '',
     },
   },
   css: ['~/assets/css/main.css'],

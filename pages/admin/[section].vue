@@ -29,7 +29,19 @@
       <div v-if="loading" class="loading">Loading current content from GitHub…</div>
 
       <form v-else-if="data" class="ed-form" @submit.prevent="save">
-        <AdminField v-for="f in section.fields" :key="f.key" :field="f" :obj="data" />
+        <AdminField v-for="f in mainFields" :key="f.key" :field="f" :obj="data" />
+
+        <!-- Technical / rarely-touched fields live behind a fold so the everyday
+             form stays short. -->
+        <details v-if="advancedFields.length" class="ed-advanced">
+          <summary>
+            <span class="ed-advanced-title">Advanced</span>
+            <span class="ed-advanced-sub">Search-engine text and connections — you'll rarely need these.</span>
+          </summary>
+          <div class="ed-advanced-body">
+            <AdminField v-for="f in advancedFields" :key="f.key" :field="f" :obj="data" />
+          </div>
+        </details>
 
         <div class="ed-foot">
           <button type="submit" class="save" :disabled="!canSave">Save</button>
@@ -41,6 +53,7 @@
 
 <script setup>
 import { getSection, normalize } from '~/admin/schema'
+import { parseEventDate } from '~/admin/tasks'
 
 definePageMeta({ layout: 'admin', middleware: 'admin-auth' })
 
@@ -49,6 +62,21 @@ const { getData, stageChange } = useDrafts()
 const { showToast } = useAdminUi()
 
 const section = computed(() => getSection(route.params.section))
+const mainFields = computed(() => (section.value?.fields || []).filter((f) => !f.advanced))
+const advancedFields = computed(() => (section.value?.fields || []).filter((f) => f.advanced))
+
+// Values the site derives from other fields, so editors never have to keep two
+// things in sync by hand. Runs on every save; harmless for files without them.
+function fillDerived(d) {
+  if (Array.isArray(d?.upcoming)) {
+    for (const ev of d.upcoming) {
+      const { day, month } = parseEventDate(ev.date || '')
+      ev.day = day
+      ev.month = month
+    }
+  }
+  return d
+}
 
 // Deep clone so our edits never mutate the draft store's cached object (which
 // stageChange snapshots for Undo). getData returns the local draft if the file
@@ -92,7 +120,7 @@ function save() {
   try {
     // Stage the change locally — publishing is the separate global step
     // (the "Review & publish" bar at the bottom of the screen).
-    stageChange(section.value.file, clone(data.value), `Edited the ${section.value.label} page`)
+    stageChange(section.value.file, fillDerived(clone(data.value)), `Edited the ${section.value.label} page`)
     savedSnapshot.value = JSON.stringify(data.value)
     saveOk.value = true
     showToast("Saved — press Review & publish when you're ready.")
@@ -164,4 +192,39 @@ h1 {
 .loading { color: #6a6a6a; padding: 40px 0; }
 .ed-form { max-width: 720px; }
 .ed-foot { margin-top: 24px; padding-top: 20px; border-top: 1px solid #e3ddd0; }
+
+.ed-advanced {
+  margin-top: 32px;
+  border: 1px dashed #d6cfe6;
+  border-radius: 8px;
+  background: #faf8ff;
+}
+.ed-advanced summary {
+  cursor: pointer;
+  padding: 14px 18px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 14px;
+  align-items: baseline;
+  list-style: none;
+}
+.ed-advanced summary::-webkit-details-marker { display: none; }
+.ed-advanced summary::before {
+  content: '▸';
+  color: #8a7fb8;
+  margin-right: 6px;
+  display: inline-block;
+  transition: transform .15s ease;
+}
+.ed-advanced[open] summary::before { transform: rotate(90deg); }
+.ed-advanced-title {
+  font-family: var(--mono, monospace);
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: #8a7fb8;
+}
+.ed-advanced-sub { font-size: 13px; color: #7a7388; }
+.ed-advanced-body { padding: 4px 18px 18px; }
 </style>

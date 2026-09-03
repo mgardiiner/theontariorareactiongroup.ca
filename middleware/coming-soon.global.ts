@@ -1,4 +1,7 @@
 export default defineNuxtRouteMiddleware((to) => {
+  // On localhost (nuxt dev) the whole site is open — no preview password.
+  if (import.meta.dev) return
+
   const path = to.path.replace(/\/$/, '') || '/'
   const allowed = ['/coming-soon', '/preview', '/logout']
   if (allowed.includes(path)) return

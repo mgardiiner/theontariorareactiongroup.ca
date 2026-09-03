@@ -18,20 +18,6 @@
     </header>
 
     <!-- INTRO — hidden entirely until there is body copy to show -->
-    <section v-if="introParagraphs.length" class="intro-bg">
-      <div class="wrap">
-        <div class="sec-head">
-          <div class="sec-num">{{ content.intro.eyebrow }}</div>
-          <div>
-            <h2 v-if="content.intro.title" class="sec-title" v-html="content.intro.title"></h2>
-            <div class="intro-body">
-              <p v-for="(para, p) in introParagraphs" :key="p">{{ para }}</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
     <!-- UPCOMING EVENTS + REGISTRATION -->
     <section class="events-bg">
       <div class="wrap">
@@ -49,10 +35,10 @@
                 v-for="(event, i) in events"
                 :key="i"
                 :class="{ active: activeIdx === i, 'has-img': event.image }"
-                @click="activeIdx = i; resetForm()"
+                @click="activeIdx = i"
                 :aria-pressed="activeIdx === i"
                 tabindex="0"
-                @keydown.enter="activeIdx = i; resetForm()"
+                @keydown.enter="activeIdx = i"
                 role="button"
               >
                 <div class="event-date" :aria-label="`${event.month} ${event.day}`">
@@ -84,42 +70,19 @@
             <h3 class="zoom-title">{{ events[activeIdx].title }}</h3>
             <div class="zoom-when">{{ events[activeIdx].date }} · {{ events[activeIdx].time }}</div>
 
-            <form class="zoom-form" @submit.prevent="handleRegister" v-if="!registered" novalidate>
-              <div class="zoom-row">
-                <div class="field">
-                  <label for="first-name">First name</label>
-                  <input id="first-name" type="text" required v-model="form.firstName" />
-                </div>
-                <div class="field">
-                  <label for="last-name">Last name</label>
-                  <input id="last-name" type="text" required v-model="form.lastName" />
-                </div>
-              </div>
-              <div class="field">
-                <label for="email">Email</label>
-                <input id="email" type="email" required :placeholder="content.registration.emailPlaceholder" v-model="form.email" />
-              </div>
-              <div class="field">
-                <label for="role">I'm joining as</label>
-                <select id="role" required v-model="form.role">
-                  <option value="">{{ content.registration.rolePlaceholder }}</option>
-                  <option v-for="opt in content.registration.roleOptions" :key="opt">{{ opt }}</option>
-                </select>
-              </div>
-              <label class="check">
-                <input type="checkbox" v-model="form.calendarInvite" />
-                <span>{{ content.registration.calendarInvite }}</span>
-              </label>
-              <button type="submit" class="zoom-submit">
-                {{ content.registration.submit }}
+            <!-- Registration lives on Zoom (or wherever the host set it up); we just link out.
+                 Until the host shares the link, say so instead of collecting details we can't act on. -->
+            <template v-if="registerUrl">
+              <a :href="registerUrl" class="zoom-submit" target="_blank" rel="noopener">
+                {{ content.registration.buttonLabel }}
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
-              </button>
-            </form>
+              </a>
+              <p class="zoom-note" v-if="content.registration.buttonNote">{{ content.registration.buttonNote }}</p>
+            </template>
 
-            <div class="zoom-success" v-if="registered" role="status">
-              <div class="success-check" aria-hidden="true">✓</div>
-              <h4>{{ content.registration.success.title }}</h4>
-              <p>{{ content.registration.success.body }}</p>
+            <div class="zoom-soon" v-else role="status">
+              <h4>{{ content.registration.comingSoon.title }}</h4>
+              <p>{{ content.registration.comingSoon.body }}</p>
             </div>
           </div>
         </div>
@@ -172,43 +135,17 @@ const pastEvents = [...content.past].sort(byDateDesc)
 const PastLink = resolveComponent('NuxtLink')
 
 // Same convention as story bodies: a blank line starts a new paragraph.
-const introParagraphs = computed(() =>
-  (content.intro?.body || '').split('\n\n').map(p => p.trim()).filter(Boolean)
-)
-
 const activeIdx = ref(0)
-const registered = ref(false)
-const form = reactive({ firstName: '', lastName: '', email: '', role: '', calendarInvite: false })
 
-function resetForm() {
-  registered.value = false
-  form.firstName = ''
-  form.lastName = ''
-  form.email = ''
-  form.role = ''
-  form.calendarInvite = false
-}
-
-function handleRegister() {
-  registered.value = true
-}
+// Same protocol guard as partner links: editors paste URLs by hand.
+const registerUrl = computed(() => {
+  const u = String(events[activeIdx.value]?.registerUrl || '').trim()
+  if (!u) return ''
+  return /^https?:\/\//i.test(u) ? u : `https://${u}`
+})
 </script>
 
 <style scoped>
-.intro-bg { padding: 88px 0; }
-/* The body sits in the .sec-head text column, so it lines up under the heading
-   whether or not a heading has been set. */
-.intro-bg .sec-head { margin-bottom: 0; }
-.intro-body { max-width: 68ch; }
-.intro-body p {
-  font-size: 17px;
-  line-height: 1.65;
-  color: var(--muted);
-  margin: 0 0 20px;
-  text-wrap: pretty;
-}
-.intro-body p:last-child { margin-bottom: 0; }
-
 .events-bg { background: var(--primary); color: #fff; padding: 96px 0; }
 .events-layout {
   display: grid;
@@ -355,20 +292,9 @@ function handleRegister() {
   margin: 0 0 8px;
 }
 .zoom-when { font-size: 14px; color: var(--muted); margin-bottom: 24px; }
-.zoom-form { display: flex; flex-direction: column; gap: 12px; }
-.zoom-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-.check {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  font-size: 13px;
-  color: var(--muted);
-  margin-top: 6px;
-  line-height: 1.4;
-  cursor: pointer;
-}
-.check input { margin-top: 2px; accent-color: var(--primary); }
 .zoom-submit {
+  width: 100%;
+  text-decoration: none;
   background: var(--primary);
   color: #fff;
   padding: 14px;
@@ -386,21 +312,21 @@ function handleRegister() {
   font-family: var(--sans);
 }
 .zoom-submit:hover { background: var(--primary-deep); }
-.zoom-success {
+.zoom-note { font-size: 13px; color: var(--muted); line-height: 1.4; margin: 12px 0 0; }
+.zoom-soon {
   background: rgba(30,1,119,0.04);
-  border: 1px solid var(--primary);
+  border: 1px dashed var(--primary);
   border-radius: 4px;
   padding: 24px;
   text-align: center;
 }
-.success-check { font-size: 32px; line-height: 1; }
-.zoom-success h4 {
+.zoom-soon h4 {
   font-family: var(--serif);
   font-size: 22px;
-  margin: 12px 0 6px;
+  margin: 0 0 6px;
   font-weight: 500;
 }
-.zoom-success p { font-size: 14px; color: var(--muted); margin: 0; }
+.zoom-soon p { font-size: 14px; color: var(--muted); margin: 0; line-height: 1.5; }
 
 .past-bg { background: var(--bg); }
 .past-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }

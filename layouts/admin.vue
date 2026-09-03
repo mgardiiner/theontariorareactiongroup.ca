@@ -121,7 +121,7 @@ const sheetBody = computed(() => {
   if (publishing.value) return 'You can close this and carry on — it keeps going in the background.'
   return pendingCount.value === 0
     ? "Everything you've done is already live. Make a change and it'll show up here."
-    : "These will appear on theontariorareactiongroup.ca in about two minutes. If something's wrong you can undo any of them first."
+    : "These will appear on ontariorare.ca in about two minutes — if you don't see them, refresh the page. If something's wrong you can undo any of them first."
 })
 
 // Once a new change lands, we're no longer in the "just published" state.
