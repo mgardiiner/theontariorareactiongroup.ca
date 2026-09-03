@@ -27,6 +27,57 @@ interface DraftState {
 }
 
 const clone = (v: any) => (v == null ? null : JSON.parse(JSON.stringify(v)))
+const sameJson = (a: unknown, b: unknown) => JSON.stringify(a) === JSON.stringify(b)
+
+/** Stable identity for a list item, if it has one. */
+function itemId(item: any): string | null {
+  if (!item || typeof item !== 'object' || Array.isArray(item)) return null
+  for (const k of ['id', 'slug', 'url', 'name', 'title']) {
+    const v = item[k]
+    if (typeof v === 'string' || typeof v === 'number') return `${k}:${v}`
+  }
+  return null
+}
+
+/**
+ * Three-way merge of a list of identifiable items. Starts from the latest published list, then
+ * applies only what the editor did relative to their starting point: edits to an item, new items,
+ * and deletions. Returns null when the lists aren't all made of identifiable items.
+ * `clashed` is true when the editor and someone else changed the same item.
+ */
+function mergeItemList(
+  base: any,
+  draft: any,
+  remote: any,
+): { data: any[]; clashed: boolean } | null {
+  if (![base, draft, remote].every(Array.isArray)) return null
+  const all = [...base, ...draft, ...remote]
+  if (!all.length || all.some((x) => itemId(x) == null)) return null
+  const byId = (list: any[]) => new Map<string, any>(list.map((x) => [itemId(x) as string, x]))
+  const b = byId(base)
+  const d = byId(draft)
+  const r = byId(remote)
+
+  let clashed = false
+  const result: any[] = []
+  for (const item of remote) {
+    const id = itemId(item) as string
+    const inBase = b.get(id)
+    const inDraft = d.get(id)
+    if (inBase !== undefined && inDraft === undefined) continue // editor deleted it
+    if (inDraft !== undefined && !sameJson(inBase, inDraft)) {
+      if (inBase !== undefined && !sameJson(inBase, item)) clashed = true
+      result.push(inDraft) // editor edited it (their version wins)
+    } else {
+      result.push(item)
+    }
+  }
+  for (const item of draft) {
+    const id = itemId(item) as string
+    if (!b.has(id) && !r.has(id)) result.push(item) // editor added it
+  }
+  return { data: result, clashed }
+}
 
 export function useDrafts() {
   const { token } = useAdminAuth()
@@ -177,8 +228,20 @@ export function useDrafts() {
         const keys = new Set([...Object.keys(base), ...Object.keys(snapshot ?? {})])
         for (const key of keys) {
           if (same(base[key], snapshot?.[key])) continue
-          merged[key] = snapshot[key]
-          if (!same(base[key], remote[key])) sections.push(key)
+          if (same(base[key], remote[key])) {
+            merged[key] = snapshot[key]
+            continue
+          }
+          // Both sides changed this section. For lists of items with a stable id (stories, events,
+          // partners, coverage…) merge item by item so a stale draft can't wipe items added elsewhere.
+          const itemMerge = mergeItemList(base[key], snapshot[key], remote[key])
+          if (itemMerge) {
+            merged[key] = itemMerge.data
+            if (itemMerge.clashed) sections.push(key)
+          } else {
+            merged[key] = snapshot[key]
+            sections.push(key)
+          }
         }
         return { data: merged, sections }
       }
