@@ -1,0 +1,1 @@
+import{p as a,q as s,c as n,s as c,o as r}from"./BnZnIMqA.js";const u={__name:"logout",async setup(_){let e,o;const t=a("preview");return t.value=null,[e,o]=s(()=>c("/coming-soon")),await e,o(),(i,p)=>(r(),n("div"))}};export{u as default};
