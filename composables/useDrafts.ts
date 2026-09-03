@@ -134,11 +134,59 @@ export function useDrafts() {
     clearAll()
   }
 
+  /**
+   * Resolve a publish conflict without losing local edits: reload each edited file from GitHub,
+   * then layer the editor's changes on top, section by section (top-level JSON keys).
+   * A section the editor didn't touch takes the latest published version; a section they did
+   * touch keeps their version. Returns the sections where both sides changed, so the UI can warn.
+   */
+  async function rebaseOnLatest(): Promise<{ file: string; sections: string[] }[]> {
+    if (!token.value) throw new Error('Not signed in.')
+    const same = (a: any, b: any) => JSON.stringify(a) === JSON.stringify(b)
+    const overlaps: { file: string; sections: string[] }[] = []
+    const changedFiles = [...new Set(state.value.pending.map((p) => p.file))]
+
+    for (const file of changedFiles) {
+      const draft = state.value.files[file]
+      if (!draft) continue
+      const { data: remote, sha } = await loadJsonFile<any>(token.value, file)
+      // The snapshot taken before the editor's first change to this file = what they started from.
+      const base = state.value.pending.find((p) => p.file === file)?.before ?? null
+
+      let merged: any = draft.data
+      const sections: string[] = []
+      if (base && remote && typeof remote === 'object' && !Array.isArray(remote)) {
+        merged = { ...remote }
+        const keys = new Set([...Object.keys(base), ...Object.keys(draft.data ?? {})])
+        for (const key of keys) {
+          const editorChanged = !same(base[key], draft.data?.[key])
+          if (!editorChanged) continue
+          merged[key] = draft.data[key]
+          if (!same(base[key], remote[key])) sections.push(key)
+        }
+      }
+      state.value.files[file] = { data: merged, baseSha: sha, dirty: true }
+      if (sections.length) overlaps.push({ file, sections })
+    }
+    persist()
+    return overlaps
+  }
+
   function clearAll() {
     state.value.files = {}
     state.value.pending = []
     if (import.meta.client) localStorage.removeItem(STORAGE)
   }
 
-  return { getData, stageChange, undo, pending, pendingCount, hasChanges, publishAll, clearAll }
+  return {
+    getData,
+    stageChange,
+    undo,
+    pending,
+    pendingCount,
+    hasChanges,
+    publishAll,
+    rebaseOnLatest,
+    clearAll,
+  }
 }

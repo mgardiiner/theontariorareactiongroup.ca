@@ -61,10 +61,20 @@
         </div>
 
         <p v-if="publishError" class="sheet-error">{{ publishError }}</p>
+        <p v-if="publishNotice" class="sheet-notice">{{ publishNotice }}</p>
 
         <div class="sheet-foot">
           <button type="button" class="sheet-close" @click="closePublish">{{ closeLabel }}</button>
-          <button v-if="canPublish" type="button" class="sheet-confirm" @click="doPublish">
+          <button
+            v-if="conflict"
+            type="button"
+            class="sheet-confirm"
+            :disabled="rebasing"
+            @click="doRebase"
+          >
+            {{ rebasing ? 'Getting the latest…' : 'Get the latest and keep my changes' }}
+          </button>
+          <button v-else-if="canPublish" type="button" class="sheet-confirm" @click="doPublish">
             Yes, publish it
           </button>
         </div>
@@ -81,13 +91,16 @@
 
 <script setup>
 const router = useRouter()
-const { pending, pendingCount, publishAll, undo } = useDrafts()
+const { pending, pendingCount, publishAll, rebaseOnLatest, undo } = useDrafts()
 const { screen, toast, showToast, hideToast, editorName, editorInitials } = useAdminUi()
 const { logout } = useAdminAuth()
 
 const publishOpen = ref(false)
 const publishing = ref(false)
 const publishError = ref('')
+const publishNotice = ref('')
+const conflict = ref(false)
+const rebasing = ref(false)
 const publishedJustNow = ref(false)
 const sheetEl = ref(null)
 
@@ -159,6 +172,8 @@ function previewSite() {
 }
 function openPublish() {
   publishError.value = ''
+  publishNotice.value = ''
+  conflict.value = false
   publishOpen.value = true
   nextTick(() => sheetEl.value?.focus())
 }
@@ -178,6 +193,7 @@ function onToastUndo() {
 async function doPublish() {
   publishing.value = true
   publishError.value = ''
+  publishNotice.value = ''
   try {
     await publishAll()
     publishing.value = false
@@ -187,11 +203,33 @@ async function doPublish() {
   } catch (e) {
     publishing.value = false
     if (e && e.code === 'conflict') {
+      conflict.value = true
       publishError.value =
-        "Someone else changed the website while you were working. Your changes are safe — reload to get the latest version and we'll re-apply them."
+        'Someone else changed the website while you were working. Your changes are safe — click below to pick up the latest version with your changes kept on top, then publish again.'
     } else {
       publishError.value = (e && e.message) || 'Something went wrong publishing. Please try again.'
     }
+  }
+}
+
+async function doRebase() {
+  rebasing.value = true
+  publishError.value = ''
+  try {
+    const overlaps = await rebaseOnLatest()
+    conflict.value = false
+    if (overlaps.length) {
+      const where = overlaps
+        .map((o) => `${o.file.replace(/^content\//, '').replace(/\.json$/, '')} (${o.sections.join(', ')})`)
+        .join('; ')
+      publishNotice.value = `Updated to the latest version. Heads up: someone else also edited ${where}. Your version of those parts will replace theirs when you publish — undo them below if you'd rather keep what's live.`
+    } else {
+      publishNotice.value = 'Updated to the latest version with your changes kept on top. You can publish now.'
+    }
+  } catch (e) {
+    publishError.value = (e && e.message) || 'Could not fetch the latest version. Please try again.'
+  } finally {
+    rebasing.value = false
   }
 }
 
@@ -481,6 +519,20 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKey))
   font-size: 14.5px;
   color: #8a1b30;
   line-height: 1.55;
+}
+.sheet-notice {
+  margin: 0;
+  background: #eef6f0;
+  border: 1px solid #c3dccb;
+  border-radius: 10px;
+  padding: 14px 18px;
+  font-size: 14.5px;
+  color: #1f5a33;
+  line-height: 1.55;
+}
+.sheet-confirm:disabled {
+  opacity: 0.6;
+  cursor: default;
 }
 .sheet-foot {
   display: flex;
