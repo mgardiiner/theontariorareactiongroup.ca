@@ -194,6 +194,18 @@ export const sections: Section[] = [
               { key: 'location', label: 'Location', type: 'text' },
             ],
           },
+          {
+            key: 'socials',
+            label: 'Social media links',
+            type: 'list',
+            itemLabelKey: 'label',
+            addLabel: 'Add a social link',
+            help: 'Shown as icons under the Contact column. Name it Facebook, Instagram, or LinkedIn to get the matching icon; any other name shows as text.',
+            fields: [
+              { key: 'label', label: 'Network name', type: 'text' },
+              { key: 'href', label: 'Profile or group URL', type: 'text' },
+            ],
+          },
           { key: 'copyright', label: 'Copyright line', type: 'text' },
           { key: 'credit', label: 'Credit line', type: 'text' },
         ],
