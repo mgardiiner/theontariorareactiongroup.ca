@@ -1055,40 +1055,6 @@ export const sections: Section[] = [
       },
     ],
   },
-  {
-    key: 'coming-soon',
-    label: 'Coming-soon page',
-    file: 'content/coming-soon.json',
-    description: 'The standalone launch page: headline, signup form, and the Mailchimp connection.',
-    path: '/coming-soon',
-    fields: [
-      seoField,
-      { key: 'orgName', label: 'Organization name', type: 'text' },
-      {
-        key: 'headline',
-        label: 'Headline',
-        type: 'html',
-        help: 'Use <em>…</em> for the italic accent and <br> for a line break.',
-      },
-      { key: 'lede', label: 'Intro paragraph', type: 'textarea' },
-      { key: 'placeholder', label: 'Email field placeholder', type: 'text' },
-      { key: 'submitLabel', label: 'Signup button label', type: 'text' },
-      { key: 'successText', label: 'Success message', type: 'text' },
-      { key: 'contactEmail', label: 'Contact email', type: 'text' },
-      {
-        key: 'mailchimp',
-        label: 'Mailchimp connection',
-        type: 'object',
-        advanced: true,
-        help: 'Connects the signup form to Mailchimp. Editing these wrong will stop signups from being recorded.',
-        fields: [
-          { key: 'url', label: 'Subscribe endpoint URL', type: 'text' },
-          { key: 'u', label: 'Audience "u" value', type: 'text' },
-          { key: 'id', label: 'List ID', type: 'text' },
-        ],
-      },
-    ],
-  },
 ]
 
 export function getSection(key: string): Section | undefined {

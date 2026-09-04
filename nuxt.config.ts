@@ -5,7 +5,6 @@ export default defineNuxtConfig({
   nitro: { preset: process.env.NODE_ENV !== 'development' ? 'github-pages' : undefined },
   runtimeConfig: {
     public: {
-      previewPassword: process.env.PREVIEW_PASSWORD ?? '',
       // Dev-only convenience: unlocks the admin vault automatically on localhost.
       // Baked in as '' for any non-development build, so it never ships.
       devAdminPassword:

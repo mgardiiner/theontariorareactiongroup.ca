@@ -188,10 +188,7 @@ function handleSignOut() {
   router.push('/admin/login')
 }
 function previewSite() {
-  // The public site is gated by the coming-soon middleware; /preview is the page
-  // that sets the cookie unlocking it. Skip that step if this browser already has it.
-  const unlocked = useCookie('preview').value
-  const win = window.open(unlocked ? '/' : '/preview', 'orag-preview')
+  const win = window.open('/', 'orag-preview')
   if (!win) {
     showToast('Your browser blocked the preview tab. Allow pop-ups for this page, then try again.')
     return
