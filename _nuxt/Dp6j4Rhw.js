@@ -1,0 +1,1 @@
+import{u as e}from"./BFTtgFDL.js";import{_ as s,B as n,y as a,c,o as u}from"./Dpp1kJDc.js";const r={class:"logout-note"},_={__name:"logout",setup(l){const{logout:o}=e(),t=n();return a(()=>{o(),t.replace("/admin/login")}),(i,p)=>(u(),c("div",r,"Signing you out…"))}},g=s(_,[["__scopeId","data-v-99c45a62"]]);export{g as default};
