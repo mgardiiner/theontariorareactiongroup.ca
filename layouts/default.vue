@@ -6,11 +6,18 @@ const menuOpen = ref(false)
 const toggleEl = ref(null)
 const panelEl = ref(null)
 
+// Per-page canonical / og:url. The config-level og:url only covers the homepage.
+const canonical = computed(
+  () => `https://ontariorare.ca${route.path === '/' ? '' : route.path.replace(/\/$/, '')}`
+)
+
 useHead({
   bodyAttrs: {
     style: 'background:#FBF7EE;',
     class: computed(() => (menuOpen.value ? 'nav-open' : ''))
-  }
+  },
+  link: [{ rel: 'canonical', href: canonical }],
+  meta: [{ property: 'og:url', content: canonical }]
 })
 
 function closeMenu () {

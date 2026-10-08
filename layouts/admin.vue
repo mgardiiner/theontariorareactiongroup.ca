@@ -115,6 +115,9 @@
 <script setup>
 import { pageNameFor } from '~/admin/diff'
 
+// The vault is never a search result.
+useHead({ meta: [{ name: 'robots', content: 'noindex, nofollow' }] })
+
 const router = useRouter()
 const { pending, pendingCount, publishAll, rebaseOnLatest, changeDetails, undo } = useDrafts()
 

@@ -1,8 +1,34 @@
+import { sections } from './admin/schema'
+
+// The admin vault is a client-rendered SPA, but GitHub Pages can only serve
+// files that exist, so emit a shell for every admin route the editor uses.
+const adminRoutes = [
+  '/admin',
+  '/admin/login',
+  '/admin/logout',
+  '/admin/settings',
+  ...sections.map((s) => `/admin/${s.key}`),
+]
+
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   devtools: { enabled: false },
-  ssr: process.env.NODE_ENV !== 'development' ? false : undefined,
-  nitro: { preset: process.env.NODE_ENV !== 'development' ? 'github-pages' : undefined },
+  // Prerender the public site to real HTML. Crawlers (and anyone whose JS fails
+  // to load) get the full page, titles and meta instead of an empty app shell.
+  ssr: true,
+  nitro: {
+    preset: process.env.NODE_ENV !== 'development' ? 'github-pages' : undefined,
+    prerender: {
+      crawlLinks: true,
+      routes: ['/', '/404.html', '/sitemap.xml', ...adminRoutes],
+      failOnError: true,
+    },
+  },
+  routeRules: {
+    // The admin vault is browser-only (localStorage auth, contenteditable
+    // editors), so it ships as a shell and boots on the client.
+    '/admin/**': { ssr: false, index: false },
+  },
   runtimeConfig: {
     public: {
       // Dev-only convenience: unlocks the admin vault automatically on localhost.
