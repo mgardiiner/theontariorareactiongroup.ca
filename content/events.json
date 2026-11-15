@@ -17,10 +17,21 @@
       "time": "7:00–8:00 PM ET",
       "tag": "ZOOM",
       "date": "Sep 16, 2026",
-      "featured": true,
+      "featured": false,
       "desc": "An open, one-hour Zoom call with co-founders Beth Vanstone and Alice Williams: what OntarioRare has been working on since the Queen's Park breakfast, what's coming next, and time for your questions. Patients, caregivers, clinicians and partner organizations are all welcome.",
       "image": "",
       "registerUrl": "https://us06web.zoom.us/meeting/register/JlPrUamMSZqKNXAikCKOaw"
+    },
+    {
+      "day": "26",
+      "month": "Feb",
+      "title": "Rare Disease Day Town Hall",
+      "time": "",
+      "tag": "ZOOM",
+      "date": "Feb 26 12:00pm - 2:00pm",
+      "featured": true,
+      "desc": "In an effort to continue to raise awareness to policy makers in Ontario we are holding a virtual Town Hall event. We will have MPP's patients, caregivers and representatives from Ontario Ministry of Health gathered to share and learn how we can collaborate to create an Ontario that cares about Rare.\n\nStay tuned as we bring this event together!",
+      "registerUrl": ""
     }
   ],
   "pastHead": {
