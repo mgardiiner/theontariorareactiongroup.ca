@@ -707,6 +707,16 @@ export const sections: Section[] = [
               { key: 'body', label: 'Body text', type: 'textarea' },
             ],
           },
+          {
+            key: 'ended',
+            label: 'Event has finished',
+            type: 'object',
+            help: 'Shown in place of the button once the event date has passed. The link is hidden automatically — you don\'t have to remove it by hand.',
+            fields: [
+              { key: 'title', label: 'Title', type: 'text' },
+              { key: 'body', label: 'Body text', type: 'textarea' },
+            ],
+          },
         ],
       },
     ],

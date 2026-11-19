@@ -16,11 +16,11 @@
       "title": "OntarioRare update call",
       "time": "7:00–8:00 PM ET",
       "tag": "ZOOM",
-      "date": "Dec 9, 2026                                                                       ",
+      "date": "Dec 9, 2026",
       "featured": true,
       "desc": "An open, one-hour Zoom call with co-founders Beth Vanstone and Alice Williams: what OntarioRare has been working on since the Queen's Park breakfast. It has been a very busy first year and we are so proud of the momentum we have. You may have seen in our recent newsletter the 2027 events we have planned to support the Ontario Rare Disease Community. We will be holding a zoom call to chat about whats been done and what we are working on. Would love to have as many of you join as possible. Your voices matter, that's why we are here to ensure our messages reach the ears of those that can make the changes our community deserve. ",
       "image": "",
-      "registerUrl": "https://us06web.zoom.us/j/86500110109?pwd=braMNQ4VCXlqORl4zk6EZwzQKmCCeB."
+      "registerUrl": ""
     },
     {
       "day": "26",
@@ -77,6 +77,10 @@
     "comingSoon": {
       "title": "Registration opens soon.",
       "body": "We're finalizing the details with our host. Check back shortly — the registration link will appear here as soon as it's live."
+    },
+    "ended": {
+      "title": "This event has ended.",
+      "body": "Thank you to everyone who joined us. Recordings and slides from recent sessions are below, and our next event will be posted here soon."
     }
   }
 }

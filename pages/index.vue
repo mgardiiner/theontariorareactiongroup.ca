@@ -99,13 +99,14 @@
             <h2 class="feat-title">{{ featured.title }}</h2>
             <p class="feat-meta" v-if="content.featuredEvent.meta">{{ content.featuredEvent.meta }}</p>
             <div class="hero-actions">
-              <!-- Goes straight to Zoom once the event has a registration link; otherwise to the events page. -->
+              <!-- Goes straight to Zoom once the event has a registration link; otherwise
+                   (no link yet, or the event has already happened) to the events page. -->
               <NuxtLink
-                :to="featured.registerUrl || content.featuredEvent.primaryCta.href"
-                :target="featured.registerUrl ? '_blank' : undefined"
+                :to="featuredLink || content.featuredEvent.primaryCta.href"
+                :target="featuredLink ? '_blank' : undefined"
                 class="btn btn-primary"
               >
-                {{ featured.registerUrl ? content.featuredEvent.primaryCta.label : 'Event details' }}
+                {{ featuredLink ? content.featuredEvent.primaryCta.label : 'Event details' }}
                 <svg class="btn-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
               </NuxtLink>
               <NuxtLink :to="content.featuredEvent.secondaryCta.href" class="btn btn-ghost">{{ content.featuredEvent.secondaryCta.label }}</NuxtLink>
@@ -156,6 +157,7 @@ import partners from '~/content/partners.json'
 import media from '~/content/media.json'
 import advocacy from '~/content/advocacy.json'
 import challenges from '~/content/challenges.json'
+import { isEventOver, todayYmd } from '~/utils/eventDate'
 
 definePageMeta({ layout: 'default' })
 
@@ -173,6 +175,17 @@ const countFor = (item) => liveCounts[item.href] ?? item.count ?? ''
 
 // Featured upcoming event is sourced from events.json (flagged with "featured": true)
 const featured = events.upcoming.find(e => e.featured)
+
+// Once the event day has passed the CTA stops linking to the meeting and falls
+// back to the events page. Worked out in the browser, not at build time: the
+// site is prerendered, so a build-time date would freeze at the last deploy.
+const today = ref('')
+onMounted(() => {
+  today.value = todayYmd()
+})
+const featuredLink = computed(() =>
+  featured?.registerUrl && !isEventOver(featured, today.value) ? featured.registerUrl : '',
+)
 
 // "September 2026" from the event's own date, so the home card can't drift out
 // of sync with events.json. Falls back to the hand-typed label if the date

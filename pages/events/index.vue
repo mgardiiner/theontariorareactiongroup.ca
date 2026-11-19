@@ -65,14 +65,21 @@
           <div class="zoom-card" aria-label="Event registration form">
             <div class="zoom-eyebrow">
               <span class="zoom-dot" aria-hidden="true"></span>
-              {{ content.registration.eyebrowPrefix }} {{ events[activeIdx].tag === 'ZOOM' ? content.registration.zoomLabel : content.registration.inPersonLabel }}
+              <template v-if="!activeIsOver">{{ content.registration.eyebrowPrefix }} </template>{{ events[activeIdx].tag === 'ZOOM' ? content.registration.zoomLabel : content.registration.inPersonLabel }}
             </div>
             <h3 class="zoom-title">{{ events[activeIdx].title }}</h3>
             <div class="zoom-when">{{ events[activeIdx].date }} · {{ events[activeIdx].time }}</div>
 
             <!-- Registration lives on Zoom (or wherever the host set it up); we just link out.
                  Until the host shares the link, say so instead of collecting details we can't act on. -->
-            <template v-if="registerUrl">
+            <!-- Once the day is past, the link goes away no matter what is saved
+                 against the event, so nobody is sent to a meeting that is over. -->
+            <div class="zoom-soon zoom-ended" v-if="activeIsOver" role="status">
+              <h4>{{ endedCopy.title }}</h4>
+              <p>{{ endedCopy.body }}</p>
+            </div>
+
+            <template v-else-if="registerUrl">
               <a :href="registerUrl" class="zoom-submit" target="_blank" rel="noopener">
                 {{ content.registration.buttonLabel }}
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
@@ -123,6 +130,7 @@
 
 <script setup>
 import content from '~/content/events.json'
+import { isEventOver, todayYmd } from '~/utils/eventDate'
 
 definePageMeta({ layout: 'default' })
 
@@ -143,6 +151,25 @@ const registerUrl = computed(() => {
   if (!u) return ''
   return /^https?:\/\//i.test(u) ? u : `https://${u}`
 })
+
+// Finished events keep their place in the list, but stop handing out a link.
+//
+// This is deliberately a browser-only check. The site is prerendered and only
+// rebuilds when someone deploys, so a date worked out at build time would be
+// stale the moment an event passed. Staying empty until mount also keeps the
+// rendered markup identical to the prerendered HTML, so hydration is clean.
+const today = ref('')
+onMounted(() => {
+  today.value = todayYmd()
+})
+
+const activeIsOver = computed(() => isEventOver(events[activeIdx.value], today.value))
+const endedCopy = computed(() => ({
+  title: content.registration.ended?.title || 'This event has ended.',
+  body:
+    content.registration.ended?.body ||
+    'Thanks to everyone who joined us. Recordings and slides from recent sessions are below, and our next event will be posted here soon.',
+}))
 </script>
 
 <style scoped>
@@ -327,6 +354,8 @@ const registerUrl = computed(() => {
   font-weight: 500;
 }
 .zoom-soon p { font-size: 14px; color: var(--muted); margin: 0; line-height: 1.5; }
+/* A finished event reads as settled rather than as something still to come. */
+.zoom-ended { opacity: 0.9; }
 
 .past-bg { background: var(--bg); }
 .past-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
