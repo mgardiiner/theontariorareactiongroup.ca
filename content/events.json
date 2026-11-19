@@ -11,14 +11,14 @@
   "upcomingLabel": "Upcoming events",
   "upcoming": [
     {
-      "day": "16",
-      "month": "Sep",
+      "day": "09",
+      "month": "Dec",
       "title": "OntarioRare update call",
       "time": "7:00–8:00 PM ET",
       "tag": "ZOOM",
-      "date": "Sep 16, 2026",
-      "featured": false,
-      "desc": "An open, one-hour Zoom call with co-founders Beth Vanstone and Alice Williams: what OntarioRare has been working on since the Queen's Park breakfast, what's coming next, and time for your questions. Patients, caregivers, clinicians and partner organizations are all welcome.",
+      "date": "Dec 9, 2026                                                                       ",
+      "featured": true,
+      "desc": "An open, one-hour Zoom call with co-founders Beth Vanstone and Alice Williams: what OntarioRare has been working on since the Queen's Park breakfast. It has been a very busy first year and we are so proud of the momentum we have. You may have seen in our recent newsletter the 2027 events we have planned to support the Ontario Rare Disease Community. We will be holding a zoom call to chat about whats been done and what we are working on. Would love to have as many of you join as possible. Your voices matter, that's why we are here to ensure our messages reach the ears of those that can make the changes our community deserve. ",
       "image": "",
       "registerUrl": "https://us06web.zoom.us/meeting/register/JlPrUamMSZqKNXAikCKOaw"
     },
@@ -29,7 +29,7 @@
       "time": "",
       "tag": "ZOOM",
       "date": "Feb 26 12:00pm - 2:00pm",
-      "featured": true,
+      "featured": false,
       "desc": "In an effort to continue to raise awareness to policy makers in Ontario we are holding a virtual Town Hall event. We will have MPP's patients, caregivers and representatives from Ontario Ministry of Health gathered to share and learn how we can collaborate to create an Ontario that cares about Rare.\n\nStay tuned as we bring this event together!",
       "registerUrl": ""
     }
