@@ -91,6 +91,11 @@
         </form>
       </template>
 
+      <!-- npm run dev only: try the editor against this checkout's files (modules/admin-local.ts). -->
+      <button v-if="isDev" type="button" class="signin-local" :disabled="busy" @click="useLocalFiles">
+        Edit the files on this computer instead
+      </button>
+
       <p class="signin-foot">
         Nothing you do here is public until you press Publish. You can't break the website from
         this screen.
@@ -108,7 +113,7 @@ import {
   decryptToken,
   suggestPassphrase,
 } from '~/utils/adminVault'
-import { commitFiles } from '~/utils/adminGithub'
+import { commitFiles, LOCAL_KEY } from '~/utils/adminGithub'
 
 definePageMeta({ layout: false })
 
@@ -122,11 +127,20 @@ const tokenInput = ref('')
 const busy = ref(false)
 const error = ref('')
 
+const route = useRoute()
+const isDev = import.meta.dev
+
 onMounted(async () => {
   mode.value = isConfigured() ? 'password' : 'setup'
-  // On localhost, skip the form entirely if .env can unlock the vault.
-  if (mode.value === 'password' && (await devAutoLogin())) router.push('/admin')
+  // On localhost, skip the form entirely if .env can unlock the vault, unless you just signed
+  // out (so the local-files option below can be picked).
+  if (mode.value === 'password' && !route.query.out && (await devAutoLogin())) router.push('/admin')
 })
+
+async function useLocalFiles() {
+  await login(LOCAL_KEY)
+  router.push('/admin')
+}
 
 function suggest() {
   const p = suggestPassphrase()
@@ -189,6 +203,21 @@ function messageFor(e) {
 </script>
 
 <style scoped>
+.signin-local {
+  margin-top: 14px;
+  width: 100%;
+  padding: 11px 16px;
+  border: 1px dashed #b9aee0;
+  border-radius: 10px;
+  background: none;
+  font: inherit;
+  font-size: 14px;
+  color: var(--primary);
+  cursor: pointer;
+}
+.signin-local:hover {
+  background: #f4f0ff;
+}
 .signin {
   min-height: 100vh;
   display: flex;

@@ -12,7 +12,7 @@ const router = useRouter()
 
 onMounted(() => {
   logout()
-  router.replace('/admin/login')
+  router.replace('/admin/login?out=1')
 })
 </script>
 

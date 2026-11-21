@@ -31,6 +31,9 @@ export interface Field {
   itemType?: 'text' | 'textarea' // for 'list' of plain strings (no per-item fields)
   itemLabelKey?: string // for 'list' of objects: which sub-field to show as each row's title
   addLabel?: string // for 'list'
+  // The live page shows it with no fallback, so it can't be published empty (see missingRequired).
+  // On a 'list': it needs at least one item.
+  required?: boolean
 }
 
 export interface Section {
@@ -94,6 +97,84 @@ export function normalize(data: unknown, fields: Field[]): Record<string, any> {
   return out
 }
 
+// ---- required fields: what can't go live empty ----
+
+/**
+ * Rich text as the page shows it: tags gone, character codes decoded once by the browser's own HTML
+ * rules (so `&#160;` is a space but `&#38;nbsp;` is the visible text "&nbsp;"). The editor always
+ * runs in a browser; outside one (the content check script) it falls back to stripping tags and
+ * decoding numeric codes and `&nbsp;` in a single pass.
+ */
+function renderedText(html: string): string {
+  if (typeof DOMParser !== 'undefined') {
+    return new DOMParser().parseFromString(html, 'text/html').body.textContent ?? ''
+  }
+  return html.replace(/<[^>]*>/g, '').replace(/&(?:#x([0-9a-f]+)|#(\d+)|(nbsp));/gi, (m, hex, dec) => {
+    const n = hex ? parseInt(hex, 16) : dec ? Number(dec) : 0xa0
+    return n <= 0x10ffff ? String.fromCodePoint(n) : m
+  })
+}
+
+// Characters that take no space on screen (zero-width spaces and joiners, word joiner, soft hyphen,
+// direction marks, byte-order mark…). Pasted text often carries them, and a field holding only these
+// looks empty. String.trim already treats the Unicode spaces as whitespace.
+const INVISIBLE = /\p{Default_Ignorable_Code_Point}/gu
+/** Plain text with nothing a reader would see: empty, spaces, or only invisible characters. */
+export const isBlankText = (text: string) => !text.replace(INVISIBLE, '').trim()
+const visibleText = (html: string) => renderedText(html).replace(INVISIBLE, '')
+
+/**
+ * True when a required field has nothing in it. A list needs at least one item. In a list of plain
+ * words (the contact form's dropdown choices) every entry must be filled too: a blank one would be
+ * an empty choice on the site, and "+ Add" starts each entry blank.
+ */
+export function isBlank(field: Field, value: unknown): boolean {
+  if (field.type === 'list') {
+    return !Array.isArray(value) || !value.length || value.some((v) => typeof v === 'string' && isBlankText(v))
+  }
+  if (value == null) return true
+  if (typeof value === 'number') return Number.isNaN(value)
+  if (typeof value !== 'string') return false
+  return isBlankText(field.type === 'html' ? renderedText(value) : value)
+}
+
+export interface Missing {
+  path: string // where in the file, e.g. "upcoming.2.date"
+  where: string[] // how the editor labels it, e.g. ["Upcoming events", "Caregiver Circle", "Date"]
+}
+
+/** Every required field left blank in `data`, list items and nested groups included. */
+export function missingRequired(data: any, fields: Field[], where: string[] = [], path = ''): Missing[] {
+  const out: Missing[] = []
+  for (const f of fields) {
+    if (f.type === 'heading') continue
+    const value = data?.[f.key]
+    const at = path ? `${path}.${f.key}` : f.key
+    if (f.required && isBlank(f, value)) out.push({ path: at, where: [...where, f.label] })
+    if (f.type === 'object') {
+      out.push(...missingRequired(value, f.fields || [], [...where, f.label], at))
+    } else if (f.type === 'list' && f.fields?.length && Array.isArray(value)) {
+      value.forEach((item, i) => {
+        const title = f.itemLabelKey ? visibleText(String(item?.[f.itemLabelKey] ?? '')).trim() : ''
+        out.push(...missingRequired(item, f.fields || [], [...where, f.label, title || `Item ${i + 1}`], `${at}.${i}`))
+      })
+    }
+  }
+  return out
+}
+
+/** Blank required fields in these content files ({ file: data }), by the section that edits them. */
+export function missingInFiles(files: Record<string, any>): { section: Section; missing: Missing[] }[] {
+  const out: { section: Section; missing: Missing[] }[] = []
+  for (const [file, data] of Object.entries(files)) {
+    for (const section of sections.filter((s) => s.file === file)) {
+      const missing = missingRequired(data, section.fields)
+      if (missing.length) out.push({ section, missing })
+    }
+  }
+  return out
+}
+
 const seoField: Field = {
   key: 'seo',
   label: 'Search / social (SEO)',
@@ -101,7 +182,7 @@ const seoField: Field = {
   advanced: true,
   help: 'What Google and social previews show for this page. The page itself looks the same either way.',
   fields: [
-    { key: 'title', label: 'Browser tab title', type: 'text' },
+    { key: 'title', label: 'Browser tab title', type: 'text', required: true },
     { key: 'description', label: 'Search-result description', type: 'textarea' },
   ],
 }
@@ -113,11 +194,17 @@ function ctaField(key: string, label: string): Field {
     label,
     type: 'object',
     fields: [
-      { key: 'label', label: 'Button label', type: 'text' },
-      { key: 'href', label: 'Link (a /path or full URL)', type: 'text' },
+      { key: 'label', label: 'Button label', type: 'text', required: true },
+      { key: 'href', label: 'Link (a /path or full URL)', type: 'text', required: true },
     ],
   }
 }
+
+/**
+ * Where "Choose what shows" keeps each photo's focus point (see composables/usePhotoFocus.ts). A
+ * content file with no section of its own: its changes are made from the photo fields.
+ */
+export const FOCUS_FILE = 'content/focus.json'
 
 export const sections: Section[] = [
   {
@@ -134,8 +221,8 @@ export const sections: Section[] = [
         itemLabelKey: 'label',
         addLabel: 'Add a nav link',
         fields: [
-          { key: 'label', label: 'Link text', type: 'text' },
-          { key: 'href', label: 'Link (a /path or full URL)', type: 'text' },
+          { key: 'label', label: 'Link text', type: 'text', required: true },
+          { key: 'href', label: 'Link (a /path or full URL)', type: 'text', required: true },
         ],
       },
       ctaField('cta', 'Header button'),
@@ -159,8 +246,8 @@ export const sections: Section[] = [
                 itemLabelKey: 'label',
                 addLabel: 'Add a link',
                 fields: [
-                  { key: 'label', label: 'Link text', type: 'text' },
-                  { key: 'href', label: 'Link (a /path or full URL)', type: 'text' },
+                  { key: 'label', label: 'Link text', type: 'text', required: true },
+                  { key: 'href', label: 'Link (a /path or full URL)', type: 'text', required: true },
                 ],
               },
             ],
@@ -178,8 +265,8 @@ export const sections: Section[] = [
                 itemLabelKey: 'label',
                 addLabel: 'Add a link',
                 fields: [
-                  { key: 'label', label: 'Link text', type: 'text' },
-                  { key: 'href', label: 'Link (a /path or full URL)', type: 'text' },
+                  { key: 'label', label: 'Link text', type: 'text', required: true },
+                  { key: 'href', label: 'Link (a /path or full URL)', type: 'text', required: true },
                 ],
               },
             ],
@@ -190,7 +277,7 @@ export const sections: Section[] = [
             type: 'object',
             fields: [
               { key: 'heading', label: 'Column heading', type: 'text' },
-              { key: 'email', label: 'Contact email', type: 'text' },
+              { key: 'email', label: 'Contact email', type: 'text', required: true },
               { key: 'location', label: 'Location', type: 'text' },
             ],
           },
@@ -229,6 +316,7 @@ export const sections: Section[] = [
           { key: 'eyebrow', label: 'Eyebrow (small label above the title)', type: 'text' },
           {
             key: 'title',
+            required: true,
             label: 'Headline',
             type: 'html',
             help: 'Wrap words in <em>…</em> to give them the italic accent style.',
@@ -245,7 +333,7 @@ export const sections: Section[] = [
         itemLabelKey: 'num',
         addLabel: 'Add a stat',
         fields: [
-          { key: 'num', label: 'Big number (e.g. 2.8M)', type: 'text' },
+          { key: 'num', label: 'Big number (e.g. 2.8M)', type: 'text', required: true },
           { key: 'label', label: 'Description', type: 'textarea' },
         ],
       },
@@ -279,6 +367,7 @@ export const sections: Section[] = [
           { key: 'eyebrow', label: 'Eyebrow', type: 'text' },
           {
             key: 'title',
+            required: true,
             label: 'Title',
             type: 'html',
             help: 'Wrap words in <em>…</em> for the italic accent.',
@@ -294,7 +383,7 @@ export const sections: Section[] = [
         addLabel: 'Add a card',
         fields: [
           { key: 'tag', label: 'Category tag', type: 'text' },
-          { key: 'title', label: 'Title', type: 'text' },
+          { key: 'title', label: 'Title', type: 'text', required: true },
           { key: 'desc', label: 'Description', type: 'textarea' },
           {
             key: 'countLabel',
@@ -302,7 +391,7 @@ export const sections: Section[] = [
             type: 'text',
             help: 'The number itself is counted automatically from what\'s on the site (e.g. 8 stories).',
           },
-          { key: 'href', label: 'Link (a /path or full URL)', type: 'text' },
+          { key: 'href', label: 'Link (a /path or full URL)', type: 'text', required: true },
           {
             key: 'image',
             label: 'Card image',
@@ -349,12 +438,13 @@ export const sections: Section[] = [
         fields: [
           {
             key: 'title',
+            required: true,
             label: 'Title',
             type: 'html',
             help: 'Wrap words in <em>…</em> for the italic accent.',
           },
           { key: 'lede', label: 'Intro paragraph', type: 'textarea' },
-          { key: 'email', label: 'Contact email', type: 'text' },
+          { key: 'email', label: 'Contact email', type: 'text', required: true },
         ],
       },
       {
@@ -362,7 +452,7 @@ export const sections: Section[] = [
         label: 'Newsletter signup',
         type: 'object',
         fields: [
-          { key: 'heading', label: 'Heading', type: 'text' },
+          { key: 'heading', label: 'Heading', type: 'text', required: true },
           { key: 'body', label: 'Body text', type: 'textarea' },
           { key: 'placeholder', label: 'Email field placeholder', type: 'text' },
           { key: 'submitLabel', label: 'Subscribe button label', type: 'text' },
@@ -386,6 +476,7 @@ export const sections: Section[] = [
           { key: 'crumb', label: 'Breadcrumb label', type: 'text' },
           {
             key: 'title',
+            required: true,
             label: 'Page title',
             type: 'html',
             help: 'Wrap words in <em>…</em> for the italic accent.',
@@ -403,6 +494,7 @@ export const sections: Section[] = [
           { key: 'eyebrow', label: 'Small label above the heading', type: 'text' },
           {
             key: 'title',
+            required: true,
             label: 'Heading',
             type: 'html',
             help: 'Wrap words in <em>…</em> for the italic accent.',
@@ -422,6 +514,7 @@ export const sections: Section[] = [
         fields: [
           {
             key: 'heading',
+            required: true,
             label: 'Heading',
             type: 'html',
             help: 'Wrap words in <em>…</em> for the italic accent.',
@@ -434,8 +527,8 @@ export const sections: Section[] = [
             itemLabelKey: 'label',
             addLabel: 'Add a button',
             fields: [
-              { key: 'label', label: 'Button label', type: 'text' },
-              { key: 'href', label: 'Link (a /path or full URL)', type: 'text' },
+              { key: 'label', label: 'Button label', type: 'text', required: true },
+              { key: 'href', label: 'Link (a /path or full URL)', type: 'text', required: true },
               { key: 'style', label: 'Style', type: 'select', options: ['dark', 'outline-ink'] },
               { key: 'arrow', label: 'Show arrow →', type: 'boolean' },
             ],
@@ -461,6 +554,7 @@ export const sections: Section[] = [
           { key: 'crumb', label: 'Breadcrumb label', type: 'text' },
           {
             key: 'title',
+            required: true,
             label: 'Page title',
             type: 'html',
             help: 'Wrap words in <em>…</em> for the italic accent.',
@@ -482,6 +576,7 @@ export const sections: Section[] = [
         fields: [
           {
             key: 'title',
+            required: true,
             label: 'Title',
             type: 'html',
             help: 'Wrap words in <em>…</em> for the italic accent.',
@@ -497,7 +592,7 @@ export const sections: Section[] = [
         itemLabelKey: 'authorName',
         addLabel: 'Add a story',
         fields: [
-          { key: 'title', label: 'Headline', type: 'textarea' },
+          { key: 'title', label: 'Headline', type: 'textarea', required: true },
           { key: 'quote', label: 'Pull quote', type: 'textarea' },
           { key: 'initials', label: 'Author initials', type: 'text' },
           { key: 'authorName', label: 'Author name', type: 'text' },
@@ -518,6 +613,7 @@ export const sections: Section[] = [
           { key: '_settings', label: 'Settings', type: 'heading' },
           {
             key: 'slug',
+            required: true,
             label: 'URL slug',
             type: 'text',
             help: 'Used in the page address, e.g. pearl-cooley.',
@@ -578,6 +674,7 @@ export const sections: Section[] = [
           { key: 'crumb', label: 'Breadcrumb label', type: 'text' },
           {
             key: 'title',
+            required: true,
             label: 'Page title',
             type: 'html',
             help: 'Wrap words in <em>…</em> for the italic accent.',
@@ -593,7 +690,7 @@ export const sections: Section[] = [
         itemLabelKey: 'title',
         addLabel: 'Add an event',
         fields: [
-          { key: 'title', label: 'Title', type: 'text' },
+          { key: 'title', label: 'Title', type: 'text', required: true },
           { key: 'desc', label: 'Short description', type: 'textarea' },
           {
             key: 'image',
@@ -605,6 +702,7 @@ export const sections: Section[] = [
           { key: 'tag', label: 'Format', type: 'select', options: ['ZOOM', 'IRL'] },
           {
             key: 'date',
+            required: true,
             label: 'Date (e.g. May 21, 2026)',
             type: 'text',
             help: 'The calendar badge on the site is worked out from this automatically.',
@@ -627,6 +725,7 @@ export const sections: Section[] = [
           { key: 'eyebrow', label: 'Eyebrow', type: 'text' },
           {
             key: 'title',
+            required: true,
             label: 'Title',
             type: 'html',
             help: 'Wrap words in <em>…</em> for the italic accent.',
@@ -642,8 +741,8 @@ export const sections: Section[] = [
         addLabel: 'Add a past event',
         help: 'Give a past event a web address to publish a write-up page for it. Leave it blank and the card just shows the date and title, with no link.',
         fields: [
-          { key: 'date', label: 'Date (e.g. Mar 18, 2026)', type: 'text' },
-          { key: 'title', label: 'Title', type: 'text' },
+          { key: 'date', label: 'Date (e.g. Mar 18, 2026)', type: 'text', required: true },
+          { key: 'title', label: 'Title', type: 'text', required: true },
           { key: 'location', label: 'Where it happened', type: 'text' },
           {
             key: 'slug',
@@ -703,7 +802,7 @@ export const sections: Section[] = [
             type: 'object',
             help: 'Shown in place of the button until a registration link is added to the event.',
             fields: [
-              { key: 'title', label: 'Title', type: 'text' },
+              { key: 'title', label: 'Title', type: 'text', required: true },
               { key: 'body', label: 'Body text', type: 'textarea' },
             ],
           },
@@ -737,6 +836,7 @@ export const sections: Section[] = [
           { key: 'crumb', label: 'Breadcrumb label', type: 'text' },
           {
             key: 'title',
+            required: true,
             label: 'Page title',
             type: 'html',
             help: 'Wrap words in <em>…</em> to give them the italic accent style.',
@@ -751,8 +851,8 @@ export const sections: Section[] = [
         itemLabelKey: 'title',
         addLabel: 'Add a challenge',
         fields: [
-          { key: 'num', label: 'Number (e.g. 01)', type: 'text' },
-          { key: 'title', label: 'Title', type: 'text' },
+          { key: 'num', label: 'Number (e.g. 01)', type: 'text', required: true },
+          { key: 'title', label: 'Title', type: 'text', required: true },
           { key: 'desc', label: 'Description', type: 'textarea' },
           { key: 'stat', label: 'Big stat (e.g. 5.6 yrs)', type: 'text' },
           { key: 'statLabel', label: 'Stat label', type: 'text' },
@@ -765,6 +865,7 @@ export const sections: Section[] = [
         fields: [
           {
             key: 'text',
+            required: true,
             label: 'Quote',
             type: 'html',
             help: 'Wrap words in <em>…</em> for the italic accent.',
@@ -777,7 +878,7 @@ export const sections: Section[] = [
         label: 'Call-to-action band',
         type: 'object',
         fields: [
-          { key: 'heading', label: 'Heading', type: 'html' },
+          { key: 'heading', label: 'Heading', type: 'html', required: true },
           { key: 'body', label: 'Body text', type: 'textarea' },
           {
             key: 'actions',
@@ -786,8 +887,8 @@ export const sections: Section[] = [
             itemLabelKey: 'label',
             addLabel: 'Add a button',
             fields: [
-              { key: 'label', label: 'Button label', type: 'text' },
-              { key: 'href', label: 'Link (a /path or full URL)', type: 'text' },
+              { key: 'label', label: 'Button label', type: 'text', required: true },
+              { key: 'href', label: 'Link (a /path or full URL)', type: 'text', required: true },
               { key: 'style', label: 'Style', type: 'select', options: ['dark', 'outline-ink'] },
               { key: 'arrow', label: 'Show arrow →', type: 'boolean' },
             ],
@@ -812,6 +913,7 @@ export const sections: Section[] = [
           { key: 'crumb', label: 'Breadcrumb label', type: 'text' },
           {
             key: 'title',
+            required: true,
             label: 'Page title',
             type: 'html',
             help: 'Wrap words in <em>…</em> for the italic accent.',
@@ -826,8 +928,8 @@ export const sections: Section[] = [
         itemLabelKey: 'title',
         addLabel: 'Add a goal',
         fields: [
-          { key: 'num', label: 'Number (e.g. 01)', type: 'text' },
-          { key: 'title', label: 'Title', type: 'text' },
+          { key: 'num', label: 'Number (e.g. 01)', type: 'text', required: true },
+          { key: 'title', label: 'Title', type: 'text', required: true },
           { key: 'desc', label: 'Description', type: 'textarea' },
         ],
       },
@@ -839,6 +941,7 @@ export const sections: Section[] = [
           { key: 'eyebrow', label: 'Eyebrow', type: 'text' },
           {
             key: 'title',
+            required: true,
             label: 'Title',
             type: 'html',
             help: 'Wrap words in <em>…</em> for the italic accent.',
@@ -853,6 +956,7 @@ export const sections: Section[] = [
         fields: [
           {
             key: 'title',
+            required: true,
             label: 'Title',
             type: 'html',
             help: 'Wrap words in <em>…</em> for the italic accent.',
@@ -880,6 +984,7 @@ export const sections: Section[] = [
           { key: 'crumb', label: 'Breadcrumb label', type: 'text' },
           {
             key: 'title',
+            required: true,
             label: 'Page title',
             type: 'html',
             help: 'Wrap words in <em>\u2026</em> for the italic accent.',
@@ -895,7 +1000,7 @@ export const sections: Section[] = [
         addLabel: 'Add a media item',
         help: 'Each item links out to the article, segment or episode. Leave the link blank and it still appears, just not clickable.',
         fields: [
-          { key: 'title', label: 'Headline', type: 'text' },
+          { key: 'title', label: 'Headline', type: 'text', required: true },
           {
             key: 'outlet',
             label: 'Publication / show',
@@ -929,6 +1034,7 @@ export const sections: Section[] = [
           { key: 'crumb', label: 'Breadcrumb label', type: 'text' },
           {
             key: 'title',
+            required: true,
             label: 'Page title',
             type: 'html',
             help: 'Wrap words in <em>…</em> for the italic accent.',
@@ -943,7 +1049,7 @@ export const sections: Section[] = [
         itemLabelKey: 'label',
         addLabel: 'Add a group',
         fields: [
-          { key: 'label', label: 'Group heading', type: 'text' },
+          { key: 'label', label: 'Group heading', type: 'text', required: true },
           {
             key: 'partners',
             label: 'Partners',
@@ -951,9 +1057,9 @@ export const sections: Section[] = [
             itemLabelKey: 'name',
             addLabel: 'Add a partner',
             fields: [
-              { key: 'abbr', label: 'Abbreviation / logo text', type: 'text' },
+              { key: 'abbr', label: 'Abbreviation / logo text', type: 'text', required: true },
               { key: 'region', label: 'Region', type: 'text' },
-              { key: 'name', label: 'Organization name', type: 'text' },
+              { key: 'name', label: 'Organization name', type: 'text', required: true },
               { key: 'focus', label: 'Focus / description', type: 'textarea' },
               { key: 'url', label: 'Website link', type: 'url' },
             ],
@@ -967,6 +1073,7 @@ export const sections: Section[] = [
         fields: [
           {
             key: 'title',
+            required: true,
             label: 'Title',
             type: 'html',
             help: 'Wrap words in <em>…</em> for the italic accent.',
@@ -994,6 +1101,7 @@ export const sections: Section[] = [
           { key: 'crumb', label: 'Breadcrumb label', type: 'text' },
           {
             key: 'title',
+            required: true,
             label: 'Page title',
             type: 'html',
             help: 'Wrap words in <em>…</em> for the italic accent.',
@@ -1007,12 +1115,13 @@ export const sections: Section[] = [
         type: 'object',
         fields: [
           { key: 'eyebrow', label: 'Eyebrow', type: 'text' },
-          { key: 'title', label: 'Form title', type: 'text' },
+          { key: 'title', label: 'Form title', type: 'text', required: true },
           { key: 'sub', label: 'Subtitle', type: 'textarea' },
           { key: 'emailPlaceholder', label: 'Email field placeholder', type: 'text' },
           { key: 'rolePlaceholder', label: 'Role dropdown placeholder', type: 'text' },
           {
             key: 'roleOptions',
+            required: true,
             label: 'Role options',
             type: 'list',
             itemType: 'text',
@@ -1021,6 +1130,7 @@ export const sections: Section[] = [
           { key: 'topicPlaceholder', label: 'Topic dropdown placeholder', type: 'text' },
           {
             key: 'topicOptions',
+            required: true,
             label: 'Topic options',
             type: 'list',
             itemType: 'text',
@@ -1047,6 +1157,7 @@ export const sections: Section[] = [
         fields: [
           {
             key: 'heading',
+            required: true,
             label: 'Heading',
             type: 'html',
             help: 'Wrap words in <em>…</em> for the italic accent.',

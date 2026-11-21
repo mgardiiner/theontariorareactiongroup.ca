@@ -34,7 +34,7 @@
         <!-- Photos from the day. Captions are optional. -->
         <div class="gallery" v-if="photos.length">
           <figure class="shot" v-for="(photo, i) in photos" :key="i">
-            <img :src="photo.src" :alt="photo.caption || event.title" loading="lazy" />
+            <img :src="photo.src" :alt="photo.caption || event.title" loading="lazy" :style="photoFocus(photo.src)" />
             <figcaption v-if="photo.caption">{{ photo.caption }}</figcaption>
           </figure>
         </div>
@@ -51,6 +51,7 @@
 
 <script setup>
 import content from '~/content/events.json'
+import { photoFocus } from '~/utils/photoFocus'
 
 definePageMeta({ layout: 'default' })
 

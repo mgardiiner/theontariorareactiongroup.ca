@@ -5,6 +5,7 @@
       <div class="home-head">
         <p class="eyebrow">{{ greeting }}</p>
         <h2 class="screen-title">What would you like to do?</h2>
+        <p v-if="lastPublished" class="home-last">Website last updated {{ lastPublished }}.</p>
       </div>
 
       <div class="tiles">
@@ -36,7 +37,10 @@
             class="direct-row"
           >
             <span class="direct-row-body">
-              <span class="direct-row-title">{{ s.label }}</span>
+              <span class="direct-row-title">
+                {{ s.label }}
+                <span v-if="changedFiles.has(s.file)" class="direct-row-changed">Unpublished changes</span>
+              </span>
               <span v-if="s.description" class="direct-row-desc">{{ s.description }}</span>
             </span>
             <span class="direct-row-arrow" aria-hidden="true">→</span>
@@ -209,7 +213,7 @@
         <div class="wiz-foot">
           <button type="button" class="btn-back" @click="back">Back</button>
           <div class="wiz-foot-right">
-            <span class="wiz-saved">Saved as you type</span>
+            <span v-if="previewState.open.value" class="wiz-saved">Shows in the preview as you type</span>
             <button type="submit" class="btn-continue">{{ nextLabel }}</button>
           </div>
         </div>
@@ -303,11 +307,23 @@ import {
   preview,
 } from '~/admin/tasks'
 import { sections } from '~/admin/schema'
+import { latestCommit } from '~/utils/adminGithub'
 
 definePageMeta({ layout: 'admin', middleware: 'admin-auth' })
 
 const { getData, stageChange, undo, pending, pendingCount } = useDrafts()
 const { screen, showToast, editorName } = useAdminUi()
+const { token } = useAdminAuth()
+const previewState = useAdminPreview()
+
+const changedFiles = computed(() => new Set(pending.value.map((p) => p.file)))
+
+// "Website last updated 2 days ago", from the latest commit (absent in local-files mode).
+const lastPublished = ref('')
+async function loadLastPublished() {
+  const c = await latestCommit(token.value)
+  if (c?.date) lastPublished.value = timeAgo(Date.parse(c.date))
+}
 
 const taskKeys = ['event', 'story', 'partner', 'media']
 
@@ -341,7 +357,41 @@ const activeScreen = computed(() => {
   return s
 })
 
-const greeting = computed(() => `Good afternoon, ${editorName}`)
+const greeting = computed(() => {
+  const h = new Date().getHours()
+  return `Good ${h < 12 ? 'morning' : h < 18 ? 'afternoon' : 'evening'}, ${editorName}`
+})
+
+// The preview follows the job at hand: the page a task adds to, or the home page.
+watch(
+  [activeScreen, task],
+  ([s, k]) => {
+    const file = s !== 'home' && s !== 'search' && k ? tasks[k].file : null
+    previewState.path.value = (file && sections.find((x) => x.file === file)?.path) || '/'
+  },
+  { immediate: true },
+)
+
+// While a wizard is open, the preview shows the item as it is being filled in (nothing is staged
+// until the last step; then the draft takes over). Leaving the wizard drops it from the preview.
+function clearTaskOverrides() {
+  const rest = { ...previewState.overrides.value }
+  for (const t of Object.values(tasks)) delete rest[t.file]
+  previewState.overrides.value = rest
+}
+watch(
+  [activeScreen, task, vals, content, editRef],
+  ([s, k]) => {
+    clearTaskOverrides()
+    if (s !== 'wizard' || !k || content.value == null) return
+    previewState.overrides.value = {
+      ...previewState.overrides.value,
+      [tasks[k].file]: applyItem(k, content.value, { ...vals.value }, editRef.value),
+    }
+  },
+  { deep: true },
+)
+onBeforeUnmount(clearTaskOverrides)
 
 // ---- Wizard derived ----
 const currentStep = computed(() =>
@@ -673,9 +723,33 @@ function timeAgo(ms) {
   if (mins < 1) return 'just now'
   if (mins < 60) return `${mins} min ago`
   const hrs = Math.round(mins / 60)
-  if (hrs < 24) return `${hrs} hr ago`
-  return `${Math.round(hrs / 24)} days ago`
+  if (hrs < 24) return `${hrs} hr${hrs === 1 ? '' : 's'} ago`
+  const days = Math.round(hrs / 24)
+  return days === 1 ? 'yesterday' : `${days} days ago`
 }
+
+// While a search result is open, the preview shows its page with the new wording as it's typed.
+// Closing or saving the result drops that copy (once saved, the draft shows it instead).
+let searchPreviewFile = null
+function dropSearchPreview() {
+  if (!searchPreviewFile) return
+  const { [searchPreviewFile]: _, ...rest } = previewState.overrides.value
+  previewState.overrides.value = rest
+  searchPreviewFile = null
+}
+watch([editId, searchDraft], async ([id, text]) => {
+  const r = id != null ? results.value.find((x) => x.id === id) : null
+  if (!r || r.file !== searchPreviewFile) dropSearchPreview()
+  if (!r) return
+  previewState.path.value = sections.find((s) => s.file === r.file)?.path || '/'
+  const c = await getData(r.file)
+  if (editId.value !== id || searchDraft.value !== text) return // moved on while it loaded
+  const data = JSON.parse(JSON.stringify(c))
+  setByPath(data, r.jsonPath, text)
+  previewState.overrides.value = { ...previewState.overrides.value, [r.file]: data }
+  searchPreviewFile = r.file
+})
+onBeforeUnmount(dropSearchPreview)
 
 // Reset the expanded search row when the query changes.
 watch(query, () => {
@@ -708,6 +782,7 @@ onMounted(() => {
   // pick/wizard/done need page-local task state that resets on mount.
   if (screen.value !== 'search') screen.value = 'home'
   loadCounts()
+  loadLastPublished()
 })
 </script>
 
@@ -864,6 +939,18 @@ onMounted(() => {
 .direct-row:hover { border-color: var(--primary); transform: translateY(-2px); }
 .direct-row-body { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
 .direct-row-title { font-size: 16px; font-weight: 600; color: var(--ink); }
+.direct-row-changed {
+  display: inline-block;
+  margin-left: 8px;
+  vertical-align: 2px;
+  font-size: 11.5px;
+  font-weight: 600;
+  background: #fff4cc;
+  color: #8a5a00;
+  border-radius: 999px;
+  padding: 2px 9px;
+}
+.home-last { margin: 10px 0 0; font-size: 14px; color: var(--muted); }
 .direct-row-desc { font-size: 13px; line-height: 1.45; color: var(--muted); }
 .direct-row-arrow { color: var(--primary); font-size: 16px; flex-shrink: 0; }
 

@@ -21,7 +21,7 @@
     <!-- UPCOMING EVENTS + REGISTRATION -->
     <section class="events-bg">
       <div class="wrap">
-        <div class="events-layout">
+        <div class="events-layout" :class="{ 'is-empty': !events.length }">
           <!-- EVENT LIST -->
           <div>
             <div class="sec-head">
@@ -46,7 +46,7 @@
                   <div class="event-day">{{ event.day }}</div>
                 </div>
                 <div class="event-thumb" v-if="event.image" aria-hidden="true">
-                  <img :src="event.image" alt="" />
+                  <img :src="event.image" alt="" :style="photoFocus(event.image)" />
                 </div>
                 <div>
                   <h3 class="event-title">{{ event.title }}</h3>
@@ -58,11 +58,16 @@
                 </div>
                 <div class="event-arrow" aria-hidden="true">→</div>
               </div>
+              <!-- Nothing scheduled: one row where the events would be, and no registration card. -->
+              <div v-if="!events.length" class="event-none" role="status">
+                <h3 class="event-title">{{ noEventsCopy.title }}</h3>
+                <p class="event-desc">{{ noEventsCopy.body }}</p>
+              </div>
             </div>
           </div>
 
           <!-- REGISTRATION CARD -->
-          <div class="zoom-card" aria-label="Event registration form">
+          <div class="zoom-card" v-if="events.length" aria-label="Event registration form">
             <div class="zoom-eyebrow">
               <span class="zoom-dot" aria-hidden="true"></span>
               <template v-if="!activeIsOver">{{ content.registration.eyebrowPrefix }} </template>{{ events[activeIdx].tag === 'ZOOM' ? content.registration.zoomLabel : content.registration.inPersonLabel }}
@@ -130,6 +135,7 @@
 
 <script setup>
 import content from '~/content/events.json'
+import { photoFocus } from '~/utils/photoFocus'
 import { isEventOver, todayYmd } from '~/utils/eventDate'
 
 definePageMeta({ layout: 'default' })
@@ -170,6 +176,13 @@ const endedCopy = computed(() => ({
     content.registration.ended?.body ||
     'Thanks to everyone who joined us. Recordings and slides from recent sessions are below, and our next event will be posted here soon.',
 }))
+// Every upcoming event removed in the editor: the card says so instead of showing an event that isn't there.
+const noEventsCopy = computed(() => ({
+  title: content.registration.none?.title || 'Nothing scheduled right now.',
+  body:
+    content.registration.none?.body ||
+    'Our next event will be posted here soon. In the meantime, recordings and slides from recent sessions are below.',
+}))
 </script>
 
 <style scoped>
@@ -193,6 +206,10 @@ const endedCopy = computed(() => ({
   transition: background .15s ease, padding .2s ease;
 }
 .event:hover { padding-left: 12px; }
+/* No upcoming events: the list takes the full width, with a single note row in it. */
+.events-layout.is-empty { grid-template-columns: 1fr; }
+.event-none { padding: 28px 0; border-bottom: 1px solid rgba(255,255,255,0.18); }
+.event-none .event-desc { margin-top: 0; max-width: 60ch; }
 .event.active {
   background: rgba(254,215,0,0.06);
   padding-left: 16px;

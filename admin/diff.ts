@@ -3,7 +3,7 @@
 // same friendly labels the editor forms use (from admin/schema), so an editor can
 // tell at a glance what each pending change actually did.
 
-import { sections, type Field } from '~/admin/schema'
+import { FOCUS_FILE, sections, type Field } from '~/admin/schema'
 
 export interface DiffLine {
   kind: 'changed' | 'added' | 'removed'
@@ -18,6 +18,7 @@ const MAX_VALUE = 70
 export function pageNameFor(file: string): string {
   const s = sections.find((x) => x.file === file)
   if (s) return s.label
+  if (file === FOCUS_FILE) return 'Photos'
   return file.replace(/^content\//, '').replace(/\.json$/, '')
 }
 
@@ -125,8 +126,43 @@ function walk(
   out.push({ kind: 'changed', label, before: short(before), after: short(after) })
 }
 
+// content/focus.json ("Choose what shows") maps photo paths to CSS positions; describe each photo
+// whose point moved in words rather than as "30% 20%".
+function focusWords(point?: string): string {
+  if (!point) return 'The usual crop'
+  const [x, y] = point.split(/\s+/).map((v) => parseFloat(v))
+  if (!Number.isFinite(x) || !Number.isFinite(y)) return point
+  const col = x < 34 ? 'left' : x > 66 ? 'right' : ''
+  const row = y < 34 ? 'top' : y > 66 ? 'bottom' : ''
+  return `Keeps the ${row && col ? `${row} ${col}` : row || col || 'middle'} in view`
+}
+
+function describeFocus(before: Record<string, string>, after: Record<string, string>): DiffLine[] {
+  const out: DiffLine[] = []
+  for (const src of new Set([...Object.keys(before), ...Object.keys(after)])) {
+    if (before[src] === after[src]) continue
+    out.push({
+      kind: 'changed',
+      label: `Photo ${src.split('/').pop() || src}`,
+      before: focusWords(before[src]),
+      after: focusWords(after[src]),
+    })
+  }
+  return capped(out)
+}
+
+function capped(out: DiffLine[]): DiffLine[] {
+  if (out.length > MAX_LINES) {
+    const extra = out.length - MAX_LINES
+    out.length = MAX_LINES
+    out.push({ kind: 'changed', label: `…and ${extra} more`, after: '' })
+  }
+  return out
+}
+
 /** Lines describing how `after` differs from `before` for the given content file. */
 export function describeChange(file: string, before: any, after: any): DiffLine[] {
+  if (file === FOCUS_FILE) return describeFocus(before ?? {}, after ?? {})
   const out: DiffLine[] = []
   const fields = sections.find((s) => s.file === file)?.fields
   if (before == null) {
@@ -134,10 +170,5 @@ export function describeChange(file: string, before: any, after: any): DiffLine[
     return out
   }
   walk(before, after, fields, [], out)
-  if (out.length > MAX_LINES) {
-    const extra = out.length - MAX_LINES
-    out.length = MAX_LINES
-    out.push({ kind: 'changed', label: `…and ${extra} more`, after: '' })
-  }
-  return out
+  return capped(out)
 }

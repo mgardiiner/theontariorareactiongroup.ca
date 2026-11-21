@@ -2,6 +2,7 @@
 import content from '~/content/site.json'
 
 const route = useRoute()
+const previewRev = useState('admin_preview_rev', () => 0)
 const menuOpen = ref(false)
 const toggleEl = ref(null)
 const panelEl = ref(null)
@@ -58,7 +59,11 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div>
+  <!-- The key only changes inside the website editor's live preview (plugins/admin-preview.client.ts):
+       it redraws the header, footer and page from unpublished content. It sits here rather than on
+       <NuxtLayout> in app.vue because re-keying <NuxtLayout> reloads the layout asynchronously, and
+       a page change during that load left two copies of the site on screen. -->
+  <div :key="previewRev">
     <header class="nav">
       <div class="wrap nav-inner">
         <NuxtLink to="/" class="brand">

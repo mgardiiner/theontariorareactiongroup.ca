@@ -20,7 +20,7 @@ export default defineNuxtConfig({
     preset: process.env.NODE_ENV !== 'development' ? 'github-pages' : undefined,
     prerender: {
       crawlLinks: true,
-      routes: ['/', '/404.html', '/sitemap.xml', ...adminRoutes],
+      routes: ['/', '/404.html', '/sitemap.xml', '/version.json', ...adminRoutes],
       failOnError: true,
     },
   },

@@ -1,62 +1,94 @@
 <template>
-  <div class="iu">
-    <div class="iu-row">
-      <label class="iu-pick">
-        <input
-          type="file"
-          accept="image/*"
-          class="iu-file"
-          :disabled="uploading"
-          @change="onFile"
-        />
-        <span class="iu-pick-btn">{{ uploading ? 'Uploading…' : 'Upload a photo' }}</span>
-      </label>
-      <span class="iu-or">or paste a link</span>
+  <div
+    class="iu"
+    :class="{ dragging }"
+    @dragover.prevent="dragging = true"
+    @dragleave.self="dragging = false"
+    @drop.prevent="onDrop"
+  >
+    <div v-if="modelValue" class="iu-current">
+      <img
+        :src="photos.src(modelValue)"
+        alt=""
+        class="iu-preview"
+        :style="focus.styleFor(modelValue)"
+        @error="onImgError"
+        @load="error = ''"
+      />
+      <div class="iu-current-info">
+        <span class="iu-name">{{ shortName }}</span>
+        <span v-if="photos.isPending(modelValue)" class="iu-badge">New: goes live when you publish</span>
+        <div class="iu-current-actions">
+          <button
+            type="button"
+            class="iu-btn"
+            :disabled="!focusReady"
+            title="Pick the part of the photo to keep in view where the site trims it to fit"
+            @click="focus.open(modelValue)"
+          >
+            Choose what shows
+          </button>
+          <button type="button" class="iu-btn" :disabled="busy" @click="pickFile">Upload a different photo</button>
+          <button type="button" class="iu-btn" @click="chooser?.open()">Choose another</button>
+          <button type="button" class="iu-clear" @click="clearValue">Remove</button>
+        </div>
+      </div>
+    </div>
+
+    <div v-else class="iu-empty">
+      <button type="button" class="iu-pick-btn" :disabled="busy" @click="pickFile">
+        {{ busy ? 'Preparing photo…' : 'Upload a photo' }}
+      </button>
+      <button type="button" class="iu-btn" @click="chooser?.open()">Choose from the site's photos</button>
+      <span class="iu-drop-hint">or drag a photo here</span>
+    </div>
+
+    <input ref="fileEl" type="file" accept="image/*" class="iu-file" tabindex="-1" aria-hidden="true" @change="onFile" />
+
+    <p v-if="error" class="iu-error">{{ error }}</p>
+
+    <details class="iu-link" :open="isWebLink">
+      <summary>Use a web address instead</summary>
       <input
         type="text"
         inputmode="url"
         class="iu-url"
         :value="modelValue"
-        placeholder="/uploads/example.jpg  or  https://…"
+        placeholder="https://…  or  /uploads/example.jpg"
+        aria-label="Photo web address"
         @input="onUrl"
       />
-    </div>
+    </details>
 
-    <p v-if="error" class="iu-error">{{ error }}</p>
-
-    <div v-if="modelValue" class="iu-preview-wrap">
-      <img :src="previewSrc" alt="" class="iu-preview" @error="onImgError" />
-      <button type="button" class="iu-clear" @click="clearValue">Remove</button>
-    </div>
+    <AdminPhotoChooser ref="chooser" :current="modelValue" @select="choose" />
   </div>
 </template>
 
 <script setup>
-import { saveBinaryFile } from '~/utils/adminGithub'
-
 const props = defineProps({
   modelValue: { type: String, default: '' },
 })
 const emit = defineEmits(['update:modelValue'])
 
-const { token } = useAdminAuth()
+// New photos aren't sent anywhere yet: they wait on this device until Publish, which sends them
+// in the same commit as the change that uses them (composables/usePendingPhotos.ts).
+const photos = usePendingPhotos()
+// "Choose what shows": the part of the photo the site keeps in view when it crops (usePhotoFocus.ts).
+const focus = usePhotoFocus()
+const focusReady = focus.ready
 
-const uploading = ref(false)
+const busy = ref(false)
 const error = ref('')
+const dragging = ref(false)
+const fileEl = ref(null)
+const chooser = ref(null)
 
-// A freshly-picked file is previewed straight from its own bytes (an object URL)
-// so the thumbnail appears instantly. The committed /uploads/… path isn't served
-// until the site redeploys, which is what used to make the preview look broken.
-const localPreview = ref('')
-const previewSrc = computed(() => localPreview.value || props.modelValue)
+const isWebLink = computed(() => /^https?:\/\//i.test(props.modelValue || ''))
+const shortName = computed(() => (props.modelValue || '').split('/').pop())
 
-function setLocalPreview(file) {
-  if (localPreview.value) URL.revokeObjectURL(localPreview.value)
-  localPreview.value = file ? URL.createObjectURL(file) : ''
-}
-
-onBeforeUnmount(() => {
-  if (localPreview.value) URL.revokeObjectURL(localPreview.value)
+onMounted(() => {
+  photos.ensureLoaded()
+  focus.ensureLoaded()
 })
 
 function kebab(s) {
@@ -66,42 +98,34 @@ function kebab(s) {
     .replace(/^-+|-+$/g, '')
 }
 
+function pickFile() {
+  fileEl.value?.click()
+}
+
 function onUrl(e) {
-  // A typed/pasted link should preview itself, not a stale just-uploaded file.
-  setLocalPreview(null)
   error.value = ''
   emit('update:modelValue', e.target.value)
 }
 
+function choose(path) {
+  error.value = ''
+  emit('update:modelValue', path)
+}
+
 function clearValue() {
   error.value = ''
-  setLocalPreview(null)
   emit('update:modelValue', '')
 }
 
 function onImgError() {
-  // The preview couldn't load — surface a gentle hint but keep the value so the
-  // editor can correct it (an uploaded image may not be live on the branch yet).
-  error.value = "That image didn't load. If you just uploaded it, give it a moment; otherwise check the link."
+  // Keep the value so the editor can correct it.
+  error.value = isWebLink.value
+    ? "That image didn't load. Check the web address."
+    : "This photo isn't showing. If it was just published, it appears in a minute or two; otherwise choose it again."
 }
 
-/** Read a Blob/File as a base64 string (without the data:...;base64, prefix). */
-function readBase64(file) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader()
-    reader.onload = () => {
-      const result = String(reader.result || '')
-      const comma = result.indexOf(',')
-      resolve(comma >= 0 ? result.slice(comma + 1) : result)
-    }
-    reader.onerror = () => reject(new Error('Could not read that file.'))
-    reader.readAsDataURL(file)
-  })
-}
-
-// Photos are downscaled + re-encoded as JPEG before upload, so commits stay small
-// and pages load fast (a phone photo can be 5–10 MB otherwise). Vector/animated
-// formats are passed through untouched.
+// Photos are downscaled + re-encoded as JPEG, so commits stay small and pages load fast (a phone
+// photo can be 5–10 MB otherwise). Vector/animated formats are passed through untouched.
 const MAX_UPLOAD_DIM = 1600
 const JPEG_QUALITY = 0.82
 
@@ -110,9 +134,9 @@ async function processImage(file) {
   const dot = file.name.lastIndexOf('.')
 
   // SVG (vector) and GIF (animation) would be ruined by a canvas re-encode.
-  if (type === 'image/svg+xml' || type === 'image/gif' || !type.startsWith('image/')) {
+  if (type === 'image/svg+xml' || type === 'image/gif') {
     const ext = (kebab(dot >= 0 ? file.name.slice(dot + 1) : '') || 'img').slice(0, 5)
-    return { base64: await readBase64(file), ext }
+    return { blob: file, ext }
   }
 
   const url = URL.createObjectURL(file)
@@ -120,7 +144,7 @@ async function processImage(file) {
     const img = await new Promise((resolve, reject) => {
       const im = new Image()
       im.onload = () => resolve(im)
-      im.onerror = () => reject(new Error('Could not read that image.'))
+      im.onerror = () => reject(new Error('unreadable'))
       im.src = url
     })
     const scale = Math.min(1, MAX_UPLOAD_DIM / Math.max(img.naturalWidth, img.naturalHeight))
@@ -135,82 +159,165 @@ async function processImage(file) {
     ctx.fillRect(0, 0, w, h)
     ctx.drawImage(img, 0, 0, w, h)
     const blob = await new Promise((resolve) => canvas.toBlob(resolve, 'image/jpeg', JPEG_QUALITY))
-    if (!blob) return { base64: await readBase64(file), ext: 'jpg' } // toBlob unsupported → original
-    return { base64: await readBase64(blob), ext: 'jpg' }
+    return { blob: blob || file, ext: 'jpg' } // toBlob unsupported → the original file
   } finally {
     URL.revokeObjectURL(url)
   }
 }
 
-async function onFile(e) {
-  const input = e.target
-  const file = input.files && input.files[0]
+async function addFile(file) {
   if (!file) return
   error.value = ''
-
-  if (!token.value) {
-    error.value = 'Please sign in again before uploading.'
-    input.value = ''
+  if (!(file.type || '').startsWith('image/') && !/\.(heic|heif)$/i.test(file.name)) {
+    error.value = "That isn't a photo. Choose a JPG, PNG or WebP file."
     return
   }
-
-  uploading.value = true
+  busy.value = true
   try {
-    const { base64, ext } = await processImage(file)
-
-    // Build a safe, collision-resistant path: uploads/<kebab-name>-<shorttime>.<ext>
+    const { blob, ext } = await processImage(file)
+    // A safe, collision-resistant path: /uploads/<kebab-name>-<shorttime>.<ext>
     const dot = file.name.lastIndexOf('.')
-    const base = kebab(dot >= 0 ? file.name.slice(0, dot) : file.name) || 'image'
+    const base = kebab(dot >= 0 ? file.name.slice(0, dot) : file.name) || 'photo'
     const suffix = Date.now().toString(36).slice(-5)
-    const path = `uploads/${base}-${suffix}.${ext}`
-
-    await saveBinaryFile(token.value, 'public/' + path, base64, 'Upload image ' + path)
-    setLocalPreview(file) // show the picked file immediately, before the deploy serves it
-    error.value = ''
-    emit('update:modelValue', '/' + path)
+    const path = `/uploads/${base}-${suffix}.${ext}`
+    await photos.add(path, blob)
+    emit('update:modelValue', path)
+    focus.open(path) // straight on to choosing what shows, as the abaileyevents editor does
   } catch (err) {
     error.value =
-      (err && err.message) ||
-      "Sorry — that photo couldn't be uploaded. Please try again."
+      err?.message === 'unreadable'
+        ? "This photo's format can't be opened here. Try a JPG or PNG (on an iPhone, choose “Most Compatible” under Settings › Camera › Formats)."
+        : "Sorry — that photo couldn't be added. Please try again."
   } finally {
-    uploading.value = false
-    input.value = '' // allow re-selecting the same file
+    busy.value = false
   }
+}
+
+function onFile(e) {
+  const input = e.target
+  addFile(input.files && input.files[0])
+  input.value = '' // allow re-selecting the same file
+}
+
+function onDrop(e) {
+  dragging.value = false
+  addFile(e.dataTransfer?.files?.[0])
 }
 </script>
 
 <style scoped>
-.iu { display: flex; flex-direction: column; gap: 10px; }
-.iu-row {
+.iu {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  border-radius: 8px;
+  outline: 2px dashed transparent;
+  outline-offset: 4px;
+  transition: outline-color 0.15s ease;
+}
+.iu.dragging {
+  outline-color: var(--primary, #5634c9);
+  background: #f4f0ff;
+}
+.iu-file {
+  display: none;
+}
+.iu-empty {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
   flex-wrap: wrap;
 }
-.iu-pick { position: relative; display: inline-block; flex-shrink: 0; }
-.iu-file {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  opacity: 0;
-  cursor: pointer;
-}
-.iu-file:disabled { cursor: default; }
 .iu-pick-btn {
-  display: inline-block;
   padding: 9px 18px;
+  border: none;
   border-radius: 6px;
   background: var(--primary, #5634c9);
   color: #fff;
+  font: inherit;
   font-size: 14px;
   font-weight: 600;
   white-space: nowrap;
+  cursor: pointer;
 }
-.iu-or { font-size: 13px; color: #7a7a7a; }
-.iu-url {
+.iu-pick-btn:disabled {
+  opacity: 0.7;
+  cursor: default;
+}
+.iu-btn {
+  padding: 8px 14px;
+  border: 1px solid #cfc4ec;
+  border-radius: 6px;
+  background: #fff;
+  color: var(--primary, #5634c9);
+  font: inherit;
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.iu-btn:hover {
+  background: #f4f0ff;
+}
+.iu-btn:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+.iu-drop-hint {
+  font-size: 13px;
+  color: #7a7a7a;
+}
+.iu-current {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+.iu-preview {
+  display: block;
+  width: 180px;
+  height: 135px; /* 4:3 like the site's cards, so the chosen focus shows here too */
+  object-fit: cover;
+  border-radius: 6px;
+  border: 1px solid #cfc8ba;
+  background: #eee8da;
+}
+.iu-current-info {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
   flex: 1;
-  min-width: 180px;
+}
+.iu-name {
+  font-size: 13px;
+  color: #555;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.iu-badge {
+  align-self: flex-start;
+  font-size: 11.5px;
+  font-weight: 600;
+  background: #fff4cc;
+  color: #8a5a00;
+  border-radius: 999px;
+  padding: 2px 9px;
+}
+.iu-current-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 4px;
+}
+.iu-link summary {
+  font-size: 13px;
+  color: #6a6a6a;
+  cursor: pointer;
+}
+.iu-url {
+  width: 100%;
+  margin-top: 8px;
   padding: 9px 11px;
   border: 1px solid #cfc8ba;
   border-radius: 5px;
@@ -228,27 +335,22 @@ async function onFile(e) {
   font-size: 13px;
   color: #a11;
 }
-.iu-preview-wrap {
-  display: flex;
-  align-items: flex-end;
-  gap: 12px;
-}
-.iu-preview {
-  display: block;
-  max-width: 200px;
-  max-height: 120px;
-  border-radius: 4px;
-  border: 1px solid #cfc8ba;
-}
 .iu-clear {
   border: 1px solid #e0b4bc;
   background: #fff;
   color: #b23;
-  border-radius: 4px;
-  padding: 6px 12px;
+  border-radius: 6px;
+  padding: 8px 12px;
   font: inherit;
   font-size: 13px;
   cursor: pointer;
 }
-.iu-clear:hover { background: #fbeff1; }
+.iu-clear:hover {
+  background: #fbeff1;
+}
+@media (prefers-reduced-motion: reduce) {
+  .iu {
+    transition: none;
+  }
+}
 </style>

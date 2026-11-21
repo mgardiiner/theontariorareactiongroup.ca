@@ -72,7 +72,7 @@
             <div class="ov-idx" aria-hidden="true">{{ item.idx }}</div>
             <div class="ov-visual" aria-hidden="true">
               <div class="ov-img-placeholder" :class="item.imgClass"></div>
-              <img v-if="item.image" :src="item.image" alt="" class="ov-photo" />
+              <img v-if="item.image" :src="item.image" alt="" class="ov-photo" :style="photoFocus(item.image)" />
               <span class="ov-visual-tag">{{ item.visualTag }}</span>
               <span class="ov-visual-arrow" aria-hidden="true">→</span>
             </div>
@@ -150,6 +150,7 @@
 
 <script setup>
 import content from '~/content/home.json'
+import { photoFocus } from '~/utils/photoFocus'
 import site from '~/content/site.json'
 import events from '~/content/events.json'
 import stories from '~/content/stories.json'

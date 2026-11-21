@@ -1,5 +1,5 @@
 <template>
-  <div class="rt">
+  <div class="rt" :class="{ 'rt-invalid': invalid }">
     <div class="rt-toolbar">
       <button
         type="button"
@@ -30,6 +30,7 @@
       contenteditable="true"
       role="textbox"
       aria-multiline="true"
+      :aria-invalid="invalid || undefined"
       @input="onInput"
       @blur="onBlur"
     ></div>
@@ -41,6 +42,7 @@ import { sanitizeHtml } from '~/utils/sanitizeHtml'
 
 const props = defineProps({
   modelValue: { type: String, default: '' },
+  invalid: { type: Boolean, default: false }, // a required field left empty: marks the text box itself
 })
 const emit = defineEmits(['update:modelValue'])
 
@@ -114,6 +116,9 @@ function makeLink() {
   border-radius: 9px;
   background: #fff;
   overflow: hidden;
+}
+.rt-invalid {
+  border-color: #d2564a;
 }
 .rt-toolbar {
   display: flex;
