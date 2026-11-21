@@ -1,0 +1,1 @@
+import{u as e}from"./BxZ1-WWS.js";import{_ as s,C as n,h as a,c as u,o as c}from"./M8QX4dBo.js";const r={class:"logout-note"},_={__name:"logout",setup(l){const{logout:o}=e(),t=n();return a(()=>{o(),t.replace("/admin/login?out=1")}),(i,p)=>(c(),u("div",r,"Signing you out…"))}},g=s(_,[["__scopeId","data-v-a33348d5"]]);export{g as default};
